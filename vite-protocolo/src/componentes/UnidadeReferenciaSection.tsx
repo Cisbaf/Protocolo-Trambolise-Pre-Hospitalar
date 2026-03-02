@@ -14,9 +14,9 @@ export function UnidadeReferenciaSection() {
 
   const unidades = createListCollection({
     items: [
-      { label: "Hospital Municipal", value: "h1" },
-      { label: "Hospital Regional", value: "h2" },
-      { label: "Unidade AVC Referência", value: "h3" },
+      { label: "Hospital Municipal São João de Meriti", value: "Hospital Municipal São João de Meriti" },
+      { label: "Hospital Geral de Nova Iguaçu", value: "Hospital Geral de Nova Iguaçu" },
+      { label: "Hospital Municipalizado Adão Pereira Nunes", value: "Hospital Municipalizado Adão Pereira Nunes" },
     ],
   })
 
