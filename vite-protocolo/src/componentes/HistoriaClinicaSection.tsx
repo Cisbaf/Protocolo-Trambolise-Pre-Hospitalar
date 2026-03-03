@@ -33,7 +33,7 @@ export function HistoriaClinicaSection() {
             {[
               "Hipertensão",
               "Diabetes",
-              "AVC Prévio",
+              "AVC Prévio (< 3 meses)",
               "Cirurgias (< 3 meses)",
             ].map((item) => (
               <Checkbox.Root key={item}>
