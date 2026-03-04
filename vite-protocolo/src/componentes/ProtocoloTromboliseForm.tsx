@@ -5,7 +5,6 @@ import {
   Container,
   VStack,
   Heading,
-  Text,
   Separator,
 } from "@chakra-ui/react"
 
@@ -13,7 +12,6 @@ import { LinhaDoTempoSection } from "./LinhaDoTempoSection"
 import { AvaliacaoNeurologicaSection } from "./AvaliacaoNeurologicaSection"
 import { ParametrosClinicosSection } from "./ParametrosClinicosSection"
 import { HistoriaClinicaSection } from "./HistoriaClinicaSection"
-import { CriteriosExclusaoSection } from "./CriteriosExclusaoSection"
 import { UnidadeReferenciaSection } from "./UnidadeReferenciaSection"
 import { DesfechoCenaSection } from "./DesfechoCenaSection"
 import { SectionCard } from "./SectionCard"
@@ -32,12 +30,9 @@ export function ProtocoloTromboliseForm() {
               color="red.600"
               letterSpacing="wide"
             >
-              PROTOCOLO DE TROMBÓLISE PRÉ-HOSPITALAR
+              PROTOCOLO DE ATENDIMENTO AO AVC HIPERAGUDO
             </Heading>
 
-            <Text fontSize="sm" color="gray.600" mt={2}>
-              Decisão Clínica Sequencial em 7 Etapas | Contexto: 2026-02-27
-            </Text>
           </Box>
 
           <Separator />
@@ -48,7 +43,7 @@ export function ProtocoloTromboliseForm() {
             <LinhaDoTempoSection />
           </SectionCard>
 
-          <SectionCard title="AVALIAÇÃO NEUROLÓGICA (ESCALA DE CINCINNATI)" step={2}>
+          <SectionCard title="AVALIAÇÃO NEUROLÓGICA (ESCALA DE BE FAST)" step={2}>
             <AvaliacaoNeurologicaSection />
           </SectionCard>
 
@@ -59,10 +54,6 @@ export function ProtocoloTromboliseForm() {
           <SectionCard title="HISTÓRIA CLÍNICA E FATORES DE RISCO" step={4}>
             <HistoriaClinicaSection />
           </SectionCard>
-
-          {/* <SectionCard title="CRITÉRIOS DE EXCLUSÃO (NIHSS E IMAGEM)" step={5}>
-            <CriteriosExclusaoSection />
-          </SectionCard> */}
 
           <SectionCard title="UNIDADE DE REFERÊNCIA E NOTIFICAÇÃO" step={5}>
             <UnidadeReferenciaSection />

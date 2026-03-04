@@ -32,12 +32,12 @@ export function DesfechoCenaSection() {
         <Text fontWeight="medium">
           Horário de Saída da Cena
         </Text>
-        <Input type="time" size="sm" width="200px" />
+        <Input type="datetime-local" size="sm" width="200px" />
 
         <Text fontWeight="medium">
           Horário de Chegada ao Hospital
         </Text>
-        <Input type="time" size="sm" width="200px" />
+        <Input type="datetime-local" size="sm" width="200px" />
       </Grid>
 
       {/* Parecer Final */}

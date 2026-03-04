@@ -6,6 +6,7 @@ import {
   HStack,
   Text,
   Input,
+  Separator,
 } from "@chakra-ui/react"
 
 export function ParametrosClinicosSection() {
@@ -39,8 +40,21 @@ export function ParametrosClinicosSection() {
 
         {/* Nota */}
         <Text fontSize="sm" color="gray.600" mt={2}>
-          <strong>Nota:</strong> Alvo PA &lt; 185/110 mmHg. Glicemia entre 60 e 400 mg/dL.
+          <strong>Nota</strong>
         </Text>
+        
+        <Separator mt={-4}/>
+
+        <Text fontSize="sm" color="gray.600" >
+          Reduzir Pressão Arterial somente se maior 185/110 mmHg (sob regulação médica).
+        </Text>
+        <Text fontSize="sm" color="gray.600" >
+          Ofertar Oxigênio se Sat. menor que 94% (sob regulação médica).
+        </Text>
+        <Text fontSize="sm" color="gray.600" >
+          Corrigir hipoglicemia se HGT menor que 60mg/dl (sob regulação médica).
+        </Text>
+
       </VStack>
     </Box>
   )

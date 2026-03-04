@@ -17,6 +17,9 @@ export function UnidadeReferenciaSection() {
       { label: "Hospital Municipal São João de Meriti", value: "Hospital Municipal São João de Meriti" },
       { label: "Hospital Geral de Nova Iguaçu", value: "Hospital Geral de Nova Iguaçu" },
       { label: "Hospital Municipalizado Adão Pereira Nunes", value: "Hospital Municipalizado Adão Pereira Nunes" },
+      { label: "Hospital MRJ (SUBPAV)", value: "Hospital MRJ (SUBPAV)"},
+      { label: "Upa", value: "Upa"},
+      { label: "Outros Hospitais não elegíveis trombólise", value: "Outros Hospitais não elegíveis trombólise"}
     ],
   })
 
@@ -34,8 +37,8 @@ export function UnidadeReferenciaSection() {
         <Select.Root
           collection={unidades}
           size="sm"
-          width="320px"
-        >
+          width="320px">
+            
           <Select.HiddenSelect />
 
           <Select.Control>
@@ -68,7 +71,7 @@ export function UnidadeReferenciaSection() {
           Horário da Notificação à Unidade
         </Text>
 
-        <Input type="time" width="200px" size="sm" />
+        <Input type="datetime-local" width="200px" size="sm" />
       </Grid>
     </Box>
   )
