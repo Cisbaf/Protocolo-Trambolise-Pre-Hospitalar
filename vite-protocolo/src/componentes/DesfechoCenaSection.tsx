@@ -5,20 +5,14 @@ import {
   Grid,
   Text,
   Input,
-  RadioCard,
-  HStack,
-  VStack,
-  createListCollection,
+  Field,
 } from "@chakra-ui/react"
 
-export function DesfechoCenaSection() {
+import { useGroupContext } from "../context/GroupContext"
 
-  const elegibilidade = createListCollection({
-    items: [
-      { label: "ELEGÍVEL", value: "elegivel" },
-      { label: "INELEGÍVEL", value: "inelegivel" },
-    ],
-  })
+export function DesfechoCenaSection() {
+  const { form } = useGroupContext();
+  const { formState: { errors } } = form;
 
   return (
     <Box>
@@ -26,66 +20,45 @@ export function DesfechoCenaSection() {
       <Grid
         templateColumns="260px 1fr"
         gap={4}
-        alignItems="center"
+        alignItems="start"
         mb={8}
       >
         <Text fontWeight="medium">
           Horário de Saída da Cena
         </Text>
-        <Input type="datetime-local" size="sm" width="200px" />
+
+        <Field.Root 
+          invalid={!!errors.DesfechoCenaSection?.horarioSaidaCena}
+          width="200px"
+        >
+          <Input 
+            type="datetime-local" 
+            size="sm" 
+            {...form.register("DesfechoCenaSection.horarioSaidaCena")}
+          />
+          <Field.ErrorText>
+            {errors.DesfechoCenaSection?.horarioSaidaCena?.message}
+          </Field.ErrorText>
+        </Field.Root>
 
         <Text fontWeight="medium">
           Horário de Chegada ao Hospital
         </Text>
-        <Input type="datetime-local" size="sm" width="200px" />
+
+        <Field.Root 
+          invalid={!!errors.DesfechoCenaSection?.horarioChegadaHospital}
+          width="200px"
+        >
+          <Input 
+            type="datetime-local" 
+            size="sm" 
+            {...form.register("DesfechoCenaSection.horarioChegadaHospital")}
+          />
+          <Field.ErrorText>
+            {errors.DesfechoCenaSection?.horarioChegadaHospital?.message}
+          </Field.ErrorText>
+        </Field.Root>
       </Grid>
-
-      {/* Parecer Final */}
-      <Box
-        border="1px solid"
-        borderColor="gray.300"
-        borderRadius="md"
-        p={8}
-      >
-        <VStack gap={6}>
-          <Text fontWeight="bold">
-            PARECER FINAL DE ELEGIBILIDADE:
-          </Text>
-
-          <RadioCard.Root
-            orientation="horizontal"
-            justify="center"
-            gap="6"
-          >
-            <HStack>
-              {elegibilidade.items.map((item) => (
-                <RadioCard.Item
-                  key={item.value}
-                  value={item.value}
-                  px={10}
-                  py={6}
-                  borderRadius="md"
-                >
-                  <RadioCard.ItemHiddenInput />
-                  <RadioCard.ItemControl>
-                    <RadioCard.ItemText
-                      fontSize="lg"
-                      fontWeight="bold"
-                      color={
-                        item.value === "elegivel"
-                          ? "green.600"
-                          : "red.600"
-                      }
-                    >
-                      {item.label}
-                    </RadioCard.ItemText>
-                  </RadioCard.ItemControl>
-                </RadioCard.Item>
-              ))}
-            </HStack>
-          </RadioCard.Root>
-        </VStack>
-      </Box>
 
     </Box>
   )

@@ -7,15 +7,15 @@ import {
   createListCollection,
     Portal
 } from "@chakra-ui/react"
+import { respostasAvaliacoes, testesNeurologicos } from "../utils/testeNeurologicos"
+import { useGroupContext } from "../context/GroupContext"
+import { Controller } from "react-hook-form";
+import React from "react";
 
-const avaliacoes = createListCollection({
-    items: [
-        { label: "Normal", value: "normal"},
-        { label: "Alterado", value: "alterado"},
-    ]
-  })
 
 export function AvaliacaoNeurologicaSection() {
+    const { form } = useGroupContext();
+
   return (
     <Box>
       <Table.Root variant="outline">
@@ -27,15 +27,24 @@ export function AvaliacaoNeurologicaSection() {
           </Table.Row>
         </Table.Header>
 
-        <Table.Body>
-
-          <Table.Row>
-            <Table.Cell>Balance (Equilíbrio)</Table.Cell>
+       <Table.Body>
+        {testesNeurologicos.map((teste) => (
+            <Table.Row key={teste.key}>
+            <Table.Cell>{teste.nome}</Table.Cell>
+            <Table.Cell>{teste.descricao}</Table.Cell>
             <Table.Cell>
-              Observe se há dificuldade para manter-se em pé ou andar"
-            </Table.Cell>
-            <Table.Cell>
-                <Select.Root collection={avaliacoes} size="sm" width="320px">
+                <Controller
+                control={form.control}
+                name={`AvaliacaoNeurologicaSection.${teste.key}`} // mapeia para o form
+                render={({ field }) => (
+                    <Select.Root
+                    {...field}
+                    collection={createListCollection(respostasAvaliacoes)}
+                    size="sm"
+                    width="320px"
+                    value={field.value ? [field.value] : []} // ✅ transformar string em array
+                    onValueChange={(val) => field.onChange(val.value[0])} // atualiza o form
+                    >
                     <Select.HiddenSelect />
                     <Select.Control>
                         <Select.Trigger>
@@ -48,7 +57,7 @@ export function AvaliacaoNeurologicaSection() {
                     <Portal>
                         <Select.Positioner>
                         <Select.Content>
-                            {avaliacoes.items.map((avaliacao) => (
+                            {respostasAvaliacoes.items.map((avaliacao) => (
                             <Select.Item item={avaliacao} key={avaliacao.value}>
                                 {avaliacao.label}
                                 <Select.ItemIndicator />
@@ -57,140 +66,14 @@ export function AvaliacaoNeurologicaSection() {
                         </Select.Content>
                         </Select.Positioner>
                     </Portal>
-                </Select.Root>
+                    </Select.Root>
+                )}
+                />
             </Table.Cell>
-          </Table.Row>
-
-
-          <Table.Row>
-            <Table.Cell>Eyes (Visão)</Table.Cell>
-            <Table.Cell>
-              Pergunte se há visão dupla, perda visual ou alteração súbita"
-            </Table.Cell>
-            <Table.Cell>
-                <Select.Root collection={avaliacoes} size="sm" width="320px">
-                    <Select.HiddenSelect />
-                    <Select.Control>
-                        <Select.Trigger>
-                        <Select.ValueText placeholder="Selecione" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                        <Select.Indicator />
-                        </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Portal>
-                        <Select.Positioner>
-                        <Select.Content>
-                            {avaliacoes.items.map((avaliacao) => (
-                            <Select.Item item={avaliacao} key={avaliacao.value}>
-                                {avaliacao.label}
-                                <Select.ItemIndicator />
-                            </Select.Item>
-                            ))}
-                        </Select.Content>
-                        </Select.Positioner>
-                    </Portal>
-                </Select.Root>
-            </Table.Cell>
-          </Table.Row>
-
-          <Table.Row>
-            <Table.Cell>Desvio Facial</Table.Cell>
-            <Table.Cell>
-              Peça para sorrir ou mostrar dentes
-            </Table.Cell>
-            <Table.Cell>
-                <Select.Root collection={avaliacoes} size="sm" width="320px">
-                    <Select.HiddenSelect />
-                    <Select.Control>
-                        <Select.Trigger>
-                        <Select.ValueText placeholder="Selecione" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                        <Select.Indicator />
-                        </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Portal>
-                        <Select.Positioner>
-                        <Select.Content>
-                            {avaliacoes.items.map((avaliacao) => (
-                            <Select.Item item={avaliacao} key={avaliacao.value}>
-                                {avaliacao.label}
-                                <Select.ItemIndicator />
-                            </Select.Item>
-                            ))}
-                        </Select.Content>
-                        </Select.Positioner>
-                    </Portal>
-                </Select.Root>
-            </Table.Cell>
-          </Table.Row>
-
-          <Table.Row>
-            <Table.Cell>Queda do Braço</Table.Cell>
-            <Table.Cell>
-              Olhos fechados, braços estendidos (10s)
-            </Table.Cell>
-            <Table.Cell>
-                <Select.Root collection={avaliacoes} size="sm" width="320px">
-                    <Select.HiddenSelect />
-                    <Select.Control>
-                        <Select.Trigger>
-                        <Select.ValueText placeholder="Selecione" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                        <Select.Indicator />
-                        </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Portal>
-                        <Select.Positioner>
-                        <Select.Content>
-                            {avaliacoes.items.map((avaliacao) => (
-                            <Select.Item item={avaliacao} key={avaliacao.value}>
-                                {avaliacao.label}
-                                <Select.ItemIndicator />
-                            </Select.Item>
-                            ))}
-                        </Select.Content>
-                        </Select.Positioner>
-                    </Portal>
-                </Select.Root>
-            </Table.Cell>
-          </Table.Row>
-
-          <Table.Row>
-            <Table.Cell>Fala Anormal</Table.Cell>
-            <Table.Cell>
-              "O rato roeu a roupa do rei..."
-            </Table.Cell>
-            <Table.Cell>
-                <Select.Root collection={avaliacoes} size="sm" width="320px">
-                    <Select.HiddenSelect />
-                    <Select.Control>
-                        <Select.Trigger>
-                        <Select.ValueText placeholder="Selecione" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                        <Select.Indicator />
-                        </Select.IndicatorGroup>
-                    </Select.Control>
-                    <Portal>
-                        <Select.Positioner>
-                        <Select.Content>
-                            {avaliacoes.items.map((avaliacao) => (
-                            <Select.Item item={avaliacao} key={avaliacao.value}>
-                                {avaliacao.label}
-                                <Select.ItemIndicator />
-                            </Select.Item>
-                            ))}
-                        </Select.Content>
-                        </Select.Positioner>
-                    </Portal>
-                </Select.Root>
-            </Table.Cell>
-          </Table.Row>
-          
+            </Table.Row>
+        ))}
         </Table.Body>
+          
       </Table.Root>
     </Box>
   )

@@ -7,54 +7,83 @@ import {
   Text,
   Input,
   Separator,
+  Field,
 } from "@chakra-ui/react"
+import { useGroupContext } from "../context/GroupContext"
 
 export function ParametrosClinicosSection() {
+  const { form } = useGroupContext()
+
   return (
     <Box>
-
       <VStack align="stretch" gap={4}>
-        {/* Glicemia */}
-        <HStack>
-          <Text minW="220px" fontWeight="medium">
-            Glicemia Capilar (mg/dL)
-          </Text>
-          <Input placeholder="HGT" type="number" />
-        </HStack>
+        {/* Linha lado a lado */}
+        <HStack align="flex-start">
+          {/* Glicemia */}
+          <Field.Root
+            invalid={!!form.formState.errors.ParametrosClinicosSection?.glicemia}
+          >
+            <Field.Label>Glicemia Capilar (mg/dL)</Field.Label>
+            <Input
+              type="number"
+              placeholder="HGT"
+              {...form.register("ParametrosClinicosSection.glicemia", {
+                valueAsNumber: true,
+              })}
+            />
+            <Field.ErrorText>
+              {form.formState.errors.ParametrosClinicosSection?.glicemia?.message}
+            </Field.ErrorText>
+          </Field.Root>
 
-        {/* Pressão Arterial */}
-        <HStack>
-          <Text minW="220px" fontWeight="medium">
-            Pressão Arterial (PA)
-          </Text>
-          <Input placeholder="Ex: 190/110" />
-        </HStack>
+          {/* Pressão Arterial */}
+          <Field.Root
+            invalid={!!form.formState.errors.ParametrosClinicosSection?.pressaoArterial}
+          >
+            <Field.Label>Pressão Arterial (PA)</Field.Label>
+            <Input
+              placeholder="Ex: 190/110"
+              {...form.register("ParametrosClinicosSection.pressaoArterial")}
+            />
+            <Field.ErrorText>
+              {form.formState.errors.ParametrosClinicosSection?.pressaoArterial?.message}
+            </Field.ErrorText>
+          </Field.Root>
 
-        {/* Saturação */}
-        <HStack>
-          <Text minW="220px" fontWeight="medium">
-            Saturação de O₂ (%)
-          </Text>
-          <Input placeholder="Sat." type="number" />
+          {/* Saturação */}
+          <Field.Root
+            invalid={!!form.formState.errors.ParametrosClinicosSection?.saturacao}
+          >
+            <Field.Label>Saturação de O₂ (%)</Field.Label>
+            <Input
+              type="number"
+              placeholder="Sat."
+              {...form.register("ParametrosClinicosSection.saturacao", {
+                valueAsNumber: true,
+              })}
+            />
+            <Field.ErrorText>
+              {form.formState.errors.ParametrosClinicosSection?.saturacao?.message}
+            </Field.ErrorText>
+          </Field.Root>
         </HStack>
 
         {/* Nota */}
         <Text fontSize="sm" color="gray.600" mt={2}>
           <strong>Nota</strong>
         </Text>
-        
-        <Separator mt={-4}/>
 
-        <Text fontSize="sm" color="gray.600" >
+        <Separator mt={-4} />
+
+        <Text fontSize="sm" color="gray.600">
           Reduzir Pressão Arterial somente se maior 185/110 mmHg (sob regulação médica).
         </Text>
-        <Text fontSize="sm" color="gray.600" >
+        <Text fontSize="sm" color="gray.600">
           Ofertar Oxigênio se Sat. menor que 94% (sob regulação médica).
         </Text>
-        <Text fontSize="sm" color="gray.600" >
+        <Text fontSize="sm" color="gray.600">
           Corrigir hipoglicemia se HGT menor que 60mg/dl (sob regulação médica).
         </Text>
-
       </VStack>
     </Box>
   )
