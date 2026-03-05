@@ -9,11 +9,13 @@ import {
   Portal,
   createListCollection,
   CheckboxCard,
+  Grid,
 } from "@chakra-ui/react"
 import React from "react"
 import { useGroupContext } from "../context/GroupContext"
 import { Controller } from "react-hook-form"
-
+import calcularDiferencaEmHorasEMinutos from "../utils/calcularDiferencaDate"
+import { parseDatetimeLocal } from "../utils/parseDatetimeLocal"
 
 const municipios = createListCollection({
   items: [
@@ -35,7 +37,18 @@ const municipios = createListCollection({
 export function LinhaDoTempoSection() {
   const { form } = useGroupContext();
   const [lkwDisabled, setLkwDisabled] = React.useState(false);
-  
+  const [chegadaCena, vistoBem] = form.watch(["LinhaDoTempoSection.chegadaCena", "LinhaDoTempoSection.ultimoHorarioVistoBem"]);
+
+  React.useEffect(()=>{
+    const vistoBemDate = parseDatetimeLocal(vistoBem);
+    const chegadaCenaDate = parseDatetimeLocal(chegadaCena);
+    if (chegadaCenaDate && vistoBemDate) {
+      const calculo = calcularDiferencaEmHorasEMinutos(vistoBemDate, chegadaCenaDate).formatado;
+      form.setValue("LinhaDoTempoSection.janelaEstimada", calculo);
+    }
+  }, [chegadaCena, vistoBem]);
+
+
   React.useEffect(()=>{
     if (lkwDisabled) {
       form.setValue("LinhaDoTempoSection.ultimoHorarioVistoBem", "");
@@ -47,109 +60,127 @@ export function LinhaDoTempoSection() {
   return (
     <Box>
       <VStack gap={6}>
-          <Field.Root
-            invalid={!!form.formState.errors.LinhaDoTempoSection?.numeroOcorrencia}
+         <Grid
+            templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+            gap={6}
+            w="full"
           >
-            <Field.Label>Nº da Ocorrência</Field.Label>
+            {/* Nº da Ocorrência */}
+            <Field.Root
+              invalid={!!form.formState.errors.LinhaDoTempoSection?.numeroOcorrencia}
+            >
+              <Field.Label>Nº da Ocorrência</Field.Label>
+              <Input
+                placeholder="Ex: 12345/2026"
+                {...form.register("LinhaDoTempoSection.numeroOcorrencia")}
+              />
+              <Field.ErrorText>
+                {
+                  form.formState.errors
+                    .LinhaDoTempoSection
+                    ?.numeroOcorrencia?.message
+                }
+              </Field.ErrorText>
+            </Field.Root>
 
-            <Input
-              placeholder="Ex: 12345/2026"
-              {...form.register("LinhaDoTempoSection.numeroOcorrencia")}
-            />
+            {/* Município */}
+            <Field.Root
+              invalid={!!form.formState.errors.LinhaDoTempoSection?.municipio}
+            >
+              <Field.Label>Município</Field.Label>
 
-            <Field.ErrorText>
-              {
-                form.formState.errors
-                  .LinhaDoTempoSection
-                  ?.numeroOcorrencia?.message
-              }
-            </Field.ErrorText>
-          </Field.Root>
+              <Controller
+                name="LinhaDoTempoSection.municipio"
+                control={form.control}
+                render={({ field }) => (
+                  <Select.Root
+                    collection={municipios}
+                    value={field.value ? [field.value] : []}
+                    onValueChange={(details) => {
+                      field.onChange(details.value[0])
+                    }}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Control>
+                      <Select.Trigger>
+                        <Select.ValueText placeholder="Selecione" />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
 
-       <Field.Root
-          invalid={!!form.formState.errors.LinhaDoTempoSection?.municipio}
-        >
-          <Field.Label>Município</Field.Label>
+                    <Portal>
+                      <Select.Positioner>
+                        <Select.Content>
+                          {municipios.items.map((municipio) => (
+                            <Select.Item
+                              item={municipio}
+                              key={municipio.value}
+                            >
+                              {municipio.label}
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          ))}
+                        </Select.Content>
+                      </Select.Positioner>
+                    </Portal>
+                  </Select.Root>
+                )}
+              />
 
-          <Controller
-            name="LinhaDoTempoSection.municipio"
-            control={form.control}
-            render={({ field }) => (
-              <Select.Root
-                collection={municipios}
-                value={field.value ? [field.value] : []}
-                onValueChange={(details) => {
-                  field.onChange(details.value[0])
-                }}
-              >
-                <Select.HiddenSelect />
-
-                <Select.Control>
-                  <Select.Trigger>
-                    <Select.ValueText placeholder="Selecione" />
-                  </Select.Trigger>
-
-                  <Select.IndicatorGroup>
-                    <Select.Indicator />
-                  </Select.IndicatorGroup>
-                </Select.Control>
-
-                <Portal>
-                  <Select.Positioner>
-                    <Select.Content>
-                      {municipios.items.map((municipio) => (
-                        <Select.Item
-                          item={municipio}
-                          key={municipio.value}
-                        >
-                          {municipio.label}
-                          <Select.ItemIndicator />
-                        </Select.Item>
-                      ))}
-                    </Select.Content>
-                  </Select.Positioner>
-                </Portal>
-              </Select.Root>
-            )}
-          />
-
-          <Field.ErrorText>
-            {
-              form.formState.errors
-                .LinhaDoTempoSection
-                ?.municipio?.message
-            }
-          </Field.ErrorText>
-        </Field.Root>
+              <Field.ErrorText>
+                {
+                  form.formState.errors
+                    .LinhaDoTempoSection
+                    ?.municipio?.message
+                }
+              </Field.ErrorText>
+            </Field.Root>
+          </Grid>
 
 
-        <Field.Root
-          invalid={!!form.formState.errors.LinhaDoTempoSection?.atendimentoSamu}
+        <Grid
+            templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+            gap={6}
+            w="full"
           >
-          <Field.Label>Atendimento Equipe SAMU</Field.Label>
-          <Input type="datetime-local" {...form.register("LinhaDoTempoSection.atendimentoSamu")}/>
-          <Field.ErrorText>
-            {
-              form.formState.errors
-                .LinhaDoTempoSection
-                ?.atendimentoSamu?.message
-            }
-            </Field.ErrorText>
-        </Field.Root>
+            {/* Abertura */}
+            <Field.Root
+              invalid={!!form.formState.errors.LinhaDoTempoSection?.aberturaChamado}
+            >
+              <Field.Label>Abertura do chamado</Field.Label>
+              <Input
+                type="datetime-local"
+                {...form.register("LinhaDoTempoSection.aberturaChamado")}
+              />
+              <Field.ErrorText>
+                {
+                  form.formState.errors
+                    .LinhaDoTempoSection
+                    ?.aberturaChamado?.message
+                }
+              </Field.ErrorText>
+            </Field.Root>
 
-        <Field.Root
-          invalid={!!form.formState.errors.LinhaDoTempoSection?.chegadaCena}
-        >
-          <Field.Label>Chegada na Cena</Field.Label>
-            <Input type="datetime-local" {...form.register("LinhaDoTempoSection.chegadaCena")}/>
-            <Field.ErrorText>
-              {
-                form.formState.errors
-                  .LinhaDoTempoSection
-                  ?.chegadaCena?.message
-              }
-            </Field.ErrorText>
-        </Field.Root>
+            {/* Chegada */}
+            <Field.Root
+              invalid={!!form.formState.errors.LinhaDoTempoSection?.chegadaCena}
+            >
+              <Field.Label>Chegada na Cena</Field.Label>
+              <Input
+                type="datetime-local"
+                {...form.register("LinhaDoTempoSection.chegadaCena")}
+              />
+              <Field.ErrorText>
+                {
+                  form.formState.errors
+                    .LinhaDoTempoSection
+                    ?.chegadaCena?.message
+                }
+              </Field.ErrorText>
+            </Field.Root>
+          </Grid>
 
         <Field.Root
           invalid={!!form.formState.errors.LinhaDoTempoSection?.ultimoHorarioVistoBem}

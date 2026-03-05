@@ -3,11 +3,11 @@
 import {
   Box,
   VStack,
-  HStack,
   Text,
   Input,
   Separator,
   Field,
+  SimpleGrid,
 } from "@chakra-ui/react"
 import { useGroupContext } from "../context/GroupContext"
 
@@ -17,8 +17,10 @@ export function ParametrosClinicosSection() {
   return (
     <Box>
       <VStack align="stretch" gap={4}>
-        {/* Linha lado a lado */}
-        <HStack align="flex-start">
+        
+        {/* Grid Responsivo */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
+          
           {/* Glicemia */}
           <Field.Root
             invalid={!!form.formState.errors.ParametrosClinicosSection?.glicemia}
@@ -66,7 +68,7 @@ export function ParametrosClinicosSection() {
               {form.formState.errors.ParametrosClinicosSection?.saturacao?.message}
             </Field.ErrorText>
           </Field.Root>
-        </HStack>
+        </SimpleGrid>
 
         {/* Nota */}
         <Text fontSize="sm" color="gray.600" mt={2}>

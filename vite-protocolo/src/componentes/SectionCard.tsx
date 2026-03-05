@@ -13,6 +13,7 @@ export function SectionCard({ title, step, children }: SectionCardProps) {
       size="lg"
       borderRadius="xl"
       bg="white"
+      width="100%" // garantir que ocupe 100% do container
     >
       <Card.Header pb={4}>
         <HStack align="center" gap={4}>

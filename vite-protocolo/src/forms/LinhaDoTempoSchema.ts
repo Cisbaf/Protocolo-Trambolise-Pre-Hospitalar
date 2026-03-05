@@ -13,7 +13,7 @@ export const LinhaDoTempoSchema = z.object({
     .string()
     .min(1, "Selecione um município"),
 
-  atendimentoSamu: z
+  aberturaChamado: z
     .string()
     .regex(datetimeLocalRegex, "Data inválida"),
 
@@ -28,6 +28,5 @@ export const LinhaDoTempoSchema = z.object({
 
   janelaEstimada: z
     .string()
-    .regex(datetimeLocalRegex, "Janela estimada inválida")
     .optional(),
 })

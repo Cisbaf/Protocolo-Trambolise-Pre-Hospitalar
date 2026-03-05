@@ -11,55 +11,78 @@ import {
 import { useGroupContext } from "../context/GroupContext"
 
 export function DesfechoCenaSection() {
-  const { form } = useGroupContext();
-  const { formState: { errors } } = form;
+  const { form } = useGroupContext()
+  const {
+    formState: { errors },
+  } = form
 
   return (
-    <Box>
-      {/* Horários */}
+    <Box w="100%">
       <Grid
-        templateColumns="260px 1fr"
+        templateColumns={{
+          base: "1fr",
+          md: "240px 1fr",
+        }}
         gap={4}
         alignItems="start"
         mb={8}
+        w="100%"
       >
+        {/* ================= Saída da Cena ================= */}
         <Text fontWeight="medium">
           Horário de Saída da Cena
         </Text>
 
-        <Field.Root 
-          invalid={!!errors.DesfechoCenaSection?.horarioSaidaCena}
-          width="200px"
+        <Field.Root
+          w="100%"
+          invalid={
+            !!errors.DesfechoCenaSection?.horarioSaidaCena
+          }
         >
-          <Input 
-            type="datetime-local" 
-            size="sm" 
-            {...form.register("DesfechoCenaSection.horarioSaidaCena")}
+          <Input
+            type="datetime-local"
+            size="sm"
+            w="100%"
+            {...form.register(
+              "DesfechoCenaSection.horarioSaidaCena"
+            )}
           />
           <Field.ErrorText>
-            {errors.DesfechoCenaSection?.horarioSaidaCena?.message}
+            {
+              errors.DesfechoCenaSection
+                ?.horarioSaidaCena?.message
+            }
           </Field.ErrorText>
         </Field.Root>
 
+        {/* ================= Chegada Hospital ================= */}
         <Text fontWeight="medium">
           Horário de Chegada ao Hospital
         </Text>
 
-        <Field.Root 
-          invalid={!!errors.DesfechoCenaSection?.horarioChegadaHospital}
-          width="200px"
+        <Field.Root
+          w="100%"
+          invalid={
+            !!errors.DesfechoCenaSection
+              ?.horarioChegadaHospital
+          }
         >
-          <Input 
-            type="datetime-local" 
-            size="sm" 
-            {...form.register("DesfechoCenaSection.horarioChegadaHospital")}
+          <Input
+            type="datetime-local"
+            size="sm"
+            w="100%"
+            {...form.register(
+              "DesfechoCenaSection.horarioChegadaHospital"
+            )}
           />
           <Field.ErrorText>
-            {errors.DesfechoCenaSection?.horarioChegadaHospital?.message}
+            {
+              errors.DesfechoCenaSection
+                ?.horarioChegadaHospital?.message
+            }
           </Field.ErrorText>
         </Field.Root>
       </Grid>
-
     </Box>
   )
 }

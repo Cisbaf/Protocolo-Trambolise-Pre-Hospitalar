@@ -14,33 +14,59 @@ import { Controller } from "react-hook-form"
 import { useGroupContext } from "../context/GroupContext"
 
 export function UnidadeReferenciaSection() {
-  const { form } = useGroupContext();
-  const { formState: { errors } } = form;
+  const { form } = useGroupContext()
+  const {
+    formState: { errors },
+  } = form
 
   const unidades = createListCollection({
     items: [
-      { label: "Hospital Municipal São João de Meriti", value: "Hospital Municipal São João de Meriti" },
-      { label: "Hospital Geral de Nova Iguaçu", value: "Hospital Geral de Nova Iguaçu" },
-      { label: "Hospital Municipalizado Adão Pereira Nunes", value: "Hospital Municipalizado Adão Pereira Nunes" },
-      { label: "Hospital MRJ (SUBPAV)", value: "Hospital MRJ (SUBPAV)"},
-      { label: "Upa", value: "Upa"},
-      { label: "Outros Hospitais não elegíveis trombólise", value: "Outros Hospitais não elegíveis trombólise"}
+      {
+        label: "Hospital Municipal São João de Meriti",
+        value: "Hospital Municipal São João de Meriti",
+      },
+      {
+        label: "Hospital Geral de Nova Iguaçu",
+        value: "Hospital Geral de Nova Iguaçu",
+      },
+      {
+        label: "Hospital Municipalizado Adão Pereira Nunes",
+        value: "Hospital Municipalizado Adão Pereira Nunes",
+      },
+      {
+        label: "Hospital MRJ (SUBPAV)",
+        value: "Hospital MRJ (SUBPAV)",
+      },
+      { label: "Upa", value: "Upa" },
+      {
+        label: "Outros Hospitais não elegíveis trombólise",
+        value: "Outros Hospitais não elegíveis trombólise",
+      },
     ],
   })
 
   return (
-    <Box>
+    <Box w="100%">
       <Grid
-        templateColumns="260px 1fr"
+        templateColumns={{
+          base: "1fr",
+          md: "240px 1fr",
+        }}
         gap={4}
         alignItems="start"
+        w="100%"
       >
+        {/* ================= Unidade ================= */}
         <Text fontWeight="medium">
           Unidade de Referência Eleita
         </Text>
 
-        <Field.Root 
-          invalid={!!errors.UnidadeReferenciaSection?.unidadeReferenciaEleita}
+        <Field.Root
+          w="100%"
+          invalid={
+            !!errors.UnidadeReferenciaSection
+              ?.unidadeReferenciaEleita
+          }
         >
           <Controller
             name="UnidadeReferenciaSection.unidadeReferenciaEleita"
@@ -49,12 +75,16 @@ export function UnidadeReferenciaSection() {
               <Select.Root
                 collection={unidades}
                 size="sm"
+                w="100%"
+                minW={0}
                 value={field.value ? [field.value] : []}
-                onValueChange={(details) => {
+                onValueChange={(details) =>
                   field.onChange(details.value[0])
-                }}
-                width="320px"
-                invalid={!!errors.UnidadeReferenciaSection?.unidadeReferenciaEleita}
+                }
+                invalid={
+                  !!errors.UnidadeReferenciaSection
+                    ?.unidadeReferenciaEleita
+                }
               >
                 <Select.HiddenSelect />
 
@@ -86,25 +116,38 @@ export function UnidadeReferenciaSection() {
             )}
           />
           <Field.ErrorText>
-            {errors.UnidadeReferenciaSection?.unidadeReferenciaEleita?.message}
+            {
+              errors.UnidadeReferenciaSection
+                ?.unidadeReferenciaEleita?.message
+            }
           </Field.ErrorText>
         </Field.Root>
 
+        {/* ================= Horário ================= */}
         <Text fontWeight="medium">
           Horário da Notificação à Unidade
         </Text>
 
-        <Field.Root 
-          invalid={!!errors.UnidadeReferenciaSection?.horarioNotificacaoUnidade}
+        <Field.Root
+          w="100%"
+          invalid={
+            !!errors.UnidadeReferenciaSection
+              ?.horarioNotificacaoUnidade
+          }
         >
-          <Input 
-            type="datetime-local" 
-            width="200px" 
-            size="sm" 
-            {...form.register("UnidadeReferenciaSection.horarioNotificacaoUnidade")}
+          <Input
+            type="datetime-local"
+            size="sm"
+            w="100%"
+            {...form.register(
+              "UnidadeReferenciaSection.horarioNotificacaoUnidade"
+            )}
           />
           <Field.ErrorText>
-            {errors.UnidadeReferenciaSection?.horarioNotificacaoUnidade?.message}
+            {
+              errors.UnidadeReferenciaSection
+                ?.horarioNotificacaoUnidade?.message
+            }
           </Field.ErrorText>
         </Field.Root>
       </Grid>

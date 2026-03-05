@@ -2,10 +2,10 @@
 
 import {
   Box,
-  Container,
   VStack,
   Heading,
   Separator,
+  Button,
 } from "@chakra-ui/react"
 
 import { LinhaDoTempoSection } from "./LinhaDoTempoSection"
@@ -15,27 +15,83 @@ import { HistoriaClinicaSection } from "./HistoriaClinicaSection"
 import { UnidadeReferenciaSection } from "./UnidadeReferenciaSection"
 import { DesfechoCenaSection } from "./DesfechoCenaSection"
 import { SectionCard } from "./SectionCard"
-import { GroupContextProvider } from "../context/GroupContext"
 import ParecerFinalSection from "./ParecerFinalSection"
-
+import { useGroupContext } from "../context/GroupContext"
+import type { DataFormValues } from "../forms/DataForm"
+import SendFormBackend from "../helpers/SendFormBackend"
+import { Toaster, toaster } from "./ui/toaster"
+import React from "react"
+import { LoadingOverlay } from "./ui/loading"
 
 export function ProtocoloTromboliseForm() {
-  return (
-    <GroupContextProvider>
-      <Box bg="gray.50" minH="100vh" py={10}>
-        <Container maxW="1000px">
-          <VStack align="stretch" gap={8}>
+  const { form } = useGroupContext()
+  const [loading, setLoading] = React.useState(false)
 
+  const onSubmit = async (data: DataFormValues) => {
+    setLoading(true)
+
+    const result = await SendFormBackend(data)
+
+    if (!result.success) {
+      toaster.create({
+        title: "Erro ao enviar formulário",
+        description: result.message,
+        type: "error",
+        duration: 10000,
+      })
+      setLoading(false)
+      return
+    }
+
+    toaster.create({
+      title: "Sucesso 🥳🥳🥳!!!",
+      description: `ID gerado ${result.data.id}`,
+      type: "success",
+      duration: 10000,
+    })
+
+    setLoading(false)
+  }
+
+  const onError = (errors: any) => {
+    console.log("FORM ERROR ❌", errors)
+  }
+
+  return (
+    <form
+      onSubmit={form.handleSubmit(onSubmit, onError)}
+      style={{ width: "100%" }}
+    >
+      <Toaster />
+      <LoadingOverlay isOpen={loading} />
+
+      <Box
+        bg="gray.50"
+        minH="100vh"
+        w="100%"
+        py={{ base: 4, md: 10 }}
+      >
+        {/* Container responsivo */}
+        <Box
+          w="100%"
+          maxW={{ base: "100%", md: "720px", lg: "900px", xl: "1100px" }}
+          mx="auto"
+          px={{ base: 3, sm: 4, md: 6 }}
+        >
+          <VStack
+            align="stretch"
+            gap={{ base: 6, md: 8 }}
+            w="100%"
+          >
             {/* Header */}
             <Box textAlign="center">
               <Heading
-                size="lg"
+                size={{ base: "md", md: "lg" }}
                 color="red.600"
                 letterSpacing="wide"
               >
                 PROTOCOLO DE ATENDIMENTO AO AVC HIPERAGUDO
               </Heading>
-
             </Box>
 
             <Separator />
@@ -65,12 +121,21 @@ export function ProtocoloTromboliseForm() {
             <SectionCard title="DESFECHO DA CENA E ELEGIBILIDADE" step={6}>
               <DesfechoCenaSection />
             </SectionCard>
-            
-            <ParecerFinalSection/>
+
+            <ParecerFinalSection />
+
+            <Button
+              type="submit"
+              size="lg"
+              colorScheme="red"
+              w="100%"
+            >
+              ENVIAR FORMULÁRIO
+            </Button>
 
           </VStack>
-        </Container>
+        </Box>
       </Box>
-    </GroupContextProvider>
+    </form>
   )
 }

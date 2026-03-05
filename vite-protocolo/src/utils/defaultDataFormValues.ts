@@ -1,0 +1,50 @@
+import type { DataFormValues } from "../hooks/useDataForm"
+import { lista_doencas } from "../utils/labels"
+
+export const defaultDataFormValues: DataFormValues = {
+  LinhaDoTempoSection: {
+    numeroOcorrencia: "",
+    municipio: "",
+    aberturaChamado: "",
+    chegadaCena: "",
+    ultimoHorarioVistoBem: undefined,
+    janelaEstimada: undefined,
+  },
+
+  AvaliacaoNeurologicaSection: {
+    balance: "normal",
+    eyes: "normal",
+    desvioFacial: "normal",
+    quedaBraco: "normal",
+    falaAnormal: "normal",
+  },
+
+  ParametrosClinicosSection: {
+    glicemia: 0,
+    pressaoArterial: "",
+    saturacao: 0,
+  },
+
+  HistoriaClinicaSection: {
+    idade: 0,
+    doencas: Object.fromEntries(
+      lista_doencas.map((d) => [d, false])
+    ) as Record<(typeof lista_doencas)[number], boolean>,
+    medicamentos: [],
+  },
+
+  UnidadeReferenciaSection: {
+    unidadeReferenciaEleita: "",
+    horarioNotificacaoUnidade: "",
+  },
+
+  DesfechoCenaSection: {
+    horarioSaidaCena: "",
+    horarioChegadaHospital: "",
+  },
+
+  ParecerFinalSection: {
+    elegibilidade: undefined,
+    motivos: [],
+  },
+}
