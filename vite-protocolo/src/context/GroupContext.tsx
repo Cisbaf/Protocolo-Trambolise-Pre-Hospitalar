@@ -1,6 +1,5 @@
 import React from "react";
 import { useDataForm } from "../hooks/useDataForm";
-import { fakeInitialValues } from "../utils/formFakeValueInit";
 
 interface GroupContextType {
   form: ReturnType<typeof useDataForm>
@@ -15,7 +14,7 @@ interface GroupContextProviderProps {
 
 export function GroupContextProvider({children}: GroupContextProviderProps) {
 
-  const methodsForm = useDataForm(fakeInitialValues);
+  const methodsForm = useDataForm();
 
   return <GroupContext.Provider
       value={{
