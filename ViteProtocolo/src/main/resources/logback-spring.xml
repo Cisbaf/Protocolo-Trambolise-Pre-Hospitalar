@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Propriedades reutilizáveis -->
+    <property name="LOG_DIR" value="logs" />
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <!-- ================================================= -->
+    <!-- Appender para o Console (INFO, WARN, ERROR)       -->
+    <!-- ================================================= -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+        <!-- Opcional: Adicionar um filtro para garantir que apenas INFO e acima apareçam -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- ================================================= -->
+    <!-- Appender para o arquivo de ERROS e WARNINGS       -->
+    <!-- ================================================= -->
+    <appender name="FILE_WARN_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/warn-error.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/archived/warn-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <!-- Encoder super conciso: foca na causa raiz e mostra apenas 1 linha da stack trace -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg: %rEx{1, rootFirst}%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- Filtros para aceitar apenas ERROR e WARN -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <!-- ================================================= -->
+    <!-- Appender específico para criação de Protocolo    -->
+    <!-- ================================================= -->
+    <appender name="PROTOCOLO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/protocolo-creation.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/protocolo-creation.%d{yyyy-MM-dd}.txt</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ================================================= -->
+    <!-- Logger raiz (configuração padrão para a aplicação)-->
+    <!-- ================================================= -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE_WARN_ERROR" />
+    </root>
+
+    <!-- ================================================= -->
+    <!-- Logger específico para ProtocoloService           -->
+    <!-- additivity="false" impede que os logs deste logger-->
+    <!-- subam para o <root>, evitando duplicação.         -->
+    <!-- ================================================= -->
+    <logger name="com.viteprotocolo.service.ProtocoloService" level="INFO" additivity="false">
+        <appender-ref ref="PROTOCOLO" />
+        <!-- Se também quiser ver os logs de ProtocoloService no console, descomente a linha abaixo -->
+        <!-- <appender-ref ref="CONSOLE" /> -->
+    </logger>
+
+</configuration>
