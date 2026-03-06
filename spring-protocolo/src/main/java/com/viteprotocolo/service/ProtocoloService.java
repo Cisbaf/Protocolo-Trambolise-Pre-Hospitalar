@@ -22,7 +22,7 @@ public class ProtocoloService {
 
     private static final Logger log = LoggerFactory.getLogger(ProtocoloService.class);
 
-    public ProtocoloResponse createProtocolo(ProtocoloRequest protocolo){
+    public ProtocoloResponse createProtocolo(ProtocoloRequest protocolo) {
         try {
             if (protocolo == null) {
                 log.warn("protocolo is null");
@@ -34,16 +34,18 @@ public class ProtocoloService {
 
             log.info("Protocolo criado: ID:{}, N. Ocorrencia: {}, Data Criação: {} \n ",
                     salvo.getId(), salvo.getLinhaDoTempo().getNumeroOcorrencia(), salvo.getDataCriacao());
-            return protocoloMapper.toResponse(salvo) ;
-        }catch (Exception e){
+            return protocoloMapper.toResponse(salvo);
+        } catch (Exception e) {
             log.error(e.getMessage());
             throw new IllegalArgumentException(e);
         }
     }
-    public List<ProtocoloResponse> getAllProtocolos(){
+
+    public List<ProtocoloResponse> getAllProtocolos() {
         return protocoloRespository.findAll().stream().map(protocoloMapper::toResponse).toList();
     }
-    public ProtocoloResponse getProtocoloById(String id){
+
+    public ProtocoloResponse getProtocoloById(String id) {
         var protocolo = protocoloRespository.findById(id).orElseThrow();
         return protocoloMapper.toResponse(protocolo);
     }
@@ -63,5 +65,8 @@ public class ProtocoloService {
         return resultados.stream().distinct().collect(Collectors.toList());
     }
 
+    public void deleteProtocoloById(String id) {
+        protocoloRespository.deleteById(id);
+    }
 
 }
