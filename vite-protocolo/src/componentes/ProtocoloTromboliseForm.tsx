@@ -28,9 +28,9 @@ export function ProtocoloTromboliseForm() {
   const [loading, setLoading] = React.useState(false)
 
   const onSubmit = async (data: DataFormValues) => {
-    setLoading(true)
+    setLoading(true);
 
-    const result = await SendFormBackend(data)
+    const result = await SendFormBackend(data);
 
     if (!result.success) {
       toaster.create({
@@ -38,8 +38,8 @@ export function ProtocoloTromboliseForm() {
         description: result.message,
         type: "error",
         duration: 10000,
-      })
-      setLoading(false)
+      });
+      setLoading(false);
       return
     }
 
@@ -48,9 +48,9 @@ export function ProtocoloTromboliseForm() {
       description: `ID gerado ${result.data.id}`,
       type: "success",
       duration: 10000,
-    })
-
-    setLoading(false)
+    });
+    form.reset();
+    setLoading(false);
   }
 
   const onError = (errors: any) => {
