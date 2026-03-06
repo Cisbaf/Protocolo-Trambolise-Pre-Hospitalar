@@ -15,7 +15,7 @@ interface GroupContextProviderProps {
 
 export function GroupContextProvider({children}: GroupContextProviderProps) {
 
-  const methodsForm = useDataForm(fakeInitialValues);
+  const methodsForm = useDataForm();
 
   return <GroupContext.Provider
       value={{
