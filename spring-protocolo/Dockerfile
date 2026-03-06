@@ -1,26 +1,13 @@
-# ===============================
-# BUILD STAGE
-# ===============================
-FROM maven:3.9.9-eclipse-temurin-21 AS build
+FROM maven:3.9.9-eclipse-temurin-21
+
 WORKDIR /app
 
+# Copia apenas o pom primeiro (cache de dependências)
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
 
-COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn dependency:go-offline
 
-
-# ===============================
-# RUNTIME STAGE
-# ===============================
-FROM eclipse-temurin:21-jre-jammy
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
+# código será montado via volume
 EXPOSE 9003
 
-ENV SPRING_PROFILES_ACTIVE=prod
-
-ENTRYPOINT ["java","-Xms128m","-Xmx384m","-XX:+UseG1GC","-XX:+UseContainerSupport","-jar","app.jar"]
+CMD ["mvn", "spring-boot:run"]

@@ -16,12 +16,33 @@ services:
     build:
       context: ./spring-protocolo/
       dockerfile: Dockerfile
+    volumes:
+      - ./spring-protocolo:/app
     ports:
-      - "${AVC_BACK_PORT}:8080"
+      - "8080:8080"
     env_file:
       - .env
     networks:
       - protocolo-network
+
+  mysql-db:
+    image: mysql:8.1
+    container_name: mysql-dev
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: protocolo
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - protocolo-network
+
+# Volumes externos
+volumes:
+  mysql-data:
 
 networks:
   protocolo-network:
