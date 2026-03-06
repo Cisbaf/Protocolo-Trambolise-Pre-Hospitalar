@@ -1,33 +1,7 @@
-# -------- Stage 1: build --------
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# copia dependências
-COPY package*.json ./
-
-# instala dependências
-RUN npm install
-
-# copia código
-COPY . .
-
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
-
-# build do vite
-RUN npm run build
-
-
-# -------- Stage 2: runtime --------
 FROM node:20-alpine
 
 WORKDIR /app
 
-# instala servidor estático
-RUN npm install -g serve
+COPY . .
 
-# copia apenas os arquivos buildados
-COPY --from=builder /app/dist ./dist
-
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["npm", "run", "dev", "--", "--host"]

@@ -90,7 +90,7 @@ export function ProtocoloTromboliseForm() {
                 color="red.600"
                 letterSpacing="wide"
               >
-                PROTOCOLO DE ATENDIMENTO AO AVC HIPERAGUDO
+                PROTOCOLO DE ATENDIMENTO AO AVC HIPERAGUDO!
               </Heading>
             </Box>
 
