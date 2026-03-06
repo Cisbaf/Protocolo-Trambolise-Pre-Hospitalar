@@ -53,4 +53,9 @@ public class ProtocoloController {
     public ResponseEntity<?> testeError(@RequestBody ProtocoloRequest protocoloRequest){
         throw new NullPointerException();
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProtocoloById(@PathVariable String id){
+        protocoloService.deleteProtocoloById(id);
+       return ResponseEntity.noContent().build();
+    }
 }
