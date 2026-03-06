@@ -6,7 +6,7 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL}
     ports:
-      - "3010:5173"
+      - "${AVC_FRONT_PORT}:5173"
     env_file:
       - .env
     networks:
@@ -17,7 +17,7 @@ services:
       context: ./spring-protocolo/
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "${AVC_BACK_PORT}:8080"
     env_file:
       - .env
     networks:
