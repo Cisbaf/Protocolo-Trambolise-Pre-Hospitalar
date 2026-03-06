@@ -19,8 +19,6 @@ public record HistoriaDTO(
         @NotNull
         @NotEmpty
         Map<String, Boolean> doencas,
-        @NotNull
-        @NotEmpty
         List<String> medicamentos
 ) implements Serializable {
 }
