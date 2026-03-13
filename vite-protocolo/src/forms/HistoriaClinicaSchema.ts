@@ -5,6 +5,7 @@ export const HistoriaClinicaSchema = z.object({
   idade: z
     .number({ message: "Informe a idade do paciente" })
     .positive("Idade deve ser um número positivo"),
+  uso_coagulante_em_48h: z.boolean().default(false).optional(),
   doencas: z.object(
    Object.fromEntries(
     lista_doencas.map((d) => [d, z.boolean()])

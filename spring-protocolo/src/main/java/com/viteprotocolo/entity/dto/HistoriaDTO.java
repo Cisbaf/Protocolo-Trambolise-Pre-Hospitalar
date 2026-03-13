@@ -16,6 +16,7 @@ public record HistoriaDTO(
         @Positive
         @Min(1)
         int idade,
+        boolean uso_coagulante_em_48h,
         @NotNull
         @NotEmpty
         Map<String, Boolean> doencas,

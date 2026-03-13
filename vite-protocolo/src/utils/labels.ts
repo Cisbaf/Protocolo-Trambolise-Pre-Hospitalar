@@ -32,11 +32,18 @@ const lista_doencas = [
   "Cirurgias de grande porte (< 3 semanas)",
 ] as const;
 
+
+const options_coagulantes = [
+    { label: "SIM", value: true },
+    { label: "NÃO", value: false }
+]
+
 export {
     label_cirurgia,
     label_avc,
     medicamentos_injetaveis,
     medicamentos_orais,
     medicamentos_outros,
-    lista_doencas
+    lista_doencas,
+    options_coagulantes
 }
