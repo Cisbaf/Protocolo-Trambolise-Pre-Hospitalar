@@ -25,6 +25,7 @@ export const fakeInitialValues: Partial<DataFormValues> = {
 
   HistoriaClinicaSection: {
     idade: 18,
+    uso_coagulante_em_48h: false,
     doencas: {
       "Hipertensão": true,
       "Diabetes": true,

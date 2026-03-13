@@ -77,6 +77,7 @@ public class ProtocoloMapper {
 
         return com.viteprotocolo.entity.emb.Historia.builder()
                 .idade(historia.idade())
+                .usoCoagulanteEm48h(historia.uso_coagulante_em_48h())
                 .doencas(historia.doencas())
                 .medicamentos(historia.medicamentos())
                 .build();
@@ -144,6 +145,7 @@ public class ProtocoloMapper {
 
         return HistoriaDTO.builder()
                 .idade(historia.getIdade())
+                .uso_coagulante_em_48h(historia.isUsoCoagulanteEm48h())
                 .medicamentos(historia.getMedicamentos())
                 .doencas(historia.getDoencas())
                 .build();

@@ -15,6 +15,7 @@ import java.util.Map;
 @Builder
 public class Historia {
     private int idade;
+    private boolean usoCoagulanteEm48h;
     @ElementCollection
     private List<String> medicamentos;
     @ElementCollection

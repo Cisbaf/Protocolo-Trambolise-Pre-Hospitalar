@@ -110,6 +110,14 @@ export default function ParecerFinalHelper(
         (med) => !medicamentos_outros.includes(med)
       )
     ) motivos.push("Uso de Anticoagulantes.");
+
+    /* ===============================
+      Regra FEZ USO DE ANTICOAGULANTE A MENOS DE 48h ?
+    =============================== */
+
+    if (formData.HistoriaClinicaSection.uso_coagulante_em_48h) {
+      motivos.push("Fez uso de anticoagulante a menos de 48 horas.")
+    }
   
   return {
     elegibilidade: motivos.length === 0 ? "elegivel" : "inelegivel",
