@@ -1,6 +1,6 @@
-package com.viteprotocolo.entity;
+package com.viteprotocolo.protocolo.entity;
 
-import com.viteprotocolo.entity.emb.*;
+import com.viteprotocolo.protocolo.entity.emb.*;
 import jakarta.persistence.*;
 import lombok.*;
 

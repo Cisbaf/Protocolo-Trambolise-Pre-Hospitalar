@@ -1,11 +1,11 @@
-package com.viteprotocolo.service;
+package com.viteprotocolo.protocolo.service;
 
-import com.viteprotocolo.entity.Protocolo;
-import com.viteprotocolo.entity.dto.*;
-import com.viteprotocolo.entity.dto.HistoriaDTO;
-import com.viteprotocolo.entity.dto.protocolo.ProtocoloRequest;
-import com.viteprotocolo.entity.dto.protocolo.ProtocoloResponse;
-import com.viteprotocolo.entity.emb.*;
+import com.viteprotocolo.protocolo.entity.Protocolo;
+import com.viteprotocolo.protocolo.entity.dto.*;
+import com.viteprotocolo.protocolo.entity.dto.HistoriaDTO;
+import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
+import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
+import com.viteprotocolo.protocolo.entity.emb.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,10 +72,10 @@ public class ProtocoloMapper {
                 .saturacao(parametros.saturacao())
                 .build();
     }
-    private com.viteprotocolo.entity.emb.Historia toHistoria(HistoriaDTO historia) {
+    private com.viteprotocolo.protocolo.entity.emb.Historia toHistoria(HistoriaDTO historia) {
         if (historia == null) return null;
 
-        return com.viteprotocolo.entity.emb.Historia.builder()
+        return com.viteprotocolo.protocolo.entity.emb.Historia.builder()
                 .idade(historia.idade())
                 .usoCoagulanteEm48h(historia.uso_coagulante_em_48h())
                 .doencas(historia.doencas())
@@ -140,7 +140,7 @@ public class ProtocoloMapper {
                 .saturacao(parametros.getSaturacao())
                 .build();
     }
-    private HistoriaDTO toHistoriaDto(com.viteprotocolo.entity.emb.Historia historia) {
+    private HistoriaDTO toHistoriaDto(com.viteprotocolo.protocolo.entity.emb.Historia historia) {
         if (historia == null) return null;
 
         return HistoriaDTO.builder()

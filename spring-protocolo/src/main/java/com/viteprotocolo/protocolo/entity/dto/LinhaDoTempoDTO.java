@@ -1,6 +1,6 @@
-package com.viteprotocolo.entity.dto;
+package com.viteprotocolo.protocolo.entity.dto;
 
-import com.viteprotocolo.entity.emb.LinhaDoTempo;
+import com.viteprotocolo.protocolo.entity.emb.LinhaDoTempo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

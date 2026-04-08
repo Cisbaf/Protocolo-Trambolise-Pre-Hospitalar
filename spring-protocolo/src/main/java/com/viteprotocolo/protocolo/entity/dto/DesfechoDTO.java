@@ -1,14 +1,13 @@
-package com.viteprotocolo.entity.dto;
+package com.viteprotocolo.protocolo.entity.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
- * DTO for {@link com.viteprotocolo.entity.emb.Desfecho}
+ * DTO for {@link com.viteprotocolo.protocolo.entity.emb.Desfecho}
  */
 @Builder
 public record DesfechoDTO(

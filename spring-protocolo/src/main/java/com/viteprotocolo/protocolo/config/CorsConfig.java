@@ -1,4 +1,4 @@
-package com.viteprotocolo.config;
+package com.viteprotocolo.protocolo.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
