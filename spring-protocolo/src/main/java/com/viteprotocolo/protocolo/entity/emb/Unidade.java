@@ -1,4 +1,4 @@
-package com.viteprotocolo.entity.emb;
+package com.viteprotocolo.protocolo.entity.emb;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;

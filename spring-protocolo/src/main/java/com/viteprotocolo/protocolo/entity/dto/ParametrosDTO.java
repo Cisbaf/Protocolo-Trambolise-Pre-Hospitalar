@@ -1,6 +1,6 @@
-package com.viteprotocolo.entity.dto;
+package com.viteprotocolo.protocolo.entity.dto;
 
-import com.viteprotocolo.entity.emb.Parametros;
+import com.viteprotocolo.protocolo.entity.emb.Parametros;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

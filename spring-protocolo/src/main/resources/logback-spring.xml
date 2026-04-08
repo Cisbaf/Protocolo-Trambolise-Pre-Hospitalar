@@ -79,7 +79,7 @@
     <!-- additivity="false" impede que os logs deste logger-->
     <!-- subam para o <root>, evitando duplicação.         -->
     <!-- ================================================= -->
-    <logger name="com.viteprotocolo.service.ProtocoloService" level="INFO" additivity="false">
+    <logger name="com.viteprotocolo.protocolo.service.ProtocoloService" level="INFO" additivity="false">
         <appender-ref ref="PROTOCOLO" />
         <!-- Se também quiser ver os logs de ProtocoloService no console, descomente a linha abaixo -->
         <!-- <appender-ref ref="CONSOLE" /> -->

@@ -1,4 +1,4 @@
-package com.viteprotocolo.entity.dto;
+package com.viteprotocolo.protocolo.entity.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DTO for {@link com.viteprotocolo.entity.emb.Historia}
+ * DTO for {@link com.viteprotocolo.protocolo.entity.emb.Historia}
  */
 @Builder
 public record HistoriaDTO(

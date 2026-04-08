@@ -1,6 +1,6 @@
-package com.viteprotocolo.entity.dto;
+package com.viteprotocolo.protocolo.entity.dto;
 
-import com.viteprotocolo.entity.emb.Neurologica;
+import com.viteprotocolo.protocolo.entity.emb.Neurologica;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 

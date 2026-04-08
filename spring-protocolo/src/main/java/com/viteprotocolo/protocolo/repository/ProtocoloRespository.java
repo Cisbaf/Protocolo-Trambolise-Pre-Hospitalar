@@ -1,8 +1,6 @@
-package com.viteprotocolo.repository;
+package com.viteprotocolo.protocolo.repository;
 
-import com.viteprotocolo.entity.Protocolo;
-import com.viteprotocolo.entity.emb.LinhaDoTempo;
-import com.viteprotocolo.entity.emb.Unidade;
+import com.viteprotocolo.protocolo.entity.Protocolo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

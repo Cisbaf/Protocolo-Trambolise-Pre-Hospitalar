@@ -1,12 +1,12 @@
-package com.viteprotocolo.entity.dto.protocolo;
+package com.viteprotocolo.protocolo.entity.dto.protocolo;
 
-import com.viteprotocolo.entity.dto.*;
+import com.viteprotocolo.protocolo.entity.dto.*;
 import lombok.Builder;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link com.viteprotocolo.entity.Protocolo}
+ * DTO for {@link com.viteprotocolo.protocolo.entity.Protocolo}
  */
 @Builder
 public record ProtocoloResponse(

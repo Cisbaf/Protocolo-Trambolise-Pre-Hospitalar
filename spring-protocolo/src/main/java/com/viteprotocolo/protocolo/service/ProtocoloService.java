@@ -1,9 +1,9 @@
-package com.viteprotocolo.service;
+package com.viteprotocolo.protocolo.service;
 
-import com.viteprotocolo.entity.Protocolo;
-import com.viteprotocolo.entity.dto.protocolo.ProtocoloRequest;
-import com.viteprotocolo.entity.dto.protocolo.ProtocoloResponse;
-import com.viteprotocolo.repository.ProtocoloRespository;
+import com.viteprotocolo.protocolo.entity.Protocolo;
+import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
+import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
+import com.viteprotocolo.protocolo.repository.ProtocoloRespository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
