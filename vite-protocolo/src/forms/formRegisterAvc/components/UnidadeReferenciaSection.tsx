@@ -11,10 +11,10 @@ import {
   Field,
 } from "@chakra-ui/react"
 import { Controller } from "react-hook-form"
-import { useGroupContext } from "../context/GroupContext"
+import { useAvcFormContext } from "../../../context/FormAvcContext"
 
 export function UnidadeReferenciaSection() {
-  const { form } = useGroupContext()
+  const { form } = useAvcFormContext()
   const {
     formState: { errors },
   } = form

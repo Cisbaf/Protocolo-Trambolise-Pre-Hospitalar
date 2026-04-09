@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 
 import React from "react";
-import { useGroupContext } from "../context/GroupContext";
 import {
   lista_doencas,
   medicamentos_injetaveis,
@@ -25,9 +24,10 @@ import {
   options_coagulantes,
 } from "../utils/labels";
 import { Controller } from "react-hook-form";
+import { useAvcFormContext } from "../../../context/FormAvcContext";
 
 export function HistoriaClinicaSection() {
-  const { form } = useGroupContext();
+  const { form } = useAvcFormContext();
 
   const {
     register,

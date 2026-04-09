@@ -1,8 +1,6 @@
-import type { DataFormValues } from "../hooks/useDataForm";
-import calcularDiferencaEmHorasEMinutos from "../utils/calcularDiferencaDate";
-import { label_avc, label_cirurgia, medicamentos_outros } from "../utils/labels";
-import { parseDatetimeLocal } from "../utils/parseDatetimeLocal";
-
+import type { AvcFormValues } from "../forms/formRegisterAvc/schemas/AvcFormSchema";
+import { label_avc, label_cirurgia, medicamentos_outros } from "../forms/formRegisterAvc/utils/labels";
+import calcularDiferencaEmHorasEMinutos, { parseDatetimeLocal } from "../utils/dateUtils";
 
 interface ParecerFinalResponse {
   elegibilidade: "elegivel" | "inelegivel";
@@ -10,7 +8,7 @@ interface ParecerFinalResponse {
 }
 
 export default function ParecerFinalHelper(
-  formData: DataFormValues
+  avcFormData: AvcFormValues
 ): ParecerFinalResponse {
 
   const motivos: string[] = [];
@@ -20,22 +18,22 @@ export default function ParecerFinalHelper(
   =============================== */
 
   const chegadaCena = parseDatetimeLocal(
-    formData.LinhaDoTempoSection.chegadaCena
+    avcFormData.LinhaDoTempoSection.chegadaCena
   );
 
   const vistoBem = parseDatetimeLocal(
-    formData.LinhaDoTempoSection.ultimoHorarioVistoBem
+    avcFormData.LinhaDoTempoSection.ultimoHorarioVistoBem
   );
 
-  const idade = formData.HistoriaClinicaSection.idade;
+  const idade = avcFormData.HistoriaClinicaSection.idade;
 
   const avaliacoesNeurologicas = Object.values(
-    formData.AvaliacaoNeurologicaSection ?? {}
+    avcFormData.AvaliacaoNeurologicaSection ?? {}
   );
 
-  const historico_doencas = formData.HistoriaClinicaSection.doencas;
+  const historico_doencas = avcFormData.HistoriaClinicaSection.doencas;
 
-  const medicamentos_selecionados = formData.HistoriaClinicaSection.medicamentos;
+  const medicamentos_selecionados = avcFormData.HistoriaClinicaSection.medicamentos;
 
   /* ===============================
      1️⃣ Regra do tempo
@@ -115,7 +113,7 @@ export default function ParecerFinalHelper(
       Regra FEZ USO DE ANTICOAGULANTE A MENOS DE 48h ?
     =============================== */
 
-    if (formData.HistoriaClinicaSection.uso_coagulante_em_48h) {
+    if (avcFormData.HistoriaClinicaSection.uso_coagulante_em_48h) {
       motivos.push("Fez uso de anticoagulante a menos de 48 horas.")
     }
   

@@ -8,7 +8,7 @@ import { DesfechoCenaSchema } from "./DesfechoCenaSchema";
 import { ParecerFinalSchema } from "./ParecerFinalSchema";
 
 
-export const DataFormSchema = z.object({
+export const AvcFormSchema = z.object({
   LinhaDoTempoSection: LinhaDoTempoSchema,
   AvaliacaoNeurologicaSection: AvaliacaoNeurologicaSchema,
   ParametrosClinicosSection: ParametrosClinicosSchema,
@@ -18,4 +18,4 @@ export const DataFormSchema = z.object({
   ParecerFinalSection: ParecerFinalSchema
 })
 
-export type DataFormValues = z.infer<typeof DataFormSchema>
+export type AvcFormValues = z.infer<typeof AvcFormSchema>

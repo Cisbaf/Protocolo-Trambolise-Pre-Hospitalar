@@ -1,18 +1,18 @@
 import { Box, Flex, For, Stack, Text } from "@chakra-ui/react";
-import { useGroupContext } from "../context/GroupContext";
 import React from "react";
 import { useWatch } from "react-hook-form";
-import ParecerFinalHelper from "../helpers/ParecerFinal";
-import type { DataFormValues } from "../forms/DataForm";
+import ParecerFinalHelper from "../../../helpers/ParecerFinal";
+import { useAvcFormContext } from "../../../context/FormAvcContext";
+import type { AvcFormValues } from "../schemas/AvcFormSchema";
 
 
 export default function ParecerFinalSection() {
-    const { form } = useGroupContext();
+    const { form } = useAvcFormContext();
 
     // ✅ Observa o form inteiro
     const formValues = useWatch({
       control: form.control,
-    }) as DataFormValues;
+    }) as AvcFormValues;
 
     // ✅ Cálculo puro
     const parecerFinal = React.useMemo(() => {

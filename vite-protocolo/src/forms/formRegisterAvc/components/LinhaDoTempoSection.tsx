@@ -12,10 +12,9 @@ import {
   Grid,
 } from "@chakra-ui/react"
 import React from "react"
-import { useGroupContext } from "../context/GroupContext"
 import { Controller } from "react-hook-form"
-import calcularDiferencaEmHorasEMinutos from "../utils/calcularDiferencaDate"
-import { parseDatetimeLocal } from "../utils/parseDatetimeLocal"
+import { useAvcFormContext } from "../../../context/FormAvcContext"
+import calcularDiferencaEmHorasEMinutos, { parseDatetimeLocal } from "../../../utils/dateUtils"
 
 const municipios = createListCollection({
   items: [
@@ -35,7 +34,7 @@ const municipios = createListCollection({
 })
 
 export function LinhaDoTempoSection() {
-  const { form } = useGroupContext();
+  const { form } = useAvcFormContext();
   const [lkwDisabled, setLkwDisabled] = React.useState(false);
   const [chegadaCena, vistoBem] = form.watch(["LinhaDoTempoSection.chegadaCena", "LinhaDoTempoSection.ultimoHorarioVistoBem"]);
 
