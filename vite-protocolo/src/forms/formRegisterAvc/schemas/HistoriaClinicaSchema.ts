@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { lista_doencas } from "../utils/labels"
 
+
 export const HistoriaClinicaSchema = z.object({
   idade: z
     .number({ message: "Informe a idade do paciente" })

@@ -1,7 +1,8 @@
-import type { DataFormValues } from "../hooks/useDataForm"
-import { lista_doencas } from "../utils/labels"
+import type { AvcFormValues } from "../schemas/AvcFormSchema";
+import { lista_doencas } from "./labels";
 
-export const defaultDataFormValues: DataFormValues = {
+
+export const defaultAvcFormInitialValues: AvcFormValues = {
   LinhaDoTempoSection: {
     numeroOcorrencia: "",
     municipio: "",

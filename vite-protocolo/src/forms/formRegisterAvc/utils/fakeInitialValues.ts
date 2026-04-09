@@ -1,12 +1,12 @@
-import type { DataFormValues } from "../forms/DataForm";
+import type { AvcFormValues } from "../schemas/AvcFormSchema";
 
-export const fakeInitialValues: Partial<DataFormValues> = {
+export const fakeAvcFormInitialValues: Partial<AvcFormValues> = {
   LinhaDoTempoSection: {
     numeroOcorrencia: "12345/2026",
     municipio: "belford_roxo",
-    aberturaChamado: "2026-03-05T04:09:00",
-    chegadaCena: "2026-03-05T05:12:00",
-    ultimoHorarioVistoBem: "2026-03-05T07:32:00",
+    aberturaChamado: "2026-03-05T04:09",
+    chegadaCena: "2026-03-05T05:12",
+    ultimoHorarioVistoBem: "2026-03-05T07:32",
     janelaEstimada: "2h 20min",
   },
   AvaliacaoNeurologicaSection: {
@@ -37,12 +37,12 @@ export const fakeInitialValues: Partial<DataFormValues> = {
 
   UnidadeReferenciaSection: {
     unidadeReferenciaEleita: "Hospital Geral de Nova Iguaçu",
-    horarioNotificacaoUnidade: "2026-03-05T12:33:00",
+    horarioNotificacaoUnidade: "2026-03-05T12:33",
   },
 
   DesfechoCenaSection: {
-    horarioSaidaCena: "2026-03-05T12:50:00",
-    horarioChegadaHospital: "2026-03-05T13:33:00",
+    horarioSaidaCena: "2026-03-05T12:50",
+    horarioChegadaHospital: "2026-03-05T13:33",
   },
 
   ParecerFinalSection: {

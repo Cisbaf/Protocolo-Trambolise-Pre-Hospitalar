@@ -9,10 +9,10 @@ import {
   Field,
   SimpleGrid,
 } from "@chakra-ui/react"
-import { useGroupContext } from "../context/GroupContext"
+import { useAvcFormContext } from "../../../context/FormAvcContext"
 
 export function ParametrosClinicosSection() {
-  const { form } = useGroupContext()
+  const { form } = useAvcFormContext()
 
   return (
     <Box>

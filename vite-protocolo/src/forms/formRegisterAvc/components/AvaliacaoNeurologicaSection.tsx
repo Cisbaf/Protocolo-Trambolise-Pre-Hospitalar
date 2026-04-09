@@ -12,11 +12,11 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react"
 import { respostasAvaliacoes, testesNeurologicos } from "../utils/testeNeurologicos"
-import { useGroupContext } from "../context/GroupContext"
 import { Controller } from "react-hook-form";
+import { useAvcFormContext } from "../../../context/FormAvcContext";
 
 export function AvaliacaoNeurologicaSection() {
-  const { form } = useGroupContext()
+  const { form } = useAvcFormContext()
 
   const isMobile = useBreakpointValue({ base: true, md: false })
 

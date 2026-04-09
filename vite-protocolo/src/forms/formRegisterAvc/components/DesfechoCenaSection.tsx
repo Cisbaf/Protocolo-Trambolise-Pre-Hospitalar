@@ -7,11 +7,12 @@ import {
   Input,
   Field,
 } from "@chakra-ui/react"
+import { useAvcFormContext } from "../../../context/FormAvcContext"
 
-import { useGroupContext } from "../context/GroupContext"
 
 export function DesfechoCenaSection() {
-  const { form } = useGroupContext()
+  const { form } = useAvcFormContext()
+  
   const {
     formState: { errors },
   } = form
