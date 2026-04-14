@@ -54,7 +54,7 @@ public class ProtocoloService {
         return protocoloMapper.toResponse(protocolo);
     }
 
-    public Page<Protocolo> getProtocoloByIdWithParams(
+    public Page<ProtocoloResponse> getProtocoloByIdWithParams(
             String id, String nomeUnidade, String numeroOcorrencia, LocalDate aberturaChamado, String municipio, Pageable pageable) {
 
         Specification<Protocolo> spec = (root, query, cb) -> {
@@ -86,7 +86,7 @@ public class ProtocoloService {
             return cb.or(predicates.toArray(new Predicate[0]));
         };
 
-        return protocoloRespository.findAll(spec, pageable);
+        return protocoloRespository.findAll(spec, pageable).map(protocoloMapper::toResponse);
     }
 
     public void deleteProtocoloById(String id) {

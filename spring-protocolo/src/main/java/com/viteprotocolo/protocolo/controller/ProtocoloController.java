@@ -57,7 +57,7 @@ public class ProtocoloController {
     }
 
     @GetMapping("/params")
-    public ResponseEntity<Page<Protocolo>> getProtocoloByIdWithParams(@RequestParam @Nullable String id,
+    public ResponseEntity<Page<ProtocoloResponse>> getProtocoloByIdWithParams(@RequestParam @Nullable String id,
                                                                       @RequestParam @Nullable String nomeUnidade,
                                                                       @RequestParam @Nullable String numeroOcorrencia,
                                                                       @RequestParam @Nullable LocalDate aberturaChamado,
