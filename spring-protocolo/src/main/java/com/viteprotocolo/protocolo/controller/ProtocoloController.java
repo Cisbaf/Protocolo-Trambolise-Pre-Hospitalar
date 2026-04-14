@@ -7,9 +7,14 @@ import com.viteprotocolo.protocolo.service.ProtocoloService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,9 +36,12 @@ public class ProtocoloController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProtocoloResponse>> getProtocolo() {
+    public ResponseEntity<Page<ProtocoloResponse>> getProtocolo(@RequestParam(defaultValue = "0")  int page,
+                                                                @RequestParam(defaultValue = "10") int size,
+                                                                @RequestParam(defaultValue = "id") String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         try {
-            return ResponseEntity.ok(protocoloService.getAllProtocolos());
+            return ResponseEntity.ok(protocoloService.getAllProtocolos(pageable));
         } catch (Exception e) {
             return ResponseEntity.noContent().build();
         }
@@ -49,8 +57,18 @@ public class ProtocoloController {
     }
 
     @GetMapping("/params")
-    public ResponseEntity<List<Protocolo>> getProtocoloByIdWithParams(@RequestParam @Nullable String id, @RequestParam @Nullable String nomeUnidade, @RequestParam @Nullable String numeroOcorrencia) {
-        return ResponseEntity.ok(protocoloService.getProtocoloByIdWithParams(id, nomeUnidade, numeroOcorrencia));
+    public ResponseEntity<Page<Protocolo>> getProtocoloByIdWithParams(@RequestParam @Nullable String id,
+                                                                      @RequestParam @Nullable String nomeUnidade,
+                                                                      @RequestParam @Nullable String numeroOcorrencia,
+                                                                      @RequestParam @Nullable LocalDate aberturaChamado,
+                                                                      @RequestParam @Nullable String municipio,
+                                                                      @RequestParam(defaultValue = "0")  int page,
+                                                                      @RequestParam(defaultValue = "10") int size,
+                                                                      @RequestParam(defaultValue = "id") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+
+        return ResponseEntity.ok(protocoloService.getProtocoloByIdWithParams(id, nomeUnidade, numeroOcorrencia, aberturaChamado, municipio, pageable));
     }
 
     @DeleteMapping("/{id}")

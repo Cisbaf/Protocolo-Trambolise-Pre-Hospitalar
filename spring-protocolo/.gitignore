@@ -34,3 +34,6 @@ build/
 /src/main/resources/application-dev.properties
 /logs/
 /src/test/
+/folder-alias.json
+/private-folder-alias.json
+/bin/
