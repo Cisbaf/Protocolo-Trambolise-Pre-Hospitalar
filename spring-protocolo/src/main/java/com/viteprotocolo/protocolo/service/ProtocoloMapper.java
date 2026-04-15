@@ -29,6 +29,7 @@ public class ProtocoloMapper {
 
         return ProtocoloResponse.builder()
                 .id(protocolo.getId())
+                .dataCriacao(protocolo.getDataCriacao())
                 .DesfechoCenaSection(toDesfechoDto(protocolo.getDesfecho()))
                 .HistoriaClinicaSection(toHistoriaDto(protocolo.getHistoria()))
                 .LinhaDoTempoSection(toIdentificacaoDto(protocolo.getLinhaDoTempo()))

@@ -1,6 +1,5 @@
 package com.viteprotocolo.protocolo.controller;
 
-import com.viteprotocolo.protocolo.entity.Protocolo;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
 import com.viteprotocolo.protocolo.service.ProtocoloService;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/protocolo")
@@ -36,7 +34,7 @@ public class ProtocoloController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProtocoloResponse>> getProtocolo(@RequestParam(defaultValue = "0")  int page,
+    public ResponseEntity<Page<ProtocoloResponse>> getProtocolo(@RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "10") int size,
                                                                 @RequestParam(defaultValue = "id") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
@@ -58,13 +56,13 @@ public class ProtocoloController {
 
     @GetMapping("/params")
     public ResponseEntity<Page<ProtocoloResponse>> getProtocoloByIdWithParams(@RequestParam @Nullable String id,
-                                                                      @RequestParam @Nullable String nomeUnidade,
-                                                                      @RequestParam @Nullable String numeroOcorrencia,
-                                                                      @RequestParam @Nullable LocalDate aberturaChamado,
-                                                                      @RequestParam @Nullable String municipio,
-                                                                      @RequestParam(defaultValue = "0")  int page,
-                                                                      @RequestParam(defaultValue = "10") int size,
-                                                                      @RequestParam(defaultValue = "id") String sort
+                                                                              @RequestParam @Nullable String nomeUnidade,
+                                                                              @RequestParam @Nullable String numeroOcorrencia,
+                                                                              @RequestParam @Nullable LocalDate aberturaChamado,
+                                                                              @RequestParam @Nullable String municipio,
+                                                                              @RequestParam(defaultValue = "0") int page,
+                                                                              @RequestParam(defaultValue = "10") int size,
+                                                                              @RequestParam(defaultValue = "id") String sort
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
