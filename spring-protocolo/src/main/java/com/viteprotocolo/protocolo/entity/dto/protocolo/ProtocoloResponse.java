@@ -4,6 +4,7 @@ import com.viteprotocolo.protocolo.entity.dto.*;
 import lombok.Builder;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * DTO for {@link com.viteprotocolo.protocolo.entity.Protocolo}
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @Builder
 public record ProtocoloResponse(
         String id,
+        LocalDateTime dataCriacao,
         DesfechoDTO DesfechoCenaSection,
         HistoriaDTO HistoriaClinicaSection,
         LinhaDoTempoDTO LinhaDoTempoSection,
