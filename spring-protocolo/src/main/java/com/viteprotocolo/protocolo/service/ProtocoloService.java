@@ -77,7 +77,7 @@ public class ProtocoloService {
                 ));
             }
             if (municipio != null) {
-                predicates.add(cb.equal(root.get("linhaDoTempo").get("municipio"), municipio));
+                predicates.add(cb.like(root.get("linhaDoTempo").get("municipio"), municipio));
             }
 
             // Se nenhum filtro foi passado, retorna tudo (1=1)
