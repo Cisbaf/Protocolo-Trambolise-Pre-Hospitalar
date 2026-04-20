@@ -5,8 +5,8 @@ import { mapAvcToPlanilha } from "./Mapper";
 
 
 export function exportAvcToExcel(list: AvcDataValues[]) {
-  const rows = list.map((item, index) =>
-    mapAvcToPlanilha(item, index)
+  const rows = list.map(item =>
+    mapAvcToPlanilha(item)
   );
 
   const columns = [

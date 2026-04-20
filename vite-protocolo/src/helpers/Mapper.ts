@@ -1,6 +1,6 @@
 import type { AvcDataValues } from "../forms/formPaginationAvc/schemas/AvcData";
 
-export function mapAvcToPlanilha(data: AvcDataValues, index: number) {
+export function mapAvcToPlanilha(data: AvcDataValues) {
   const { LinhaDoTempoSection, HistoriaClinicaSection, UnidadeReferenciaSection, DesfechoCenaSection } = data;
 
     function formatDate(date?: string) {
@@ -41,7 +41,7 @@ export function mapAvcToPlanilha(data: AvcDataValues, index: number) {
       : "Not known";
 
   return {
-    "ID do caso (você pode usar letras iniciais, ou numerar de 1, 2, 3 etc)": index + 1,
+    "ID do caso (você pode usar letras iniciais, ou numerar de 1, 2, 3 etc)": LinhaDoTempoSection.numeroOcorrencia,
 
     "Horário que a ambulância chegou na cena":
       formatDate(LinhaDoTempoSection.chegadaCena),
