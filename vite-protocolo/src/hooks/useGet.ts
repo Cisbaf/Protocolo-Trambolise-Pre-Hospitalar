@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 type UseGetOptions = {
   url: string;
@@ -24,7 +24,10 @@ export function useGet<T = any>({ url, params, autoFetch = true, transform }: Us
     setError(null);
 
     try {
-      const response = await fetch(buildUrl());
+      const response = await fetch(
+        buildUrl(),
+        { credentials: "include" }
+      );
 
       const result = await response.json();
 
@@ -45,11 +48,11 @@ export function useGet<T = any>({ url, params, autoFetch = true, transform }: Us
     }
   }, [url, JSON.stringify(params)]); // 👈 garante atualização quando params mudar
 
-//   useEffect(() => {
-//     if (autoFetch) {
-//       fetchData();
-//     }
-//   }, [fetchData, autoFetch]);
+  React.useEffect(() => {
+    if (autoFetch) {
+      fetchData();
+    }
+  }, [fetchData, autoFetch]);
 
   return {
     data,
