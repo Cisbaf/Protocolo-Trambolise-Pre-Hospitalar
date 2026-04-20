@@ -13,24 +13,12 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import { Controller } from "react-hook-form"
-import { useAvcFormContext } from "../../../context/FormAvcContext"
+import { useAvcFormContext } from "../../../context/AvcFormContext"
 import calcularDiferencaEmHorasEMinutos, { parseDatetimeLocal } from "../../../utils/dateUtils"
+import { municipios } from "../utils/labels"
 
-const municipios = createListCollection({
-  items: [
-    { label: "BELFORD ROXO", value: "belford_roxo" },
-    { label: "DUQUE DE CAXIAS", value: "duque_de_caxias" },
-    { label: "ITAGUAÍ", value: "itaguai" },
-    { label: "JAPERI", value: "japeri" },
-    { label: "MAGÉ", value: "mage" },
-    { label: "MESQUITA", value: "mesquita" },
-    { label: "NILÓPOLIS", value: "nilopolis" },
-    { label: "NOVA IGUAÇU", value: "nova_iguacu" },
-    { label: "PARACAMBI", value: "paracambi" },
-    { label: "QUEIMADOS", value: "queimados" },
-    { label: "SÃO JOÃO DE MERITI", value: "sao_joao_de_meriti" },
-    { label: "SEROPÉDICA", value: "seropedica" },
-  ],
+const municipiosList = createListCollection({
+  items: municipios,
 })
 
 export function LinhaDoTempoSection() {
@@ -93,7 +81,7 @@ export function LinhaDoTempoSection() {
                 control={form.control}
                 render={({ field }) => (
                   <Select.Root
-                    collection={municipios}
+                    collection={municipiosList}
                     value={field.value ? [field.value] : []}
                     onValueChange={(details) => {
                       field.onChange(details.value[0])
@@ -112,7 +100,7 @@ export function LinhaDoTempoSection() {
                     <Portal>
                       <Select.Positioner>
                         <Select.Content>
-                          {municipios.items.map((municipio) => (
+                          {municipiosList.items.map((municipio) => (
                             <Select.Item
                               item={municipio}
                               key={municipio.value}

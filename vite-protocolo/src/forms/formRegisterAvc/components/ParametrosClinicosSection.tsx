@@ -9,7 +9,7 @@ import {
   Field,
   SimpleGrid,
 } from "@chakra-ui/react"
-import { useAvcFormContext } from "../../../context/FormAvcContext"
+import { useAvcFormContext } from "../../../context/AvcFormContext"
 
 export function ParametrosClinicosSection() {
   const { form } = useAvcFormContext()

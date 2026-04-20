@@ -31,3 +31,16 @@ export default function calcularDiferencaEmHorasEMinutos(
     formatado: `${horas}h ${minutos.toString().padStart(2, "0")}min`,
   };
 }
+
+export function formatDateTimeBR(dateString: string): string {
+  const date = new Date(dateString);
+
+  return date.toLocaleString("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
