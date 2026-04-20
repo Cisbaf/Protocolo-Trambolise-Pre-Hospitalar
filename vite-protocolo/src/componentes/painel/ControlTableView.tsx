@@ -1,5 +1,7 @@
 import {
+    Button,
     Field,
+    Flex,
     Input,
 } from "@chakra-ui/react";
 import { useAvcManagerContext } from "../../context/AvcManagerContext";
@@ -10,6 +12,8 @@ export default function ControlTableView() {
     const { setValue, watch } = form;
 
     const formValue = watch("size");
+
+    const totalElements = watch("totalElements");
 
     const [localValue, setLocalValue] = React.useState<number | string>(formValue ?? "");
 
@@ -35,7 +39,8 @@ export default function ControlTableView() {
     }, [localValue, setValue]);
 
     return (
-        <Field.Root maxW="220px">
+        <Flex gap={5}>
+            <Field.Root maxW="220px">
             <Input
                 type="number"
                 value={localValue}
@@ -46,5 +51,11 @@ export default function ControlTableView() {
                 Quantidade de registros exibidos por página
             </Field.HelperText>
         </Field.Root>
+
+        <Button
+        disabled={totalElements > 0? false: true}
+        onClick={()=>{setValue("size", totalElements)}}
+        colorPalette="cyan">Listar Todos</Button>
+        </Flex>
     );
 }
