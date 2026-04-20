@@ -6,7 +6,7 @@ import { ParametrosClinicosSection } from "../forms/formRegisterAvc/components/P
 import ParecerFinalSection from "../forms/formRegisterAvc/components/ParecerFinalSection";
 import { SectionCard } from "../componentes/SectionCard";
 import { UnidadeReferenciaSection } from "../forms/formRegisterAvc/components/UnidadeReferenciaSection";
-import { AvcFormProvider } from "../context/FormAvcContext";
+import { AvcFormProvider } from "../context/AvcFormContext";
 
 import {
     Button,

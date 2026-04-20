@@ -24,7 +24,7 @@ import {
   options_coagulantes,
 } from "../utils/labels";
 import { Controller } from "react-hook-form";
-import { useAvcFormContext } from "../../../context/FormAvcContext";
+import { useAvcFormContext } from "../../../context/AvcFormContext";
 
 export function HistoriaClinicaSection() {
   const { form } = useAvcFormContext();

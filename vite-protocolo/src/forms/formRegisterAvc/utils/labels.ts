@@ -38,6 +38,21 @@ const options_coagulantes = [
     { label: "NÃO", value: false }
 ]
 
+const municipios = [
+    { label: "BELFORD ROXO", value: "belford roxo" },
+    { label: "DUQUE DE CAXIAS", value: "duque de caxias" },
+    { label: "ITAGUAÍ", value: "itaguai" },
+    { label: "JAPERI", value: "japeri" },
+    { label: "MAGÉ", value: "mage" },
+    { label: "MESQUITA", value: "mesquita" },
+    { label: "NILÓPOLIS", value: "nilopolis" },
+    { label: "NOVA IGUAÇU", value: "nova iguacu" },
+    { label: "PARACAMBI", value: "paracambi" },
+    { label: "QUEIMADOS", value: "queimados" },
+    { label: "SÃO JOÃO DE MERITI", value: "sao joao de meriti" },
+    { label: "SEROPÉDICA", value: "seropedica" },
+  ]
+
 export {
     label_cirurgia,
     label_avc,
@@ -45,5 +60,6 @@ export {
     medicamentos_orais,
     medicamentos_outros,
     lista_doencas,
-    options_coagulantes
+    options_coagulantes,
+    municipios
 }
