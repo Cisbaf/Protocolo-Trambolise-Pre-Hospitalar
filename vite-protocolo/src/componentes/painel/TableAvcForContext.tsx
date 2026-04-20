@@ -2,7 +2,7 @@ import { useWatch } from "react-hook-form";
 import { useAvcManagerContext } from "../../context/AvcManagerContext";
 import TableAvc from "./TableAvc";
 import { useAvcSelectedContext } from "../../context/AvcSelected";
-import { Box, Checkbox, Flex } from "@chakra-ui/react";
+import { Checkbox, Flex } from "@chakra-ui/react";
 
 export default function TableAvcForContext() {
     const { form } = useAvcManagerContext();

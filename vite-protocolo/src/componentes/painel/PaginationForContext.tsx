@@ -2,7 +2,6 @@
 import { useWatch } from "react-hook-form";
 import { useAvcManagerContext } from "../../context/AvcManagerContext";
 import { PaginationCP } from "./Pagination";
-import React from "react";
 
 
 export default function PaginationForContext() {
