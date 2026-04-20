@@ -6,11 +6,14 @@ import com.viteprotocolo.protocolo.service.ProtocoloService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/protocolo")
@@ -36,7 +39,7 @@ public class ProtocoloController {
                                                                 @RequestParam(defaultValue = "id") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         try {
-            return ResponseEntity.ok(protocoloService.getAllProtocolos());
+            return ResponseEntity.ok(protocoloService.getAllProtocolos(pageable));
         } catch (Exception e) {
             return ResponseEntity.noContent().build();
         }
