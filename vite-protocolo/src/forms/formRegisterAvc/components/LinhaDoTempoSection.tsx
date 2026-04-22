@@ -38,7 +38,7 @@ export function LinhaDoTempoSection() {
 
   React.useEffect(()=>{
     if (lkwDisabled) {
-      form.setValue("LinhaDoTempoSection.ultimoHorarioVistoBem", undefined);
+      form.setValue("LinhaDoTempoSection.ultimoHorarioVistoBem", "");
       form.setValue("LinhaDoTempoSection.janelaEstimada", "");
     }
 

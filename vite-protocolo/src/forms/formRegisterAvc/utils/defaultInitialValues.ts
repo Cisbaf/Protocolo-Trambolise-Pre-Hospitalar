@@ -8,8 +8,8 @@ export const defaultAvcFormInitialValues: AvcFormValues = {
     municipio: "",
     aberturaChamado: "",
     chegadaCena: "",
-    ultimoHorarioVistoBem: undefined,
-    janelaEstimada: undefined,
+    ultimoHorarioVistoBem: "",
+    janelaEstimada: "",
   },
 
   AvaliacaoNeurologicaSection: {
