@@ -1,10 +1,11 @@
 import * as XLSX from "xlsx";
 
 import type { AvcDataValues } from "../forms/formPaginationAvc/schemas/AvcData";
-import { mapAvcToPlanilha } from "./Mapper";
+import { mapAvcToPlanilha } from "./MapperAngel";
+import { getDataAtualFormatada } from "../utils/dateUtils";
 
 
-export function exportAvcToExcel(list: AvcDataValues[]) {
+export function exportAvcToAngel(list: AvcDataValues[]) {
   const rows = list.map(item =>
     mapAvcToPlanilha(item)
   );
@@ -39,5 +40,5 @@ export function exportAvcToExcel(list: AvcDataValues[]) {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Relatório AVC");
 
-  XLSX.writeFile(workbook, "relatorio_avc.xlsx");
+  XLSX.writeFile(workbook, `exportacao-angel-${getDataAtualFormatada()}.xlsx`);
 }
