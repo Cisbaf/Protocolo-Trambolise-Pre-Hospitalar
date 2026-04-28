@@ -18,7 +18,7 @@ import {
 export default function AvcFormPage() {
 
     return (
-        <AvcFormProvider fakeInitialValues>
+        <AvcFormProvider>
            <Flex direction="column" gap={5}>
                 {/* Header */}
                 <Heading
