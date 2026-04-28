@@ -3,6 +3,7 @@ import {
   Button,
   CloseButton,
   Flex,
+  Menu,
   Tag,
   Text,
   Wrap,
@@ -10,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useAvcSelectedContext } from "../../context/AvcSelected";
 import { useAvcManagerContext } from "../../context/AvcManagerContext";
-import { exportAvcToExcel } from "../../helpers/exportAvcToExcel";
+import { exportAvcToAngel } from "../../helpers/exportAvcToAngel";
+import { exportAvcToFull } from "../../helpers/exportAvcToFull";
 
 export default function TagsSelecteds() {
   const { useAvc } = useAvcSelectedContext();
@@ -26,8 +28,12 @@ export default function TagsSelecteds() {
     useAvc.clear();
   };
 
+  const handleExportAngel = () => {
+    exportAvcToAngel(useAvc.avcList);
+  }
+
   const handleExportAll = () => {
-    exportAvcToExcel(useAvc.avcList);
+    exportAvcToFull(useAvc.avcList);
   }
 
   return (
@@ -49,15 +55,30 @@ export default function TagsSelecteds() {
             Selecionar página
           </Button>
 
-            <Button
+      <Menu.Root>
+        <Menu.Trigger asChild>
+          <Button
             size="xs"
             variant="outline"
             colorPalette="green"
-            onClick={handleExportAll}
             disabled={!useAvc.avcList.length}
           >
             Exportar Selecionados
           </Button>
+        </Menu.Trigger>
+
+        <Menu.Positioner>
+          <Menu.Content>
+            <Menu.Item value="angel" onClick={handleExportAngel}>
+              Exportação Angel
+            </Menu.Item>
+
+            <Menu.Item value="completa" onClick={handleExportAll}>
+              Exportação Completa
+            </Menu.Item>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Menu.Root>
 
           <Button
             size="xs"

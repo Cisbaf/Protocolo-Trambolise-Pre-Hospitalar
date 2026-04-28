@@ -1,25 +1,9 @@
 import type { AvcDataValues } from "../forms/formPaginationAvc/schemas/AvcData";
+import { formatDatePontuation } from "../utils/dateUtils";
 
 export function mapAvcToPlanilha(data: AvcDataValues) {
   const { LinhaDoTempoSection, HistoriaClinicaSection, UnidadeReferenciaSection, DesfechoCenaSection } = data;
 
-    function formatDate(date?: string) {
-        if (!date) return "";
-
-        const d = new Date(date);
-        if (isNaN(d.getTime())) return "";
-
-        const pad = (n: number) => String(n).padStart(2, "0");
-
-        const day = pad(d.getDate());
-        const month = pad(d.getMonth() + 1);
-        const year = d.getFullYear();
-
-        const hours = pad(d.getHours());
-        const minutes = pad(d.getMinutes());
-
-        return `${day}.${month}.${year}, ${hours}:${minutes}`;
-    }
   // Medicação
   const medicamentos = HistoriaClinicaSection.medicamentos;
   const medicacaoAtual =
@@ -37,17 +21,17 @@ export function mapAvcToPlanilha(data: AvcDataValues) {
   // Último visto bem
   const ultimoVistoBem =
     LinhaDoTempoSection.ultimoHorarioVistoBem
-      ? formatDate(LinhaDoTempoSection.ultimoHorarioVistoBem)
+      ? formatDatePontuation(LinhaDoTempoSection.ultimoHorarioVistoBem)
       : "Not known";
 
   return {
     "ID do caso (você pode usar letras iniciais, ou numerar de 1, 2, 3 etc)": LinhaDoTempoSection.numeroOcorrencia,
 
     "Horário que a ambulância chegou na cena":
-      formatDate(LinhaDoTempoSection.chegadaCena),
+      formatDatePontuation(LinhaDoTempoSection.chegadaCena),
 
     "Horário que ambulância deixou a cena":
-      formatDate(DesfechoCenaSection.horarioSaidaCena),
+      formatDatePontuation(DesfechoCenaSection.horarioSaidaCena),
 
     "O Hospital foi pré-notificado?":
       hospitalPreNotificado,
@@ -62,6 +46,6 @@ export function mapAvcToPlanilha(data: AvcDataValues) {
       ultimoVistoBem,
 
     "Hora de chegada ao hospital":
-      formatDate(DesfechoCenaSection.horarioChegadaHospital),
+      formatDatePontuation(DesfechoCenaSection.horarioChegadaHospital),
   };
 }

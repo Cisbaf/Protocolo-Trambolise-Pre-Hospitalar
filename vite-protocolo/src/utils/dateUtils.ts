@@ -44,3 +44,34 @@ export function formatDateTimeBR(dateString: string): string {
     minute: "2-digit",
   });
 }
+
+
+export function formatDatePontuation(date?: string) {
+    if (!date) return "";
+
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "";
+
+    const pad = (n: number) => String(n).padStart(2, "0");
+
+    const day = pad(d.getDate());
+    const month = pad(d.getMonth() + 1);
+    const year = d.getFullYear();
+
+    const hours = pad(d.getHours());
+    const minutes = pad(d.getMinutes());
+
+    return `${day}.${month}.${year}, ${hours}:${minutes}`;
+}
+
+export function getDataAtualFormatada(): string {
+    const agora = new Date();
+
+    const dia = String(agora.getDate()).padStart(2, "0");
+    const mes = String(agora.getMonth() + 1).padStart(2, "0"); // mês começa em 0
+    const ano = agora.getFullYear();
+    const hora = String(agora.getHours()).padStart(2, "0");
+    const minuto = String(agora.getMinutes()).padStart(2, "0");
+
+    return `${dia}-${mes}-${ano}-${hora}-${minuto}`;
+}
