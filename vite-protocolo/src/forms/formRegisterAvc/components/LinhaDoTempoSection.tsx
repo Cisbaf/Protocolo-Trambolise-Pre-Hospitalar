@@ -23,8 +23,9 @@ const municipiosList = createListCollection({
 
 export function LinhaDoTempoSection() {
   const { form } = useAvcFormContext();
-  const [lkwDisabled, setLkwDisabled] = React.useState(false);
-  const [chegadaCena, vistoBem] = form.watch(["LinhaDoTempoSection.chegadaCena", "LinhaDoTempoSection.ultimoHorarioVistoBem"]);
+  const chegadaCena = form.watch("LinhaDoTempoSection.chegadaCena");
+  const vistoBem = form.watch("LinhaDoTempoSection.ultimoHorarioVistoBem");
+  const naoSoubeInformar = form.watch("LinhaDoTempoSection.naoSoubeInformarLKW");
 
   React.useEffect(()=>{
     const vistoBemDate = parseDatetimeLocal(vistoBem);
@@ -35,14 +36,12 @@ export function LinhaDoTempoSection() {
     }
   }, [chegadaCena, vistoBem]);
 
-
-  React.useEffect(()=>{
-    if (lkwDisabled) {
+  React.useEffect(() => {
+    if (naoSoubeInformar) {
       form.setValue("LinhaDoTempoSection.ultimoHorarioVistoBem", "");
       form.setValue("LinhaDoTempoSection.janelaEstimada", "");
     }
-
-  }, [lkwDisabled]);
+  }, [naoSoubeInformar]);
 
   return (
     <Box>
@@ -173,20 +172,35 @@ export function LinhaDoTempoSection() {
           invalid={!!form.formState.errors.LinhaDoTempoSection?.ultimoHorarioVistoBem}
           >
           <Field.Label>Último Horário Visto Bem (LKW)</Field.Label>
-            <CheckboxCard.Root
-              maxW="240px"
-              size={"sm"}
-              onChange={()=> setLkwDisabled(!lkwDisabled)}
-              colorPalette="teal">
-              <CheckboxCard.HiddenInput />
-              <CheckboxCard.Control>
-                <CheckboxCard.Label>Não soube informar</CheckboxCard.Label>
-                <CheckboxCard.Indicator />
-              </CheckboxCard.Control>
-            </CheckboxCard.Root>
+          <Controller
+            name="LinhaDoTempoSection.naoSoubeInformarLKW"
+            control={form.control}
+            render={({ field }) => (
+              <CheckboxCard.Root
+                maxW="240px"
+                size="sm"
+                checked={!!field.value}
+                onCheckedChange={(value) => {
+                  // Chakra pode mandar boolean OU objeto
+                  const checked =
+                    typeof value === "boolean"
+                      ? value
+                      : value?.checked ?? false;
 
+                  field.onChange(checked);
+                }}
+                colorPalette="teal"
+              >
+                <CheckboxCard.HiddenInput />
+                <CheckboxCard.Control>
+                  <CheckboxCard.Label>Não soube informar</CheckboxCard.Label>
+                  <CheckboxCard.Indicator />
+                </CheckboxCard.Control>
+              </CheckboxCard.Root>
+            )}
+          />
           <Input
-            disabled={lkwDisabled}
+            disabled={naoSoubeInformar}
             {...form.register("LinhaDoTempoSection.ultimoHorarioVistoBem")}
             type="datetime-local"
           />

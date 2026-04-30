@@ -5,6 +5,8 @@ import { usePost } from "../hooks/usePost";
 import { BaseURL } from "../settings";
 import { fakeAvcFormInitialValues } from "../forms/formRegisterAvc/utils/fakeInitialValues";
 import { ErrorToaster, FormErrorToaster, SuccessToaster } from "../forms/formRegisterAvc/utils/toasters";
+import { defaultAvcFormInitialValues } from "../forms/formRegisterAvc/utils/defaultInitialValues";
+import type { AvcFormValues } from "../forms/formRegisterAvc/schemas/AvcFormSchema";
 
 interface AvcFormType {
   form: ReturnType<typeof useAvcForm>
@@ -18,7 +20,7 @@ interface AvcFormProps {
 const AvcFormContext = React.createContext<AvcFormType | null>(null);
 
 export function AvcFormProvider(props: AvcFormProps) {
-    const avcForm = useAvcForm(props.fakeInitialValues? fakeAvcFormInitialValues : undefined);
+    const avcForm = useAvcForm(props.fakeInitialValues? fakeAvcFormInitialValues : defaultAvcFormInitialValues);
 
     const { post, loading } = usePost({
       url: `${BaseURL}/protocolo`,
@@ -29,9 +31,18 @@ export function AvcFormProvider(props: AvcFormProps) {
       onError: (error)=>ErrorToaster(error.message),
     })
 
+    const cleanForm = (data: AvcFormValues) => {
+      const { naoSoubeInformarLKW, ...rest } = data.LinhaDoTempoSection;
+      const payload = {
+        ...data,
+        LinhaDoTempoSection: rest,
+      };
+      post(payload);
+    }
+
     return (
        <AvcFormContext.Provider value={{form: avcForm}}>
-         <form onSubmit={avcForm.handleSubmit(post, FormErrorToaster)}>
+         <form onSubmit={avcForm.handleSubmit(cleanForm, FormErrorToaster)}>
             <LoadingOverlay isOpen={loading} />
             {props.children}
         </form>
