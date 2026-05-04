@@ -1,9 +1,9 @@
 package com.viteprotocolo.auth.controller;
 
-import com.viteprotocolo.auth.entity.UserRequest;
+import com.viteprotocolo.auth.entity.AdminRequest;
 import com.viteprotocolo.auth.service.JwtRequestFilter;
 import com.viteprotocolo.auth.service.JwtTokenUtil;
-import com.viteprotocolo.auth.service.UserService;
+import com.viteprotocolo.auth.service.AdminService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,22 +26,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final AdminService adminService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserRequest request) {
-        if (userService.existsByUsername(request.username())) {
+    public ResponseEntity<String> register(@RequestBody @Valid AdminRequest request) {
+        if (adminService.existsByUsername(request.username())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já cadastrado");
         } else {
-            userService.register(request);
+            adminService.register(request);
             return ResponseEntity.ok("Usuário cadastrado com sucesso!! " + request.username());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody @Valid AdminRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
             final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -64,7 +64,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> me(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         Object principal = authentication.getPrincipal();
