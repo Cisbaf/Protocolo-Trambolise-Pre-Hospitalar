@@ -1,8 +1,8 @@
 package com.viteprotocolo.auth.service;
 
-import com.viteprotocolo.auth.entity.UserEntity;
-import com.viteprotocolo.auth.entity.UserRequest;
-import com.viteprotocolo.auth.repository.UserRepository;
+import com.viteprotocolo.auth.entity.AdminEntity;
+import com.viteprotocolo.auth.entity.AdminRequest;
+import com.viteprotocolo.auth.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.User;
@@ -14,26 +14,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
+public class AdminService implements UserDetailsService {
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
 
-    public void register(UserRequest request) {
+    public void register(AdminRequest request) {
         String encoded = passwordEncoder.encode(request.password());
-        userRepository.save(UserEntity.builder().username(request.username()).password(encoded).build());
+        adminRepository.save(AdminEntity.builder().username(request.username()).password(encoded).build());
     }
 
     public boolean existsByUsername(String username) {
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("O nome do usuário não pode estar vazio");
         }
-        return userRepository.existsByUsername(username);
+        return adminRepository.existsByUsername(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findAll()
+        AdminEntity user = adminRepository.findAll()
                 .stream()
                 .filter(u -> u.getUsername().equals(username))
                 .findFirst()
