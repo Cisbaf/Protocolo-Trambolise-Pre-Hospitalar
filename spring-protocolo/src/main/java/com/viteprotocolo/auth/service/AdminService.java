@@ -31,6 +31,13 @@ public class AdminService implements UserDetailsService {
         return adminRepository.existsByUsername(username);
     }
 
+    public AdminEntity findByUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            return null;
+        }
+        return adminRepository.findByUsername(username);
+    }
+
     @Override
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         AdminEntity user = adminRepository.findAll()
