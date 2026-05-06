@@ -22,7 +22,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    public static final String JWT_COOKIE_NAME = "auth_token";
+    public static final String JWT_AUTH_COOKIE_NAME = "auth_token";
+    public static final String JWT_REFRESH_COOLIE_NAME = "refreshToken";
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
 
@@ -70,7 +71,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (JWT_COOKIE_NAME.equals(cookie.getName())) {
+                if (JWT_AUTH_COOKIE_NAME.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }

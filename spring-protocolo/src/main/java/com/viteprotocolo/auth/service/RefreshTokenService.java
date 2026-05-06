@@ -3,6 +3,7 @@ package com.viteprotocolo.auth.service;
 import com.viteprotocolo.auth.entity.AdminEntity;
 import com.viteprotocolo.auth.entity.RefreshToken;
 import com.viteprotocolo.auth.repository.RefreshTokenRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -32,17 +33,18 @@ public class RefreshTokenService {
 
 
     public RefreshToken createRefreshToken(AdminEntity usuario) {
-        RefreshToken refreshToken = new RefreshToken();
+        RefreshToken refreshToken = refreshTokenRepository.findByUsuario(usuario)
+                .orElseGet(RefreshToken::new);
 
         refreshToken.setUsuario(usuario);
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-        refreshToken.setToken(UUID.randomUUID().toString()); // Token aleatório e único
+        refreshToken.setToken(UUID.randomUUID().toString());
 
         return refreshTokenRepository.save(refreshToken);
     }
 
     public ResponseEntity<Map<String, String>> findByToken(HttpServletRequest request) {
-        var token = jwtRequestFilter.getCookieValue(request);
+        var token = getRefreshCookieValue(request);
         return refreshTokenRepository.findByToken(token)
                 .map(this::verifyExpiration)
                 .map(RefreshToken::getUsuario)
@@ -59,5 +61,17 @@ public class RefreshTokenService {
             throw new RuntimeException("Refresh token expirado. Faça login novamente.");
         }
         return token;
+    }
+
+    private String getRefreshCookieValue(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
