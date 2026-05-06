@@ -33,7 +33,7 @@ public class ProtocoloMapper {
                 .id(protocolo.getId())
                 .cpf_atendente(protocolo.getCpf_atendente())
                 .dataCriacao(protocolo.getDataCriacao())
-                .finalizado(protocolo.isFinalizado())
+                .finalizado(protocolo.getFinalizado())
                 .preId(protocolo.getPreId())
                 .DesfechoCenaSection(toDesfechoDto(protocolo.getDesfecho()))
                 .HistoriaClinicaSection(toHistoriaDto(protocolo.getHistoria()))
@@ -151,7 +151,7 @@ public class ProtocoloMapper {
 
         return HistoriaDTO.builder()
                 .idade(historia.getIdade())
-                .uso_coagulante_em_48h(historia.isUsoCoagulanteEm48h())
+                .uso_coagulante_em_48h(historia.getUsoCoagulanteEm48h())
                 .medicamentos(historia.getMedicamentos())
                 .doencas(historia.getDoencas())
                 .build();

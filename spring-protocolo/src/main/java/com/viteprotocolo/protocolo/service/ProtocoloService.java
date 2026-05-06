@@ -136,7 +136,7 @@ public class ProtocoloService {
         var linhadoTempo = LinhaDoTempo.builder().numeroOcorrencia(numeroOcorrencia).municipio(municipio)
                 .aberturaChamado(aberturaChamado).build();
 
-        protocoloRepository.save(Protocolo.builder().linhaDoTempo(linhadoTempo).dataCriacao(LocalDateTime.now()).preId(preProto.getId()).build());
+        protocoloRepository.save(Protocolo.builder().linhaDoTempo(linhadoTempo).dataCriacao(LocalDateTime.now()).preId(preProto.getId()).finalizado(false).build());
 
         return preProto;
     }

@@ -17,6 +17,6 @@ public record ParametrosDTO(
         @NotBlank
         String pressaoArterial,
         @NotNull
-        int saturacao
+        Integer saturacao
 ) implements Serializable {
 }
