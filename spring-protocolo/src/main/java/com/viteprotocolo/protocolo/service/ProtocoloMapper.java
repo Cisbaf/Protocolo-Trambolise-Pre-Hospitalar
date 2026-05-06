@@ -23,6 +23,7 @@ public class ProtocoloMapper {
                 .unidade(toUnidade(request.UnidadeReferenciaSection()))
                 .desfecho(toDesfecho(request.DesfechoCenaSection()))
                 .parecerFinal(toParecerFinal(request.ParecerFinalSection()))
+                .preId(request.preId())
                 .build();
     }
 
@@ -33,7 +34,6 @@ public class ProtocoloMapper {
                 .id(protocolo.getId())
                 .cpf_atendente(protocolo.getCpf_atendente())
                 .dataCriacao(protocolo.getDataCriacao())
-                .finalizado(protocolo.getFinalizado())
                 .preId(protocolo.getPreId())
                 .DesfechoCenaSection(toDesfechoDto(protocolo.getDesfecho()))
                 .HistoriaClinicaSection(toHistoriaDto(protocolo.getHistoria()))

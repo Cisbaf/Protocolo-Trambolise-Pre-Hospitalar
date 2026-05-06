@@ -7,9 +7,8 @@ import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
 import com.viteprotocolo.protocolo.entity.emb.LinhaDoTempo;
 import com.viteprotocolo.protocolo.entity.preDto.ProtocoloPreRequest;
-import com.viteprotocolo.protocolo.repository.PortocoloPreRepository;
+import com.viteprotocolo.protocolo.repository.ProtocoloPreRepository;
 import com.viteprotocolo.protocolo.repository.ProtocoloRespository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ import java.util.List;
 public class ProtocoloService {
     private final ProtocoloRespository protocoloRepository;
     private final ProtocoloMapper protocoloMapper;
-    private final PortocoloPreRepository protocoloPreRepository;
+    private final ProtocoloPreRepository protocoloPreRepository;
 
     private static final Logger log = LoggerFactory.getLogger(ProtocoloService.class);
 
@@ -59,20 +58,28 @@ public class ProtocoloService {
         return protocoloRepository.findAll(pageable).map(protocoloMapper::toResponse);
     }
 
-    public Page<ProtocoloResponse> getAllProtocolosByMunicipio(HttpServletRequest request, Pageable pageable) {
+//    public Page<ProtocoloResponse> getAllProtocolosByMunicipio(HttpServletRequest request, Pageable pageable) {
+//        String municipioCookieValue = getCookieValue(request);
+//
+//        if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
+//            return Page.empty(pageable);
+//        }
+//        String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
+//        Page<Protocolo> protocolos = protocoloRepository.findByLinhaDoTempo_MunicipioAndFinalizadoFalse(muniName, pageable);
+//
+//        return protocolos.map(protocoloMapper::toResponse);
+//    }
+
+    public Page<ProtocoloPre> getAllProtocoloPreByMunicipio(HttpServletRequest request, Pageable pageable) {
         String municipioCookieValue = getCookieValue(request);
 
         if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
             return Page.empty(pageable);
         }
         String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
-        Page<Protocolo> protocolos = protocoloRepository.findByLinhaDoTempo_MunicipioAndFinalizadoFalse(muniName, pageable);
 
-        return protocolos.map(protocoloMapper::toResponse);
+        return protocoloPreRepository.findPendentesByMunicipio(muniName, pageable);
     }
-
-
-
 
     public ProtocoloResponse getProtocoloById(String id) {
         var protocolo = protocoloRepository.findById(id).orElseThrow();
@@ -114,14 +121,6 @@ public class ProtocoloService {
         return protocoloRepository.findAll(spec, pageable).map(protocoloMapper::toResponse);
     }
 
-    public ProtocoloResponse findProtocoloByOcorrencia(String numeroOcorrencia) {
-        if (numeroOcorrencia == null || numeroOcorrencia.isBlank()) {
-            return ProtocoloResponse.builder().build();
-        }
-        var protocolo = protocoloRepository.findByLinhaDoTempo_NumeroOcorrencia(numeroOcorrencia).orElse(Protocolo.builder().build());
-        return protocoloMapper.toResponse(protocolo);
-    }
-
     @Transactional
     public ProtocoloPre criarPrePreenchimento(ProtocoloPreRequest protocoloPre) {
         if (protocoloPre == null) return null;
@@ -130,34 +129,8 @@ public class ProtocoloService {
         var municipio = protocoloPre.municipio() != null ? protocoloPre.municipio() : "";
         var numeroOcorrencia = protocoloPre.numeroOcorrencia() != null ? protocoloPre.numeroOcorrencia() : "";
 
-        var preProto = protocoloPreRepository.save(ProtocoloPre.builder().numeroOcorrencia(numeroOcorrencia).municipio(municipio)
-                .aberturaChamado(aberturaChamado).build());
-
-        var linhadoTempo = LinhaDoTempo.builder().numeroOcorrencia(numeroOcorrencia).municipio(municipio)
-                .aberturaChamado(aberturaChamado).build();
-
-        protocoloRepository.save(Protocolo.builder().linhaDoTempo(linhadoTempo).dataCriacao(LocalDateTime.now()).preId(preProto.getId()).finalizado(false).build());
-
-        return preProto;
-    }
-
-    @Transactional
-    public Protocolo editProtocolo(Protocolo request) {
-        var protocoloExistente = protocoloRepository.findById(request.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Protocolo não encontrado"));
-
-        protocoloExistente.setCpf_atendente(request.getCpf_atendente());
-        protocoloExistente.setLinhaDoTempo(request.getLinhaDoTempo());
-        protocoloExistente.setDesfecho(request.getDesfecho());
-        protocoloExistente.setHistoria(request.getHistoria());
-        protocoloExistente.setNeurologica(request.getNeurologica());
-        protocoloExistente.setParametros(request.getParametros());
-        protocoloExistente.setUnidade(request.getUnidade());
-        protocoloExistente.setParecerFinal(request.getParecerFinal());
-
-        protocoloExistente.setFinalizado(true);
-
-        return protocoloRepository.save(protocoloExistente);
+        return protocoloPreRepository.save(ProtocoloPre.builder().numeroOcorrencia(numeroOcorrencia).municipio(municipio)
+                .aberturaChamado(aberturaChamado).criadoPreAtt(LocalDateTime.now()).build());
     }
 
     public void deleteProtocoloById(String id) {

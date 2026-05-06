@@ -84,7 +84,7 @@ class ProtocoloMapperTest {
                 .motivos(List.of("Janela terapeutica", "Sem contraindicacoes"))
                 .build();
 
-        ProtocoloRequest request = new ProtocoloRequest(des, hist, ldt, neu, par, uni, pf, "12345678900");
+        ProtocoloRequest request = new ProtocoloRequest(des, hist, ldt, neu, par, uni, pf, "12345678900",0L);
 
         Protocolo result = mapper.toProtocolo(request);
 
@@ -125,7 +125,6 @@ class ProtocoloMapperTest {
         Protocolo entity = Protocolo.builder()
                 .id("test-uuid")
                 .cpf_atendente("09876543211")
-                .finalizado(true)
                 .preId(42L)
                 .dataCriacao(now)
                 .linhaDoTempo(LinhaDoTempo.builder()
@@ -158,7 +157,6 @@ class ProtocoloMapperTest {
         assertNotNull(response);
         assertEquals("test-uuid", response.id());
         assertEquals("09876543211", response.cpf_atendente());
-        assertTrue(response.finalizado());
         assertEquals(42L, response.preId());
         assertEquals(now, response.dataCriacao());
 

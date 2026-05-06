@@ -1,6 +1,5 @@
 package com.viteprotocolo.protocolo.controller;
 
-import com.viteprotocolo.protocolo.entity.Protocolo;
 import com.viteprotocolo.protocolo.entity.ProtocoloPre;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
@@ -8,7 +7,6 @@ import com.viteprotocolo.protocolo.entity.preDto.ProtocoloPreRequest;
 import com.viteprotocolo.protocolo.service.AtendenteService;
 import com.viteprotocolo.protocolo.service.ProtocoloService;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -78,22 +76,16 @@ public class ProtocoloController {
 
         return ResponseEntity.ok(protocoloService.getProtocoloByIdWithParams(id, nomeUnidade, numeroOcorrencia, aberturaChamado, municipio, pageable));
     }
-    @GetMapping("/ocorrencia/{numeroOcorrencia}")
-    public ResponseEntity<ProtocoloResponse> getProtocoloByOcorrencia(@PathVariable String numeroOcorrencia) {
-        try {
-            ProtocoloResponse response = protocoloService.findProtocoloByOcorrencia(numeroOcorrencia);
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    @PostMapping("/home")
-    public ResponseEntity<Page<ProtocoloResponse>> getProtocolos(HttpServletRequest request,
-                                                                 @PageableDefault(size = 4, sort = "id") @Nullable Pageable pageable) {
+    @GetMapping("/home")
+    public ResponseEntity<Page<ProtocoloPre>> getProtocolos(HttpServletRequest request,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "id") String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
-        Page<ProtocoloResponse> protocolos = protocoloService.getAllProtocolosByMunicipio(request, pageable);
+        var protocolos = protocoloService.getAllProtocoloPreByMunicipio(request, pageable);
         return ResponseEntity.ok(protocolos);
     }
 
@@ -123,6 +115,7 @@ public class ProtocoloController {
         protocoloService.deleteProtocoloById(id);
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/pre-preenchimento")
     public ResponseEntity<ProtocoloPre> createPrePreenchimento(@RequestBody @Valid ProtocoloPreRequest protocoloPreRequest) {
         if (protocoloPreRequest == null) {
@@ -136,20 +129,30 @@ public class ProtocoloController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Protocolo> editProtocolo(@PathVariable String id, @RequestBody Protocolo protocoloRequest) {
-        if (protocoloRequest == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        try {
-            protocoloRequest.setId(id);
-
-            Protocolo updated = protocoloService.editProtocolo(protocoloRequest);
-            return ResponseEntity.ok(updated);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Protocolo> editProtocolo(@PathVariable String id, @RequestBody Protocolo protocoloRequest) {
+//        if (protocoloRequest == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        try {
+//            protocoloRequest.setId(id);
+//
+//            Protocolo updated = protocoloService.editProtocolo(protocoloRequest);
+//            return ResponseEntity.ok(updated);
+//        } catch (EntityNotFoundException e) {
+//            return ResponseEntity.notFound().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
+//    @GetMapping("/ocorrencia/{numeroOcorrencia}")
+//    public ResponseEntity<ProtocoloResponse> getProtocoloByOcorrencia(@PathVariable String numeroOcorrencia) {
+//        try {
+//            ProtocoloResponse response = protocoloService.findProtocoloByOcorrencia(numeroOcorrencia);
+//
+//            return ResponseEntity.ok(response);
+//        } catch (Exception e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 }

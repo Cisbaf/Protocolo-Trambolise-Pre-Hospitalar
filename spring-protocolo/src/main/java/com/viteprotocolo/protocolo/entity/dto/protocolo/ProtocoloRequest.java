@@ -31,6 +31,9 @@ public record ProtocoloRequest(
         @NotNull
         @Valid
         ParecerFinalDTO ParecerFinalSection,
-        String cpf_atendente
+
+        String cpf_atendente,
+        Long preId
+
 ) implements Serializable {
 }
