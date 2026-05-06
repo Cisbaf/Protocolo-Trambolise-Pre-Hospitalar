@@ -295,7 +295,7 @@ class ProtocoloServiceTest {
         assertEquals("00011122233", result.getCpf_atendente());
         assertEquals("Hospital Novo", result.getUnidade().getUnidadeReferenciaEleita());
         assertEquals("INELEGIVEL", result.getParecerFinal().getElegibilidade());
-        assertTrue(result.isFinalizado(), "A flag 'finalizado' deve estar true após a edição");
+        assertTrue(result.getFinalizado(), "A flag 'finalizado' deve estar true após a edição");
 
         verify(protocoloRepository).save(protocoloExistenteNoBanco);
     }

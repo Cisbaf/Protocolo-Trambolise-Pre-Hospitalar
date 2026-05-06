@@ -101,7 +101,7 @@ class ProtocoloMapperTest {
         assertEquals(90L, result.getParametros().getGlicemia());
 
         assertEquals(65, result.getHistoria().getIdade());
-        assertTrue(result.getHistoria().isUsoCoagulanteEm48h());
+        assertTrue(result.getHistoria().getUsoCoagulanteEm48h());
 
         assertEquals("Unidade A", result.getUnidade().getUnidadeReferenciaEleita());
         assertEquals("ELEGIVEL", result.getParecerFinal().getElegibilidade());
