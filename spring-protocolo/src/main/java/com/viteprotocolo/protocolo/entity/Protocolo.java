@@ -17,23 +17,29 @@ public class Protocolo {
     @Id
     private String id;
     private String cpf_atendente;
+    private Long preId;
     private LocalDateTime dataCriacao;
+
     @Embedded
     private Desfecho desfecho;
+
     @Embedded
     private Historia historia;
+
     @Embedded
     private LinhaDoTempo linhaDoTempo;
+
     @Embedded
     private Neurologica neurologica;
+
     @Embedded
     private Parametros parametros;
+
     @Embedded
     private Unidade unidade;
+
     @Embedded
     private ParecerFinal parecerFinal;
-    private Boolean finalizado = false;
-    private Long preId;
 
     @PrePersist
     public void gerarIdSeNaoExistir() {

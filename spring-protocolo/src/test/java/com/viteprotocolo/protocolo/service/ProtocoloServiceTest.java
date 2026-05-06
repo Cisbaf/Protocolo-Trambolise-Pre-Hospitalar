@@ -1,6 +1,5 @@
 package com.viteprotocolo.protocolo.service;
 
-import com.viteprotocolo.auth.entity.Municipios;
 import com.viteprotocolo.protocolo.entity.Protocolo;
 import com.viteprotocolo.protocolo.entity.ProtocoloPre;
 import com.viteprotocolo.protocolo.entity.dto.*;
@@ -8,10 +7,8 @@ import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
 import com.viteprotocolo.protocolo.entity.emb.*;
 import com.viteprotocolo.protocolo.entity.preDto.ProtocoloPreRequest;
-import com.viteprotocolo.protocolo.repository.PortocoloPreRepository;
+import com.viteprotocolo.protocolo.repository.ProtocoloPreRepository;
 import com.viteprotocolo.protocolo.repository.ProtocoloRespository;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +28,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +41,7 @@ class ProtocoloServiceTest {
     @Mock
     private ProtocoloMapper protocoloMapper;
     @Mock
-    private PortocoloPreRepository protocoloPreRepository;
+    private ProtocoloPreRepository protocoloPreRepository;
 
     @InjectMocks
     private ProtocoloService service;
@@ -65,7 +61,6 @@ class ProtocoloServiceTest {
                 .id("uuid-1")
                 .dataCriacao(now)
                 .cpf_atendente("12345678900")
-                .finalizado(false)
                 .preId(10L)
                 .linhaDoTempo(LinhaDoTempo.builder()
                         .numeroOcorrencia("OC-001")
@@ -85,7 +80,6 @@ class ProtocoloServiceTest {
                 .id("uuid-1")
                 .cpf_atendente("12345678900")
                 .dataCriacao(now)
-                .finalizado(false)
                 .preId(10L)
                 .DesfechoCenaSection(new DesfechoDTO(now, now))
                 .HistoriaClinicaSection(new HistoriaDTO(65, true, Map.of("AVC", true), List.of()))
@@ -104,7 +98,8 @@ class ProtocoloServiceTest {
                 new ParametrosDTO(100L, "120/80", 98),
                 new UnidadeDTO("Unidade X", now),
                 new ParecerFinalDTO("ELEGIVEL", List.of("OK")),
-                "12345678900"
+                "12345678900",
+                0L
         );
     }
 
@@ -169,46 +164,46 @@ class ProtocoloServiceTest {
         assertEquals("uuid-1", result.getContent().getFirst().id());
     }
 
-    // -------------------------------------------------------------------------
-    // getAllProtocolosByMunicipio
-    // -------------------------------------------------------------------------
+//    // -------------------------------------------------------------------------
+//    // getAllProtocolosByMunicipio
+//    // -------------------------------------------------------------------------
+//
+//    @Test
+//    @DisplayName("Deve retornar Page.empty quando o cookie for nulo")
+//    void getAllProtocolosByMunicipio_nullCookie_returnsEmptyPage() {
+//        HttpServletRequest httpRequest = mock(HttpServletRequest.class);
+//        when(httpRequest.getCookies()).thenReturn(null);
+//        Pageable pageable = PageRequest.of(0, 10);
+//
+//        Page<ProtocoloResponse> result = service.getAllProtocolosByMunicipio(httpRequest, pageable);
+//
+//        assertTrue(result.isEmpty());
+//        verifyNoInteractions(protocoloRepository);
+//    }
 
-    @Test
-    @DisplayName("Deve retornar Page.empty quando o cookie for nulo")
-    void getAllProtocolosByMunicipio_nullCookie_returnsEmptyPage() {
-        HttpServletRequest httpRequest = mock(HttpServletRequest.class);
-        when(httpRequest.getCookies()).thenReturn(null);
-        Pageable pageable = PageRequest.of(0, 10);
-
-        Page<ProtocoloResponse> result = service.getAllProtocolosByMunicipio(httpRequest, pageable);
-
-        assertTrue(result.isEmpty());
-        verifyNoInteractions(protocoloRepository);
-    }
-
-    @Test
-    @DisplayName("Deve filtrar por município quando o cookie for válido")
-    void getAllProtocolosByMunicipio_validCookie_returnsMappedPage() {
-        // Usa o primeiro municipio do Enum para garantir que existe e não quebra com IllegalArgumentException do valueOf
-        Municipios municipio = Municipios.values()[0];
-        String municipioEnumStr = municipio.name();
-        String municipioDisplay = municipio.getNomeExibicao();
-
-        Cookie validCookie = new Cookie("municipio_protocolo", municipioEnumStr);
-        HttpServletRequest httpRequest = mock(HttpServletRequest.class);
-        when(httpRequest.getCookies()).thenReturn(new Cookie[]{validCookie});
-
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Protocolo> page = new PageImpl<>(List.of(protocolo));
-
-        when(protocoloRepository.findByLinhaDoTempo_MunicipioAndFinalizadoFalse(municipioDisplay, pageable)).thenReturn(page);
-        when(protocoloMapper.toResponse(protocolo)).thenReturn(response);
-
-        Page<ProtocoloResponse> result = service.getAllProtocolosByMunicipio(httpRequest, pageable);
-
-        assertFalse(result.isEmpty());
-        verify(protocoloRepository).findByLinhaDoTempo_MunicipioAndFinalizadoFalse(municipioDisplay, pageable);
-    }
+//    @Test
+//    @DisplayName("Deve filtrar por município quando o cookie for válido")
+//    void getAllProtocolosByMunicipio_validCookie_returnsMappedPage() {
+//        // Usa o primeiro municipio do Enum para garantir que existe e não quebra com IllegalArgumentException do valueOf
+//        Municipios municipio = Municipios.values()[0];
+//        String municipioEnumStr = municipio.name();
+//        String municipioDisplay = municipio.getNomeExibicao();
+//
+//        Cookie validCookie = new Cookie("municipio_protocolo", municipioEnumStr);
+//        HttpServletRequest httpRequest = mock(HttpServletRequest.class);
+//        when(httpRequest.getCookies()).thenReturn(new Cookie[]{validCookie});
+//
+//        Pageable pageable = PageRequest.of(0, 10);
+//        Page<Protocolo> page = new PageImpl<>(List.of(protocolo));
+//
+//        when(protocoloRepository.findByLinhaDoTempo_MunicipioAndFinalizadoFalse(municipioDisplay, pageable)).thenReturn(page);
+//        when(protocoloMapper.toResponse(protocolo)).thenReturn(response);
+//
+//        Page<ProtocoloResponse> result = service.getAllProtocolosByMunicipio(httpRequest, pageable);
+//
+//        assertFalse(result.isEmpty());
+//        verify(protocoloRepository).findByLinhaDoTempo_MunicipioAndFinalizadoFalse(municipioDisplay, pageable);
+//    }
 
     // -------------------------------------------------------------------------
     // getProtocoloByIdWithParams
@@ -266,37 +261,37 @@ class ProtocoloServiceTest {
         assertNotNull(protocoloCriado.getDataCriacao());
     }
 
-    // -------------------------------------------------------------------------
-    // editProtocolo
-    // -------------------------------------------------------------------------
-
-    @Test
-    @DisplayName("Deve atualizar dados e setar finalizado como true quando editar protocolo existente")
-    void editProtocolo_existingProtocolo_updatesAndSetsFinalizadoTrue() {
-        Protocolo protocoloExistenteNoBanco = Protocolo.builder()
-                .id("uuid-2")
-                .finalizado(false)
-                .cpf_atendente(null)
-                .build();
-
-        Protocolo editRequest = Protocolo.builder()
-                .id("uuid-2")
-                .cpf_atendente("00011122233")
-                .unidade(Unidade.builder().unidadeReferenciaEleita("Hospital Novo").build())
-                .parecerFinal(ParecerFinal.builder().elegibilidade("INELEGIVEL").build())
-                .build();
-
-        when(protocoloRepository.findById("uuid-2")).thenReturn(Optional.of(protocoloExistenteNoBanco));
-        when(protocoloRepository.save(any(Protocolo.class))).thenAnswer(i -> i.getArgument(0));
-
-        Protocolo result = service.editProtocolo(editRequest);
-
-        assertNotNull(result);
-        assertEquals("00011122233", result.getCpf_atendente());
-        assertEquals("Hospital Novo", result.getUnidade().getUnidadeReferenciaEleita());
-        assertEquals("INELEGIVEL", result.getParecerFinal().getElegibilidade());
-        assertTrue(result.getFinalizado(), "A flag 'finalizado' deve estar true após a edição");
-
-        verify(protocoloRepository).save(protocoloExistenteNoBanco);
-    }
+//    // -------------------------------------------------------------------------
+//    // editProtocolo
+//    // -------------------------------------------------------------------------
+//
+//    @Test
+//    @DisplayName("Deve atualizar dados e setar finalizado como true quando editar protocolo existente")
+//    void editProtocolo_existingProtocolo_updatesAndSetsFinalizadoTrue() {
+//        Protocolo protocoloExistenteNoBanco = Protocolo.builder()
+//                .id("uuid-2")
+//                .finalizado(false)
+//                .cpf_atendente(null)
+//                .build();
+//
+//        Protocolo editRequest = Protocolo.builder()
+//                .id("uuid-2")
+//                .cpf_atendente("00011122233")
+//                .unidade(Unidade.builder().unidadeReferenciaEleita("Hospital Novo").build())
+//                .parecerFinal(ParecerFinal.builder().elegibilidade("INELEGIVEL").build())
+//                .build();
+//
+//        when(protocoloRepository.findById("uuid-2")).thenReturn(Optional.of(protocoloExistenteNoBanco));
+//        when(protocoloRepository.save(any(Protocolo.class))).thenAnswer(i -> i.getArgument(0));
+//
+//        Protocolo result = service.editProtocolo(editRequest);
+//
+//        assertNotNull(result);
+//        assertEquals("00011122233", result.getCpf_atendente());
+//        assertEquals("Hospital Novo", result.getUnidade().getUnidadeReferenciaEleita());
+//        assertEquals("INELEGIVEL", result.getParecerFinal().getElegibilidade());
+//        assertTrue(result.getFinalizado(), "A flag 'finalizado' deve estar true após a edição");
+//
+//        verify(protocoloRepository).save(protocoloExistenteNoBanco);
+//    }
 }

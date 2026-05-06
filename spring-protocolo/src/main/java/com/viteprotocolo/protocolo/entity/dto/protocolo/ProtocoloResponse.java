@@ -21,7 +21,6 @@ public record ProtocoloResponse(
         ParametrosDTO ParametrosClinicosSection,
         UnidadeDTO UnidadeReferenciaSection,
         ParecerFinalDTO ParecerFinalSection,
-        Boolean finalizado,
         Long preId
 
 
