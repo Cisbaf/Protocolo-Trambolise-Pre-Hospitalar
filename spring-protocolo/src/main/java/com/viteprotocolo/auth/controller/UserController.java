@@ -57,7 +57,7 @@ public class UserController {
             var accessToken = jwtTokenUtil.generateToken(userDetails.getUsername());
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(admin);
 
-            JwtRequestFilter.addCookie(response, JwtRequestFilter.JWT_COOKIE_NAME, accessToken, Math.toIntExact(jwtTokenUtil.getExpirationTime()), true, false);
+            JwtRequestFilter.addCookie(response, JwtRequestFilter.JWT_AUTH_COOKIE_NAME, accessToken, Math.toIntExact(jwtTokenUtil.getExpirationTime()), true, false);
             JwtRequestFilter.addCookie(response, "refreshToken", refreshToken.getToken(),
                     15552000, true, false);
 
@@ -94,7 +94,8 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
-        JwtRequestFilter.removeCookie(response, JwtRequestFilter.JWT_COOKIE_NAME);
+        JwtRequestFilter.removeCookie(response, JwtRequestFilter.JWT_AUTH_COOKIE_NAME);
+        JwtRequestFilter.removeCookie(response, JwtRequestFilter.JWT_REFRESH_COOLIE_NAME);
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
 

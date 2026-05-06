@@ -93,7 +93,7 @@ class JwtRequestFilterTest {
     @Test
     @DisplayName("Deve extrair o JWT do cookie quando não houver header Authorization")
     void doFilterInternal_cookieToken_extractsAndAuthenticates() throws Exception {
-        Cookie jwtCookie = new Cookie(JwtRequestFilter.JWT_COOKIE_NAME, "cookie-jwt");
+        Cookie jwtCookie = new Cookie(JwtRequestFilter.JWT_AUTH_COOKIE_NAME, "cookie-jwt");
         UserDetails userDetails = new User("admin", "pass", List.of());
 
         when(request.getHeader("Authorization")).thenReturn(null);
@@ -111,7 +111,7 @@ class JwtRequestFilterTest {
     @Test
     @DisplayName("Deve preferir o header Bearer ao cookie quando ambos estiverem presentes")
     void doFilterInternal_bothHeaderAndCookie_prefersHeader() throws Exception {
-        Cookie jwtCookie = new Cookie(JwtRequestFilter.JWT_COOKIE_NAME, "cookie-jwt");
+        Cookie jwtCookie = new Cookie(JwtRequestFilter.JWT_AUTH_COOKIE_NAME, "cookie-jwt");
         UserDetails userDetails = new User("admin", "pass", List.of());
 
         when(request.getHeader("Authorization")).thenReturn("Bearer header-jwt");
@@ -204,7 +204,7 @@ class JwtRequestFilterTest {
     @Test
     @DisplayName("Deve retornar o valor do cookie 'auth_token' quando estiver presente")
     void getCookieValue_correctCookie_returnsValue() {
-        Cookie correct = new Cookie(JwtRequestFilter.JWT_COOKIE_NAME, "jwt-value");
+        Cookie correct = new Cookie(JwtRequestFilter.JWT_AUTH_COOKIE_NAME, "jwt-value");
         Cookie noise = new Cookie("outro", "x");
         when(request.getCookies()).thenReturn(new Cookie[]{noise, correct});
 
