@@ -12,4 +12,6 @@ public interface ProtocoloRespository extends JpaRepository<Protocolo, String>, 
 
     Optional<Protocolo> findById(String id);
     Page<Protocolo> findByLinhaDoTempo_Municipio(String municipio, Pageable pageable);
+    Optional<Protocolo> findByLinhaDoTempo_NumeroOcorrencia(String numeroOcorrencia);
+    Page<Protocolo> findByLinhaDoTempo_MunicipioAndFinalizadoFalse(String municipio, Pageable pageable);
 }

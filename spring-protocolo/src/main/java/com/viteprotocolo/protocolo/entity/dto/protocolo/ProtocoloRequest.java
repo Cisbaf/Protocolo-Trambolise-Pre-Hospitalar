@@ -30,6 +30,7 @@ public record ProtocoloRequest(
         UnidadeDTO UnidadeReferenciaSection,
         @NotNull
         @Valid
-        ParecerFinalDTO ParecerFinalSection
+        ParecerFinalDTO ParecerFinalSection,
+        String cpf_atendente
 ) implements Serializable {
 }
