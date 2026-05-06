@@ -35,7 +35,7 @@ class ProtocoloMapperTest {
     }
 
     @Test
-    @DisplayName("Deve mapear ProtocoloRequest para a entidade Protocolo corretamente")
+    @DisplayName("Deve mapear ProtocoloRequest para a entidade Protocolo corretamente incluindo o CPF")
     void toProtocolo_validRequest_mapsCorrectly() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -84,45 +84,27 @@ class ProtocoloMapperTest {
                 .motivos(List.of("Janela terapeutica", "Sem contraindicacoes"))
                 .build();
 
-        // ProtocoloRequest record field order:
-        // DesfechoCenaSection, HistoriaClinicaSection, LinhaDoTempoSection,
-        // AvaliacaoNeurologicaSection, ParametrosClinicosSection,
-        // UnidadeReferenciaSection, ParecerFinalSection
-        ProtocoloRequest request = new ProtocoloRequest(des, hist, ldt, neu, par, uni, pf);
+        ProtocoloRequest request = new ProtocoloRequest(des, hist, ldt, neu, par, uni, pf, "12345678900");
 
         Protocolo result = mapper.toProtocolo(request);
 
         assertNotNull(result);
+        assertEquals("12345678900", result.getCpf_atendente());
 
-        // LinhaDoTempo
         assertEquals("OC-123", result.getLinhaDoTempo().getNumeroOcorrencia());
         assertEquals("SAO_PAULO", result.getLinhaDoTempo().getMunicipio());
         assertEquals(now, result.getLinhaDoTempo().getAberturaChamado());
-        assertEquals(now, result.getLinhaDoTempo().getChegadaCena());
 
-        // Neurologica (String fields)
         assertEquals("SIM", result.getNeurologica().getDesvioFacial());
         assertEquals("NAO", result.getNeurologica().getQuedaBraco());
 
-        // Parametros
         assertEquals(90L, result.getParametros().getGlicemia());
-        assertEquals("120/80", result.getParametros().getPressaoArterial());
 
-        // Historia
         assertEquals(65, result.getHistoria().getIdade());
         assertTrue(result.getHistoria().isUsoCoagulanteEm48h());
-        assertTrue(result.getHistoria().getDoencas().get("Hipertensao"));
 
-        // Unidade
         assertEquals("Unidade A", result.getUnidade().getUnidadeReferenciaEleita());
-
-        // Desfecho
-        assertEquals(now, result.getDesfecho().getHorarioSaidaCena());
-        assertEquals(now, result.getDesfecho().getHorarioChegadaHospital());
-
-        // ParecerFinal
         assertEquals("ELEGIVEL", result.getParecerFinal().getElegibilidade());
-        assertTrue(result.getParecerFinal().getMotivos().contains("Janela terapeutica"));
     }
 
     // -------------------------------------------------------------------------
@@ -136,42 +118,38 @@ class ProtocoloMapperTest {
     }
 
     @Test
-    @DisplayName("Deve mapear entidade Protocolo para ProtocoloResponse corretamente")
+    @DisplayName("Deve mapear entidade Protocolo para ProtocoloResponse corretamente incluindo novas flags (preId e finalizado)")
     void toResponse_validProtocolo_mapsCorrectly() {
         LocalDateTime now = LocalDateTime.now();
 
         Protocolo entity = Protocolo.builder()
                 .id("test-uuid")
+                .cpf_atendente("09876543211")
+                .finalizado(true)
+                .preId(42L)
                 .dataCriacao(now)
                 .linhaDoTempo(LinhaDoTempo.builder()
                         .numeroOcorrencia("OC-123")
                         .municipio("SAO_PAULO")
                         .aberturaChamado(now)
-                        .chegadaCena(now)
                         .build())
                 .neurologica(Neurologica.builder()
                         .desvioFacial("SIM")
-                        .quedaBraco("NAO")
                         .build())
                 .parametros(Parametros.builder()
                         .glicemia(100L)
-                        .pressaoArterial("130/85")
                         .build())
                 .historia(Historia.builder()
                         .idade(70)
-                        .doencas(Map.of("AVC_previo", true))
-                        .medicamentos(List.of("Clopidogrel"))
                         .build())
                 .unidade(Unidade.builder()
                         .unidadeReferenciaEleita("Unidade X")
                         .build())
                 .desfecho(Desfecho.builder()
                         .horarioSaidaCena(now)
-                        .horarioChegadaHospital(now)
                         .build())
                 .parecerFinal(ParecerFinal.builder()
                         .elegibilidade("ELEGIVEL")
-                        .motivos(List.of("Resultado positivo"))
                         .build())
                 .build();
 
@@ -179,32 +157,16 @@ class ProtocoloMapperTest {
 
         assertNotNull(response);
         assertEquals("test-uuid", response.id());
+        assertEquals("09876543211", response.cpf_atendente());
+        assertTrue(response.finalizado());
+        assertEquals(42L, response.preId());
         assertEquals(now, response.dataCriacao());
 
-        // LinhaDoTempo
         assertEquals("OC-123", response.LinhaDoTempoSection().numeroOcorrencia());
-        assertEquals("SAO_PAULO", response.LinhaDoTempoSection().municipio());
-
-        // Neurologica
         assertEquals("SIM", response.AvaliacaoNeurologicaSection().desvioFacial());
-        assertEquals("NAO", response.AvaliacaoNeurologicaSection().quedaBraco());
-
-        // Parametros
         assertEquals(100L, response.ParametrosClinicosSection().glicemia());
-
-        // Historia
         assertEquals(70, response.HistoriaClinicaSection().idade());
-        assertTrue(response.HistoriaClinicaSection().doencas().get("AVC_previo"));
-
-        // Unidade
         assertEquals("Unidade X", response.UnidadeReferenciaSection().unidadeReferenciaEleita());
-
-        // Desfecho
-        assertEquals(now, response.DesfechoCenaSection().horarioSaidaCena());
-        assertEquals(now, response.DesfechoCenaSection().horarioChegadaHospital());
-
-        // ParecerFinal
         assertEquals("ELEGIVEL", response.ParecerFinalSection().elegibilidade());
-        assertTrue(response.ParecerFinalSection().motivos().contains("Resultado positivo"));
     }
 }

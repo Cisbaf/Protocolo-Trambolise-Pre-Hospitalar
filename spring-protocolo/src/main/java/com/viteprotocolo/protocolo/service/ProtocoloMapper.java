@@ -15,6 +15,7 @@ public class ProtocoloMapper {
         if (request == null) return null;
 
         return Protocolo.builder()
+                .cpf_atendente(request.cpf_atendente())
                 .linhaDoTempo(toIdentificacao(request.LinhaDoTempoSection()))
                 .neurologica(toNeurologica(request.AvaliacaoNeurologicaSection()))
                 .parametros(toParametros(request.ParametrosClinicosSection()))
@@ -24,12 +25,16 @@ public class ProtocoloMapper {
                 .parecerFinal(toParecerFinal(request.ParecerFinalSection()))
                 .build();
     }
+
     public ProtocoloResponse toResponse(Protocolo protocolo) {
         if (protocolo == null) return null;
 
         return ProtocoloResponse.builder()
                 .id(protocolo.getId())
+                .cpf_atendente(protocolo.getCpf_atendente())
                 .dataCriacao(protocolo.getDataCriacao())
+                .finalizado(protocolo.isFinalizado())
+                .preId(protocolo.getPreId())
                 .DesfechoCenaSection(toDesfechoDto(protocolo.getDesfecho()))
                 .HistoriaClinicaSection(toHistoriaDto(protocolo.getHistoria()))
                 .LinhaDoTempoSection(toIdentificacaoDto(protocolo.getLinhaDoTempo()))

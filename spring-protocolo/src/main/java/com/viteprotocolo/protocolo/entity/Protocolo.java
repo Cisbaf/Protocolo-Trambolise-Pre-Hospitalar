@@ -32,6 +32,8 @@ public class Protocolo {
     private Unidade unidade;
     @Embedded
     private ParecerFinal parecerFinal;
+    private boolean finalizado = false;
+    private Long preId;
 
     @PrePersist
     public void gerarIdSeNaoExistir() {

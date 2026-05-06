@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ProtocoloResponse(
         String id,
+        String cpf_atendente,
         LocalDateTime dataCriacao,
         DesfechoDTO DesfechoCenaSection,
         HistoriaDTO HistoriaClinicaSection,
@@ -19,7 +20,10 @@ public record ProtocoloResponse(
         NeurologicaDTO AvaliacaoNeurologicaSection,
         ParametrosDTO ParametrosClinicosSection,
         UnidadeDTO UnidadeReferenciaSection,
-        ParecerFinalDTO ParecerFinalSection
+        ParecerFinalDTO ParecerFinalSection,
+        boolean finalizado,
+        Long preId
+
 
 ) implements Serializable {
 }
