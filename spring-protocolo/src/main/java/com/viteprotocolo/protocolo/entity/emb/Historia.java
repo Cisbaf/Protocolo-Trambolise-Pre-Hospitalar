@@ -14,8 +14,8 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class Historia {
-    private int idade;
-    private boolean usoCoagulanteEm48h;
+    private Integer idade;
+    private Boolean usoCoagulanteEm48h;
     @ElementCollection
     private List<String> medicamentos;
     @ElementCollection
