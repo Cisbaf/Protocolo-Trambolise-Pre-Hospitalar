@@ -12,5 +12,5 @@ import lombok.*;
 public class Parametros {
     private Long glicemia;
     private String pressaoArterial;
-    private int saturacao;
+    private Integer saturacao;
 }
