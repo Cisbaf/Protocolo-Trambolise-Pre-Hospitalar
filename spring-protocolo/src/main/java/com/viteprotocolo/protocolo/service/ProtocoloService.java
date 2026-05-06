@@ -1,10 +1,13 @@
 package com.viteprotocolo.protocolo.service;
 
+import com.viteprotocolo.auth.entity.Municipios;
 import com.viteprotocolo.protocolo.entity.Protocolo;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloRequest;
 import com.viteprotocolo.protocolo.entity.dto.protocolo.ProtocoloResponse;
 import com.viteprotocolo.protocolo.repository.ProtocoloRespository;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +50,18 @@ public class ProtocoloService {
 
     public Page<ProtocoloResponse> getAllProtocolos(Pageable pageable) {
         return protocoloRespository.findAll(pageable).map(protocoloMapper::toResponse);
+    }
+
+    public Page<ProtocoloResponse> getAllProtocolosByMunicipio(HttpServletRequest request, Pageable pageable) {
+        String municipioCookieValue = getCookieValue(request);
+
+        if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
+            return Page.empty(pageable);
+        }
+        String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
+        Page<Protocolo> protocolos = protocoloRespository.findByLinhaDoTempo_Municipio(muniName, pageable);
+
+        return protocolos.map(protocoloMapper::toResponse);
     }
 
     public ProtocoloResponse getProtocoloById(String id) {
@@ -93,4 +108,15 @@ public class ProtocoloService {
         protocoloRespository.deleteById(id);
     }
 
+    private String getCookieValue(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("municipio_protocolo".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -1,9 +1,13 @@
 package com.viteprotocolo.auth.controller;
 
-import com.viteprotocolo.auth.entity.UserRequest;
+import com.viteprotocolo.auth.entity.AdminEntity;
+import com.viteprotocolo.auth.entity.AdminRequest;
+import com.viteprotocolo.auth.entity.RefreshToken;
 import com.viteprotocolo.auth.service.JwtRequestFilter;
 import com.viteprotocolo.auth.service.JwtTokenUtil;
-import com.viteprotocolo.auth.service.UserService;
+import com.viteprotocolo.auth.service.AdminService;
+import com.viteprotocolo.auth.service.RefreshTokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,29 +30,37 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final AdminService adminService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserRequest request) {
-        if (userService.existsByUsername(request.username())) {
+    public ResponseEntity<String> register(@RequestBody @Valid AdminRequest request) {
+        if (adminService.existsByUsername(request.username())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já cadastrado");
         } else {
-            userService.register(request);
+            adminService.register(request);
             return ResponseEntity.ok("Usuário cadastrado com sucesso!! " + request.username());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody @Valid AdminRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
             final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
             assert userDetails != null;
+            final AdminEntity admin = adminService.findByUsername(request.username());
+
             var accessToken = jwtTokenUtil.generateToken(userDetails.getUsername());
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(admin);
+
             JwtRequestFilter.addCookie(response, JwtRequestFilter.JWT_COOKIE_NAME, accessToken, Math.toIntExact(jwtTokenUtil.getExpirationTime()), true, false);
+            JwtRequestFilter.addCookie(response, "refreshToken", refreshToken.getToken(),
+                    15552000, true, false);
+
             return ResponseEntity.ok("Login feito com sucesso!!");
 
         } catch (BadCredentialsException e) {
@@ -64,7 +76,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> me(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         Object principal = authentication.getPrincipal();
@@ -84,5 +96,10 @@ public class UserController {
     public ResponseEntity<String> logout(HttpServletResponse response) {
         JwtRequestFilter.removeCookie(response, JwtRequestFilter.JWT_COOKIE_NAME);
         return ResponseEntity.ok("Logout realizado com sucesso");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        return refreshTokenService.findByToken(request);
     }
 }

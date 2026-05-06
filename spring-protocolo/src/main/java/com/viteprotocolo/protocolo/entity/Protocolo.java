@@ -16,6 +16,7 @@ public class Protocolo {
 
     @Id
     private String id;
+    private String cpf_atendente;
     private LocalDateTime dataCriacao;
     @Embedded
     private Desfecho desfecho;
