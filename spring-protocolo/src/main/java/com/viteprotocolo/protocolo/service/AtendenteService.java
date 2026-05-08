@@ -8,7 +8,6 @@ import com.viteprotocolo.protocolo.service.client.CadSusClient;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
@@ -17,8 +16,6 @@ import java.text.Normalizer;
 @RequiredArgsConstructor
 public class AtendenteService {
 
-    @Value("${jwt.expiration}")
-    private long expirationTime;
     private final AtendenteRepository atendenteRepository;
     private final CadSusClient cadSusClient;
 
@@ -51,6 +48,7 @@ public class AtendenteService {
         var normalizado = Normalizer.normalize(municipio, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         var muni = Municipios.valueOf(normalizado.trim().toUpperCase().substring(0, 3));
 
+        long expirationTime = 60 * 60 * 24 * 365;
         var time = Integer.parseInt(Long.toString(expirationTime));
 
         addCookie(response, muni.name(), time);
