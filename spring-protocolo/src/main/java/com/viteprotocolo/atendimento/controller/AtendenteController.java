@@ -1,6 +1,8 @@
 package com.viteprotocolo.atendimento.controller;
 
+import com.viteprotocolo.atendimento.entity.Municipio;
 import com.viteprotocolo.atendimento.service.AtendenteService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +34,13 @@ public class AtendenteController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(atendenteService.createAttAccount(cpf));
+    }
+    @GetMapping("/municipio")
+    public ResponseEntity<Municipio> getMunicipio(HttpServletRequest request){
+        var service = atendenteService.isMunicipio(request);
+        if (service == null){
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(service);
     }
 }

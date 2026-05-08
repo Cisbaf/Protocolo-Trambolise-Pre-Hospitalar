@@ -1,16 +1,20 @@
 package com.viteprotocolo.atendimento.service;
 
+import com.viteprotocolo.atendimento.entity.Municipio;
 import com.viteprotocolo.auth.entity.Municipios;
 import com.viteprotocolo.atendimento.entity.AtendenteEntity;
 import com.viteprotocolo.atendimento.entity.cadSus.CadSusRequest;
 import com.viteprotocolo.atendimento.repository.AtendenteRepository;
 import com.viteprotocolo.atendimento.service.client.CadSusClient;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
+
+import static com.viteprotocolo.atendimento.service.AtendimentoService.getCookieValue;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +56,28 @@ public class AtendenteService {
         var time = Integer.parseInt(Long.toString(expirationTime));
 
         addCookie(response, muni.name(), time);
+    }
+
+    public Municipio isMunicipio(HttpServletRequest request){
+        String cookie = getCookieValue(request);
+
+        if (cookie == null || cookie.isBlank()) {
+            return null;
+        }
+
+        try {
+
+            Municipios municipio = Municipios.valueOf(cookie.toUpperCase());
+
+            return Municipio.builder()
+                    .nome(municipio.getNomeExibicao().toUpperCase())
+                    .codigo(cookie)
+                    .build();
+
+        } catch (IllegalArgumentException e) {
+
+            return null;
+        }
     }
 
     private static void addCookie(HttpServletResponse response,

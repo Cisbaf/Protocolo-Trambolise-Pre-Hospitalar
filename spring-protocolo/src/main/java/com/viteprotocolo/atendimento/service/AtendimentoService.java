@@ -148,11 +148,11 @@ public class AtendimentoService {
         protocoloRepository.deleteById(id);
     }
 
-    private String getCookieValue(HttpServletRequest request) {
+    static String getCookieValue(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("municipio_protocolo".equals(cookie.getName())) {
+                if ("municipio_atendente".equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
