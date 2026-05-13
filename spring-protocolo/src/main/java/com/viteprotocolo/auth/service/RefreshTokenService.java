@@ -1,13 +1,11 @@
 package com.viteprotocolo.auth.service;
 
-import com.viteprotocolo.auth.entity.AdminEntity;
 import com.viteprotocolo.auth.entity.RefreshToken;
+import com.viteprotocolo.auth.entity.UserEntity;
 import com.viteprotocolo.auth.repository.RefreshTokenRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,22 +15,16 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class RefreshTokenService {
 
     @Value("${jwt.refresh.expiration}")
     private Long refreshTokenDurationMs;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
-
-    public RefreshToken createRefreshToken(AdminEntity usuario) {
+    public RefreshToken createRefreshToken(UserEntity usuario) {
         RefreshToken refreshToken = refreshTokenRepository.findByUsuario(usuario)
                 .orElseGet(RefreshToken::new);
 
@@ -49,7 +41,7 @@ public class RefreshTokenService {
                 .map(this::verifyExpiration)
                 .map(RefreshToken::getUsuario)
                 .map(user -> {
-                    String accessToken = jwtTokenUtil.generateToken(user.getUsername());
+                    String accessToken = jwtTokenUtil.generateToken(user.getUsername(), user.getRole().toString());
                     return ResponseEntity.ok(Map.of("accessToken", accessToken));
                 })
                 .orElseThrow(() -> new RuntimeException("Refresh token não encontrado!"));

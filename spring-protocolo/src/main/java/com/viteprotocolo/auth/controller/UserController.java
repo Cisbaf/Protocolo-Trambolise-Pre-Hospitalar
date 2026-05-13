@@ -1,28 +1,23 @@
 package com.viteprotocolo.auth.controller;
 
-import com.viteprotocolo.auth.entity.AdminEntity;
-import com.viteprotocolo.auth.entity.AdminRequest;
-import com.viteprotocolo.auth.entity.RefreshToken;
+import com.viteprotocolo.auth.entity.DTO.LoginRequest;
+import com.viteprotocolo.auth.entity.DTO.UserRequest;
+import com.viteprotocolo.auth.service.InOutService;
 import com.viteprotocolo.auth.service.JwtRequestFilter;
-import com.viteprotocolo.auth.service.JwtTokenUtil;
-import com.viteprotocolo.auth.service.AdminService;
 import com.viteprotocolo.auth.service.RefreshTokenService;
+import com.viteprotocolo.auth.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 @RestController
@@ -30,37 +25,24 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final AdminService adminService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final UserService userService;
     private final RefreshTokenService refreshTokenService;
+    private final InOutService inOutService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid AdminRequest request) {
-        if (adminService.existsByUsername(request.username())) {
+    public ResponseEntity<String> register(@RequestBody @Valid UserRequest request) {
+        if (userService.existsByUsername(request.username())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já cadastrado");
         } else {
-            adminService.register(request);
+            inOutService.register(request);
             return ResponseEntity.ok("Usuário cadastrado com sucesso!! " + request.username());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid AdminRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request, HttpServletResponse response) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-            final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            assert userDetails != null;
-            final AdminEntity admin = adminService.findByUsername(request.username());
-
-            var accessToken = jwtTokenUtil.generateToken(userDetails.getUsername());
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(admin);
-
-            JwtRequestFilter.addCookie(response, JwtRequestFilter.JWT_AUTH_COOKIE_NAME, accessToken, Math.toIntExact(jwtTokenUtil.getExpirationTime()), true, false);
-            JwtRequestFilter.addCookie(response, "refreshToken", refreshToken.getToken(),
-                    15552000, true, false);
-
+            inOutService.login(request, response);
             return ResponseEntity.ok("Login feito com sucesso!!");
 
         } catch (BadCredentialsException e) {
@@ -83,9 +65,14 @@ public class UserController {
 
         if (principal instanceof UserDetails userDetails) {
             return ResponseEntity.ok().body(
-                Map.of(
-                    "username", userDetails.getUsername()
-                )
+                    Map.of(
+                            "username", userDetails.getUsername(),
+                            "role", userDetails.getAuthorities()
+                                    .stream()
+                                    .map(GrantedAuthority::getAuthority)
+                                    .findFirst()
+                                    .orElse("")
+                    )
             );
         }
 
