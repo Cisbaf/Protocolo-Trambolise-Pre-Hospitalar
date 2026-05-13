@@ -29,45 +29,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
 
-                        // AUTH
-                        .requestMatchers("/auth/**").permitAll()
+                        // === ROTAS DE AUTENTICAÇÃO (AUTH) ===
+                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/auth/me").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
 
-                        // SWAGGER
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        // === ROTAS DE ATENDENTES ===
+                        .requestMatchers(HttpMethod.POST, "/atendentes/municipio/{muni}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/atendentes/registeratt").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/atendentes/municipio").permitAll()
 
-                        // ATENDIMENTOS
-                        .requestMatchers(HttpMethod.GET, "/atendimentos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/atendimentos/**").permitAll()
+                        // === ROTAS DE ATENDIMENTO (SINGULAR) ===
+                        .requestMatchers(HttpMethod.POST, "/atendimento").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/atendimento").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/atendimento/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/atendimento/params").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/atendimento/{id}").permitAll()
 
-                        // PRE PREENCHIMENTO
-                        .requestMatchers(HttpMethod.GET, "/atendimentos/pre/**").permitAll()
+                        // === ROTAS DE ATENDIMENTO PRÉ (PLURAL) ===
+                        .requestMatchers(HttpMethod.GET,  "/atendimentos/pre/home").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/atendimentos/pre/pre-preenchimento").permitAll()
 
-                        // ATENDENTES
-                        .requestMatchers(HttpMethod.POST, "/atendentes/accounts").permitAll()
+                        // === SWAGGER E DOCS ===
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                        // TODO resto autenticado
+                        // Qualquer outra rota não mapeada acima exigirá autenticação
                         .anyRequest().authenticated()
                 )
-
-                .addFilterBefore(
-                        jwtRequestFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
