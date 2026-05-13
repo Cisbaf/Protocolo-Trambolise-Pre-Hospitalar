@@ -29,19 +29,45 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
                 .authorizeHttpRequests(authz -> authz
+
+                        // AUTH
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/protocolo/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/protocolo/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/protocolo/**").permitAll()
+
+                        // SWAGGER
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
+                        // ATENDIMENTOS
+                        .requestMatchers(HttpMethod.GET, "/atendimentos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/atendimentos/**").permitAll()
+
+                        // PRE PREENCHIMENTO
+                        .requestMatchers(HttpMethod.GET, "/atendimentos/pre/**").permitAll()
+
+                        // ATENDENTES
+                        .requestMatchers(HttpMethod.POST, "/atendentes/accounts").permitAll()
+
+                        // TODO resto autenticado
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+                .addFilterBefore(
+                        jwtRequestFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
