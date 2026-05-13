@@ -10,6 +10,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
@@ -19,6 +21,8 @@ import static com.viteprotocolo.atendimento.service.AtendimentoService.getCookie
 @Service
 @RequiredArgsConstructor
 public class AtendenteService {
+
+    private static final Logger log = LoggerFactory.getLogger(AtendenteService.class);
 
     private final AtendenteRepository atendenteRepository;
     private final CadSusClient cadSusClient;
@@ -30,18 +34,22 @@ public class AtendenteService {
         }
 
         cpf = cpf.replaceAll("\\D", "");
-        System.out.println("cpf: " + cpf);
         if (cpf.length() < 11) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("CPF inválido: menos de 11 dígitos");
         }
-
 
         var existe = findByCpf(cpf);
         if (existe != null) {
             return existe;
         }
-        var cadSus = cadSusClient.getCadSus(new CadSusRequest("cpf", cpf));
-        return atendenteRepository.save(new AtendenteEntity(cadSus.getFull_name(), cadSus.getCpf()));
+
+        try {
+            var cadSus = cadSusClient.getCadSus(new CadSusRequest("cpf", cpf));
+            return atendenteRepository.save(new AtendenteEntity(cadSus.getFull_name(), cadSus.getCpf()));
+        } catch (Exception e) {
+            log.warn("CadSus indisponível ou CPF não encontrado ({}): {}. Atendente não vinculado.", cpf, e.getMessage());
+            return null;
+        }
     }
 
     private AtendenteEntity findByCpf(String cpf) {
@@ -49,6 +57,7 @@ public class AtendenteService {
     }
 
     public void setMunicio(HttpServletResponse response, String municipio) {
+        if (municipio.length() < 3) return;
         var normalizado = Normalizer.normalize(municipio, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
         var muni = Municipios.valueOf(normalizado.trim().toUpperCase().substring(0, 3));
 

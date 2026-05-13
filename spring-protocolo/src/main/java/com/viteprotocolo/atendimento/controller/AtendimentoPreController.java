@@ -1,9 +1,9 @@
 package com.viteprotocolo.atendimento.controller;
 
-import com.viteprotocolo.atendimento.entity.AtendimentoPre;
+import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
 import com.viteprotocolo.atendimento.entity.preDto.AtendimentoPreRequest;
 import com.viteprotocolo.atendimento.service.AtendimentoService;
-import com.viteprotocolo.auth.service.AdminService;
+import com.viteprotocolo.auth.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ import java.security.Principal;
 public class AtendimentoPreController {
 
     private final AtendimentoService atendimentoService;
-    private final AdminService adminService;
+    private final UserService userService;
 
 
     @GetMapping("/home")
-    public ResponseEntity<Page<AtendimentoPre>> getAtendimentos(HttpServletRequest request,
-                                                                @RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "10") int size,
-                                                                @RequestParam(defaultValue = "id") String sort) {
+    public ResponseEntity<Page<PreResponse>> getAtendimentos(HttpServletRequest request,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size,
+                                                             @RequestParam(defaultValue = "id") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
         var protocolos = atendimentoService.getAllAtendimentoPreByMunicipio(request, pageable);
@@ -38,15 +38,15 @@ public class AtendimentoPreController {
     }
 
     @PostMapping("/pre-preenchimento")
-    public ResponseEntity<AtendimentoPre> createPrePreenchimento(
+    public ResponseEntity<PreResponse> createPrePreenchimento(
             @RequestBody @Valid AtendimentoPreRequest atendimentoPreRequest,
             Principal principal) {
         if (atendimentoPreRequest == null) {
             return ResponseEntity.badRequest().build();
         }
         try {
-            var admin = principal != null ? adminService.findByUsername(principal.getName()) : null;
-            AtendimentoPre created = atendimentoService.criarPrePreenchimento(atendimentoPreRequest, admin);
+            var admin = principal != null ? userService.findByUsername(principal.getName()) : null;
+            var created = atendimentoService.criarPrePreenchimento(atendimentoPreRequest, admin);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

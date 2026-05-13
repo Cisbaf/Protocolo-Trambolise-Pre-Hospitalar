@@ -55,11 +55,11 @@ public class AtendimentoController {
     }
 
     @GetMapping("/params")
-    public ResponseEntity<Page<AtendimentoResponse>> getAtendimentoByIdWithParams(@RequestParam @Nullable String id,
-                                                                                  @RequestParam @Nullable String nomeUnidade,
-                                                                                  @RequestParam @Nullable String numeroOcorrencia,
-                                                                                  @RequestParam @Nullable LocalDate aberturaChamado,
-                                                                                  @RequestParam @Nullable String municipio,
+    public ResponseEntity<Page<AtendimentoResponse>> getAtendimentoByIdWithParams(@RequestParam(required = false) String id,
+                                                                                  @RequestParam(required = false) String nomeUnidade,
+                                                                                  @RequestParam(required = false) String numeroOcorrencia,
+                                                                                  @RequestParam(required = false) LocalDate aberturaChamado,
+                                                                                  @RequestParam(required = false) String municipio,
                                                                                   @RequestParam(defaultValue = "0") int page,
                                                                                   @RequestParam(defaultValue = "10") int size,
                                                                                   @RequestParam(defaultValue = "id") String sort
