@@ -1,6 +1,7 @@
 package com.viteprotocolo.atendimento.service;
 
-import com.viteprotocolo.auth.entity.AdminEntity;
+import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
+import com.viteprotocolo.auth.entity.UserEntity;
 import com.viteprotocolo.auth.entity.Municipios;
 import com.viteprotocolo.atendimento.entity.Atendimento;
 import com.viteprotocolo.atendimento.entity.AtendimentoPre;
@@ -39,24 +40,20 @@ public class AtendimentoService {
     @Transactional
     public AtendimentoResponse createAtendimento(AtendimentoRequest protocolo) {
         try {
-            if (protocolo == null) {
-                log.warn("protocolo is null");
-                throw new IllegalArgumentException();
-            }
             var resp = protocoloMapper.toAtendimento(protocolo);
             resp.setDataCriacao(LocalDateTime.now());
+
+            // Tenta buscar o atendente, mas se falhar (retornar null), o código segue
+            var atendente = atendenteService.createAttAccount(resp.getCpf_atendente());
+            resp.setAtendente(atendente);
+
+            // Agora o save vai funcionar, com ou sem atendente
             var salvo = protocoloRepository.save(resp);
-
-            log.info("Atendimento criado: ID:{}, N. Ocorrencia: {}, Data Criação: {} \n ",
-                    salvo.getId(), salvo.getLinhaDoTempo().getNumeroOcorrencia(), salvo.getDataCriacao());
-
-            var atendente = atendenteService.createAttAccount(salvo.getCpf_atendente());
-            salvo.setAtendente(atendente);
 
             return protocoloMapper.toResponse(salvo);
         } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new IllegalArgumentException(e);
+            log.error("Erro ao criar atendimento: {}", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -76,7 +73,7 @@ public class AtendimentoService {
 //        return protocolos.map(protocoloMapper::toResponse);
 //    }
 
-    public Page<AtendimentoPre> getAllAtendimentoPreByMunicipio(HttpServletRequest request, Pageable pageable) {
+    public Page<PreResponse> getAllAtendimentoPreByMunicipio(HttpServletRequest request, Pageable pageable) {
         String municipioCookieValue = getCookieValue(request);
 
         if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
@@ -84,7 +81,7 @@ public class AtendimentoService {
         }
         String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
 
-        return protocoloPreRepository.findPendentesByMunicipio(muniName, pageable);
+        return protocoloPreRepository.findPendentesByMunicipio(muniName, pageable).map(AtendimentoMapper::toPreResponse);
     }
 
     public AtendimentoResponse getAtendimentoById(String id) {
@@ -128,24 +125,27 @@ public class AtendimentoService {
     }
 
     @Transactional
-    public AtendimentoPre criarPrePreenchimento(AtendimentoPreRequest protocoloPre, AdminEntity admin) {
+    public PreResponse criarPrePreenchimento(AtendimentoPreRequest protocoloPre, UserEntity admin) {
         if (protocoloPre == null) return null;
 
         var aberturaChamado = protocoloPre.aberturaChamado() != null ? protocoloPre.aberturaChamado() : null;
         var municipio = protocoloPre.municipio() != null ? protocoloPre.municipio() : "";
         var numeroOcorrencia = protocoloPre.numeroOcorrencia() != null ? protocoloPre.numeroOcorrencia() : "";
 
-        return protocoloPreRepository.save(AtendimentoPre.builder()
+        var entity = protocoloPreRepository.save(AtendimentoPre.builder()
                 .numeroOcorrencia(numeroOcorrencia)
                 .municipio(municipio)
                 .aberturaChamado(aberturaChamado)
                 .criadoPreAtt(LocalDateTime.now())
                 .admin(admin)
                 .build());
+        return AtendimentoMapper.toPreResponse(entity);
     }
 
     public void deleteAtendimentoById(String id) {
-        protocoloRepository.deleteById(id);
+        if(id == null) return;
+        var entidade = protocoloRepository.findById(id).orElseThrow();
+        protocoloRepository.deleteById(entidade.getId());
     }
 
     static String getCookieValue(HttpServletRequest request) {

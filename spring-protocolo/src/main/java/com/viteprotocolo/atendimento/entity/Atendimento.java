@@ -41,8 +41,8 @@ public class Atendimento {
     @Embedded
     private ParecerFinal parecerFinal;
 
-    @ManyToOne
-    @JoinColumn(name = "atendentId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atendentId", nullable = true)
     private AtendenteEntity atendente;
 
     @PrePersist

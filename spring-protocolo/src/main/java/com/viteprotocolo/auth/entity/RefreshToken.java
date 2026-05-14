@@ -20,7 +20,7 @@ public class RefreshToken {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private AdminEntity usuario;
+    private UserEntity usuario;
 
     @Column(nullable = false)
     private Instant expiryDate; // Data exata que expira

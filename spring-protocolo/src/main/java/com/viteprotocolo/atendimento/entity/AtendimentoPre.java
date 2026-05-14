@@ -1,6 +1,6 @@
 package com.viteprotocolo.atendimento.entity;
 
-import com.viteprotocolo.auth.entity.AdminEntity;
+import com.viteprotocolo.auth.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,5 +23,5 @@ public class AtendimentoPre {
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
-    private AdminEntity admin;
+    private UserEntity admin;
 }

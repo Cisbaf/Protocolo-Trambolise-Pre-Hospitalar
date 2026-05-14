@@ -1,11 +1,15 @@
 package com.viteprotocolo.atendimento.service;
 
 import com.viteprotocolo.atendimento.entity.Atendimento;
+import com.viteprotocolo.atendimento.entity.AtendimentoPre;
 import com.viteprotocolo.atendimento.entity.dto.*;
+import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
 import com.viteprotocolo.atendimento.entity.dto.HistoriaDTO;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoRequest;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoResponse;
 import com.viteprotocolo.atendimento.entity.emb.*;
+import com.viteprotocolo.auth.entity.UserEntity;
+import com.viteprotocolo.auth.entity.DTO.UserResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,6 +47,22 @@ public class AtendimentoMapper {
                 .UnidadeReferenciaSection(toUnidadeDto(atendimento.getUnidade()))
                 .ParecerFinalSection(toParecerFinalDTO(atendimento.getParecerFinal()))
                 .atendente(atendimento.getAtendente())
+                .build();
+    }
+
+    public static PreResponse toPreResponse(AtendimentoPre atendimentoPre){
+        if (atendimentoPre == null) return PreResponse.builder().build();
+        var admin = atendimentoPre.getAdmin() != null ? atendimentoPre.getAdmin() : UserEntity.builder().build();
+        return PreResponse.builder()
+                .id(atendimentoPre.getId())
+                .aberturaChamado(atendimentoPre.getAberturaChamado())
+                .criadoPreAtt(atendimentoPre.getCriadoPreAtt())
+                .municipio(atendimentoPre.getMunicipio())
+                .numeroOcorrencia(atendimentoPre.getNumeroOcorrencia())
+                .admin(UserResponse.builder()
+                        .role(admin.getRole() != null ? admin.getRole().toString() : "ADMIN" )
+                        .username(admin.getUsername())
+                        .build())
                 .build();
     }
 

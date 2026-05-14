@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "user_entity")
-public class AdminEntity {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,4 +20,6 @@ public class AdminEntity {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Municipios municipios;
 }
