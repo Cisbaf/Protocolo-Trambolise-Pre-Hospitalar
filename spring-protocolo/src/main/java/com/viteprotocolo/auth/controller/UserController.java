@@ -51,7 +51,7 @@ public class UserController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro interno no servidor");
+                    .body("Erro interno no servidor" + e.getMessage());
         }
     }
 
