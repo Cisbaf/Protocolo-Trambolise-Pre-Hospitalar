@@ -9,6 +9,7 @@ export const defaultAvcFormInitialValues: AvcFormValues = {
     aberturaChamado: "",
     chegadaCena: "",
     ultimoHorarioVistoBem: "",
+    naoSoubeInformarLKW: false,
     janelaEstimada: "",
   },
 

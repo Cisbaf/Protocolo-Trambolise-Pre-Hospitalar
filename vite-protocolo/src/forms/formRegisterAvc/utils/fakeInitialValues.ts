@@ -6,6 +6,7 @@ export const fakeAvcFormInitialValues: Partial<AvcFormValues> = {
     municipio: "belford_roxo",
     aberturaChamado: "2026-03-05T04:09",
     chegadaCena: "2026-03-05T05:12",
+    naoSoubeInformarLKW: false,
     ultimoHorarioVistoBem: "2026-03-05T07:32",
     janelaEstimada: "2h 20min",
   },
