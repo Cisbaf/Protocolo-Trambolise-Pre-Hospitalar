@@ -37,8 +37,16 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         UserEntity user = adminRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-        var userRole = user.getRole() != null ? user.getRole().toString() : "User";
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole));
+
+        var userRole = user.getRole() != null
+                ? "ROLE_" + user.getRole()
+                : "ROLE_USER";
+
+        var municipio = user.getMunicipios() != null
+                ? user.getMunicipios().toString()
+                : "null";
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole), new SimpleGrantedAuthority(municipio));
         return new User(username, user.getPassword(), authorities);
     }
 }

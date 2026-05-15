@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -64,14 +65,27 @@ public class UserController {
         Object principal = authentication.getPrincipal();
 
         if (principal instanceof UserDetails userDetails) {
+
+            List<String> authorities = userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+
+            String role = authorities.stream()
+                    .filter(a -> a.startsWith("ROLE_"))
+                    .findFirst()
+                    .orElse("");
+
+            String municipio = authorities.stream()
+                    .filter(a -> !a.startsWith("ROLE_"))
+                    .findFirst()
+                    .orElse("");
+
             return ResponseEntity.ok().body(
                     Map.of(
                             "username", userDetails.getUsername(),
-                            "role", userDetails.getAuthorities()
-                                    .stream()
-                                    .map(GrantedAuthority::getAuthority)
-                                    .findFirst()
-                                    .orElse("")
+                            "role", role.split("ROLE_")[1],
+                            "municipio", municipio
                     )
             );
         }
