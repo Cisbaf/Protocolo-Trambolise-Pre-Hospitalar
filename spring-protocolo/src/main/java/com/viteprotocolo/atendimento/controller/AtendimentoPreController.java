@@ -4,7 +4,6 @@ import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
 import com.viteprotocolo.atendimento.entity.preDto.AtendimentoPreRequest;
 import com.viteprotocolo.atendimento.service.AtendimentoService;
 import com.viteprotocolo.auth.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,13 +26,13 @@ public class AtendimentoPreController {
 
 
     @GetMapping("/home")
-    public ResponseEntity<Page<PreResponse>> getAtendimentos(HttpServletRequest request,
+    public ResponseEntity<Page<PreResponse>> getAtendimentos(@RequestParam String municipio,
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int size,
                                                              @RequestParam(defaultValue = "id") String sort) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 
-        var protocolos = atendimentoService.getAllAtendimentoPreByMunicipio(request, pageable);
+        var protocolos = atendimentoService.getAllAtendimentoPreByMunicipio(pageable, municipio);
         return ResponseEntity.ok(protocolos);
     }
 

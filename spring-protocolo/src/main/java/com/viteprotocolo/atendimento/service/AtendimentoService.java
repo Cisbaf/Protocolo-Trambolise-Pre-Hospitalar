@@ -1,15 +1,14 @@
 package com.viteprotocolo.atendimento.service;
 
-import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
-import com.viteprotocolo.auth.entity.UserEntity;
-import com.viteprotocolo.auth.entity.Municipios;
 import com.viteprotocolo.atendimento.entity.Atendimento;
 import com.viteprotocolo.atendimento.entity.AtendimentoPre;
+import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoRequest;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoResponse;
 import com.viteprotocolo.atendimento.entity.preDto.AtendimentoPreRequest;
 import com.viteprotocolo.atendimento.repository.AtendimentoPreRepository;
 import com.viteprotocolo.atendimento.repository.AtendimentoRepository;
+import com.viteprotocolo.auth.entity.UserEntity;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,11 +43,9 @@ public class AtendimentoService {
             var resp = protocoloMapper.toAtendimento(protocolo);
             resp.setDataCriacao(LocalDateTime.now());
 
-            // Tenta buscar o atendente, mas se falhar (retornar null), o código segue
             var atendente = atendenteService.createAttAccount(resp.getCpf_atendente());
             resp.setAtendente(atendente);
 
-            // Agora o save vai funcionar, com ou sem atendente
             var salvo = protocoloRepository.save(resp);
 
             return protocoloMapper.toResponse(salvo);
@@ -61,27 +59,15 @@ public class AtendimentoService {
         return protocoloRepository.findAll(pageable).map(protocoloMapper::toResponse);
     }
 
-//    public Page<AtendimentoResponse> getAllAtendimentosByMunicipio(HttpServletRequest request, Pageable pageable) {
-//        String municipioCookieValue = getCookieValue(request);
-//
-//        if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
-//            return Page.empty(pageable);
-//        }
-//        String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
-//        Page<Atendimento> protocolos = protocoloRepository.findByLinhaDoTempo_MunicipioAndFinalizadoFalse(muniName, pageable);
-//
-//        return protocolos.map(protocoloMapper::toResponse);
-//    }
+    public Page<PreResponse> getAllAtendimentoPreByMunicipio(Pageable pageable, String municipio) {
 
-    public Page<PreResponse> getAllAtendimentoPreByMunicipio(HttpServletRequest request, Pageable pageable) {
-        String municipioCookieValue = getCookieValue(request);
-
-        if (municipioCookieValue == null || municipioCookieValue.isBlank()) {
+        if (municipio == null || municipio.isBlank()) {
             return Page.empty(pageable);
         }
-        String muniName = Municipios.valueOf(municipioCookieValue).getNomeExibicao();
 
-        return protocoloPreRepository.findPendentesByMunicipio(muniName, pageable).map(AtendimentoMapper::toPreResponse);
+        var normalizado = Normalizer.normalize(municipio, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
+
+        return protocoloPreRepository.findPendentesByMunicipio(normalizado, pageable).map(AtendimentoMapper::toPreResponse);
     }
 
     public AtendimentoResponse getAtendimentoById(String id) {
@@ -129,7 +115,7 @@ public class AtendimentoService {
         if (protocoloPre == null) return null;
 
         var aberturaChamado = protocoloPre.aberturaChamado() != null ? protocoloPre.aberturaChamado() : null;
-        var municipio = protocoloPre.municipio() != null ? protocoloPre.municipio() : "";
+        var municipio = protocoloPre.municipio() != null ? protocoloPre.municipio().toUpperCase() : "";
         var numeroOcorrencia = protocoloPre.numeroOcorrencia() != null ? protocoloPre.numeroOcorrencia() : "";
 
         var entity = protocoloPreRepository.save(AtendimentoPre.builder()
