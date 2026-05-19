@@ -56,7 +56,9 @@ public class SecurityConfig {
 
                         // === ROTAS DE ATENDIMENTO PRÉ (PLURAL) ===
                         .requestMatchers(HttpMethod.GET,  "/atendimentos/pre/home").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/atendimentos/pre/all").permitAll()
                         .requestMatchers(HttpMethod.POST, "/atendimentos/pre/pre-preenchimento").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/atendimentos/pre/update/**").permitAll()
 
                         // === SWAGGER E DOCS ===
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()

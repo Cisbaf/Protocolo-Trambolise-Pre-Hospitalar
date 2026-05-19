@@ -98,7 +98,4 @@ public class AtendenteService {
 
         response.addCookie(cookie);
     }
-
-
-
 }

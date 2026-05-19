@@ -1,14 +1,9 @@
 package com.viteprotocolo.atendimento.service;
 
 import com.viteprotocolo.atendimento.entity.Atendimento;
-import com.viteprotocolo.atendimento.entity.AtendimentoPre;
-import com.viteprotocolo.atendimento.entity.dto.AtendimentoPre.PreResponse;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoRequest;
 import com.viteprotocolo.atendimento.entity.dto.atendimento.AtendimentoResponse;
-import com.viteprotocolo.atendimento.entity.preDto.AtendimentoPreRequest;
-import com.viteprotocolo.atendimento.repository.AtendimentoPreRepository;
 import com.viteprotocolo.atendimento.repository.AtendimentoRepository;
-import com.viteprotocolo.auth.entity.UserEntity;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +26,6 @@ import java.util.List;
 public class AtendimentoService {
     private final AtendimentoRepository protocoloRepository;
     private final AtendimentoMapper protocoloMapper;
-    private final AtendimentoPreRepository protocoloPreRepository;
     private final AtendenteService atendenteService;
 
     private static final Logger log = LoggerFactory.getLogger(AtendimentoService.class);
@@ -59,16 +52,6 @@ public class AtendimentoService {
         return protocoloRepository.findAll(pageable).map(protocoloMapper::toResponse);
     }
 
-    public Page<PreResponse> getAllAtendimentoPreByMunicipio(Pageable pageable, String municipio) {
-
-        if (municipio == null || municipio.isBlank()) {
-            return Page.empty(pageable);
-        }
-
-        var normalizado = Normalizer.normalize(municipio, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase();
-
-        return protocoloPreRepository.findPendentesByMunicipio(normalizado, pageable).map(AtendimentoMapper::toPreResponse);
-    }
 
     public AtendimentoResponse getAtendimentoById(String id) {
         var protocolo = protocoloRepository.findById(id).orElseThrow();
@@ -110,26 +93,9 @@ public class AtendimentoService {
         return protocoloRepository.findAll(spec, pageable).map(protocoloMapper::toResponse);
     }
 
-    @Transactional
-    public PreResponse criarPrePreenchimento(AtendimentoPreRequest protocoloPre, UserEntity admin) {
-        if (protocoloPre == null) return null;
-
-        var aberturaChamado = protocoloPre.aberturaChamado() != null ? protocoloPre.aberturaChamado() : null;
-        var municipio = protocoloPre.municipio() != null ? protocoloPre.municipio().toUpperCase() : "";
-        var numeroOcorrencia = protocoloPre.numeroOcorrencia() != null ? protocoloPre.numeroOcorrencia() : "";
-
-        var entity = protocoloPreRepository.save(AtendimentoPre.builder()
-                .numeroOcorrencia(numeroOcorrencia)
-                .municipio(municipio)
-                .aberturaChamado(aberturaChamado)
-                .criadoPreAtt(LocalDateTime.now())
-                .admin(admin)
-                .build());
-        return AtendimentoMapper.toPreResponse(entity);
-    }
 
     public void deleteAtendimentoById(String id) {
-        if(id == null) return;
+        if (id == null) return;
         var entidade = protocoloRepository.findById(id).orElseThrow();
         protocoloRepository.deleteById(entidade.getId());
     }

@@ -14,4 +14,8 @@ public interface AtendimentoPreRepository extends JpaRepository<AtendimentoPre, 
             "LOWER(REPLACE(p.municipio, '-', ' ')) LIKE LOWER(CONCAT('%', REPLACE(:municipio, '-', ' '), '%')) " +
             "AND p.id NOT IN (SELECT pr.preId FROM Atendimento pr WHERE pr.preId IS NOT NULL)")
     Page<AtendimentoPre> findPendentesByMunicipio(@Param("municipio") String municipio, Pageable pageable);
+
+    @Query("SELECT p FROM AtendimentoPre p WHERE "+
+    "p.id NOT IN (SELECT pr.preId FROM Atendimento pr WHERE pr.preId IS NOT NULL)")
+    Page<AtendimentoPre> findAllPendentes(Pageable pageable);
 }
