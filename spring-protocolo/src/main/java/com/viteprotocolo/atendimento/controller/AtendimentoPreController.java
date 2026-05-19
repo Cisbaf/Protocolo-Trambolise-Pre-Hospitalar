@@ -40,9 +40,6 @@ public class AtendimentoPreController {
             } else {
                 protocolos = atendimentoPreService.getAllAtendimentoPrePendentes(pageable);
             }
-            if (protocolos == null || protocolos.getTotalElements() == 0) {
-                return ResponseEntity.notFound().build();
-            }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
