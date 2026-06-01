@@ -1,5 +1,4 @@
 "use client"
-
 import {
   Box,
   VStack,
@@ -10,6 +9,7 @@ import {
   SimpleGrid,
 } from "@chakra-ui/react"
 import { useAvcFormContext } from "../../../context/AvcFormContext"
+import { PressaoArterialField } from "./PressaoArterialField"
 
 export function ParametrosClinicosSection() {
   const { form } = useAvcFormContext()
@@ -39,19 +39,8 @@ export function ParametrosClinicosSection() {
           </Field.Root>
 
           {/* Pressão Arterial */}
-          <Field.Root
-            invalid={!!form.formState.errors.ParametrosClinicosSection?.pressaoArterial}
-          >
-            <Field.Label>Pressão Arterial (PA)</Field.Label>
-            <Input
-              placeholder="Ex: 190/110"
-              {...form.register("ParametrosClinicosSection.pressaoArterial")}
-            />
-            <Field.ErrorText>
-              {form.formState.errors.ParametrosClinicosSection?.pressaoArterial?.message}
-            </Field.ErrorText>
-          </Field.Root>
-
+          <PressaoArterialField />
+        
           {/* Saturação */}
           <Field.Root
             invalid={!!form.formState.errors.ParametrosClinicosSection?.saturacao}
@@ -78,7 +67,7 @@ export function ParametrosClinicosSection() {
         <Separator mt={-4} />
 
         <Text fontSize="sm" color="gray.600">
-          Reduzir Pressão Arterial somente se maior 185/110 mmHg (sob regulação médica).
+          Reduzir Pressão Arterial somente se maior 220/120 mmHg (sob regulação médica).
         </Text>
         <Text fontSize="sm" color="gray.600">
           Ofertar Oxigênio se Sat. menor que 94% (sob regulação médica).

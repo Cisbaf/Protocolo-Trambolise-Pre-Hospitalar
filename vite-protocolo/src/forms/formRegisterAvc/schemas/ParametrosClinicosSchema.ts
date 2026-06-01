@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-// Regex para validar PA no formato 120/80
-const paRegex = /^\d{2,3}\/\d{2,3}$/;
-
 export const ParametrosClinicosSchema = z.object({
   glicemia: z
     .number()
@@ -10,7 +7,20 @@ export const ParametrosClinicosSchema = z.object({
 
   pressaoArterial: z
     .string()
-    .regex(paRegex, { message: "Formato inválido de PA. Use Ex: 120/80" }),
+    .refine((value) => {
+      const [sis, dias] = value.split("/").map(Number);
+
+      return (
+        !isNaN(sis) &&
+        !isNaN(dias) &&
+        sis >= 40 &&
+        sis <= 300 &&
+        dias >= 20 &&
+        dias <= 200
+      );
+    }, {
+      message: "Pressão arterial inválida",
+    }),
 
   saturacao: z
     .number()
