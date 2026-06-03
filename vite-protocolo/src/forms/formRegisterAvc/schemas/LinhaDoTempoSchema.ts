@@ -4,10 +4,10 @@ const datetimeLocalRegex =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/
 
 export const LinhaDoTempoSchema = z.object({
-    numeroOcorrencia: z
+  numeroOcorrencia: z
     .string()
     .min(1, "Informe o número da ocorrência")
-    .regex(/^\d+\/\d{4}$/, "Formato inválido. Use: 12345/2026"),
+    .regex(/^\d{7}\/\d$/, "Formato inválido. Use: 0000000/0"),
 
   municipio: z
     .string()
