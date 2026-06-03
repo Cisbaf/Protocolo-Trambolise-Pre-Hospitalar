@@ -57,7 +57,7 @@ export function LinhaDoTempoSection() {
             >
               <Field.Label>Nº da Ocorrência</Field.Label>
               <Input
-                placeholder="Ex: 12345/2026"
+                placeholder="Ex: 0000000/0"
                 {...form.register("LinhaDoTempoSection.numeroOcorrencia")}
               />
               <Field.ErrorText>
