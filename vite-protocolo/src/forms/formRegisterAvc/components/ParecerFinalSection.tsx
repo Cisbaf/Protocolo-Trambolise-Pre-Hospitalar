@@ -42,9 +42,9 @@ export default function ParecerFinalSection() {
 
   const styleMap = {
     elegivel: {
-      borderColor: "green.500",
-      bgColor: "green.50",
-      textColor: "green.700",
+      borderColor: "purple.500",
+      bgColor: "purple.50",
+      textColor: "purple.700",
       label: "AVC HIPERAGUDO",
     },
     inelegivel: {
@@ -88,12 +88,14 @@ export default function ParecerFinalSection() {
 
       {parecerFinal?.elegibilidade && (
         <Flex direction="column" gap={2}>
-          <Text fontSize="md" color="gray.600" mt={2}>
-            Parecer final de elegibilidade
-          </Text>
+          
 
           {parecerFinal.elegibilidade === "inelegivel" && (
+            
             <Stack>
+              <Text fontSize="md" color="gray.600" mt={2}>
+                Seguir linha de cuidado para AVC.
+              </Text>
               <For each={parecerFinal.motivos}>
                 {(item, index) => (
                   <Text key={item + index} fontWeight="bold">

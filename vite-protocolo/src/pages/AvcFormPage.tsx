@@ -53,7 +53,7 @@ export default function AvcFormPage() {
                     <UnidadeReferenciaSection />
                 </SectionCard>
 
-                <SectionCard title="DESFECHO DA CENA E ELEGIBILIDADE" step={6}>
+                <SectionCard title="DESFECHO DA CENA" step={6}>
                     <DesfechoCenaSection />
                 </SectionCard>
 
