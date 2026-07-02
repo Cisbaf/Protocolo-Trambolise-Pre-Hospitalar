@@ -45,13 +45,13 @@ export default function ParecerFinalSection() {
       borderColor: "green.500",
       bgColor: "green.50",
       textColor: "green.700",
-      label: "ELEGÍVEL",
+      label: "AVC HIPERAGUDO",
     },
     inelegivel: {
       borderColor: "red.500",
       bgColor: "red.50",
       textColor: "red.700",
-      label: "INELEGÍVEL",
+      label: "AVC",
     },
     default: {
       borderColor: "gray.300",
