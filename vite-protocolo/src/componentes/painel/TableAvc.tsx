@@ -3,7 +3,7 @@
 
 
 
-import { Flex, Show, Table, Text } from "@chakra-ui/react"
+import { Flex, IconButton, Show, Table, Text } from "@chakra-ui/react"
 import React from "react";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
 import type { AvcDataValues } from "../../forms/formPaginationAvc/schemas/AvcData";
@@ -14,7 +14,7 @@ interface TableAvcProps {
     avcValues: AvcDataValues[];
     renderExtraCols?: React.ReactNode[];
     renderRow?: (item: AvcDataValues, index: number) => React.ReactNode;
-    showDetail?: (protocol: string) => void;
+    showDetail?: (item: AvcDataValues) => void;
 }
 
 export default function TableAvc({avcValues, renderExtraCols, renderRow, showDetail}: TableAvcProps) {
@@ -48,10 +48,15 @@ export default function TableAvc({avcValues, renderExtraCols, renderRow, showDet
                             {showDetail && (
                             <Table.Cell textAlign="end">
                                 <Flex justifyContent={"flex-end"}>
-                                    <HiOutlineDocumentSearch 
-                                        cursor={"pointer"}
-                                        onClick={()=>showDetail(item.LinhaDoTempoSection.numeroOcorrencia)}
-                                        size={26} />
+                                    <IconButton
+                                        aria-label={`Abrir detalhes da ocorrência ${item.LinhaDoTempoSection.numeroOcorrencia}`}
+                                        title="Ver, editar ou excluir"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={()=>showDetail(item)}
+                                    >
+                                        <HiOutlineDocumentSearch size={22} />
+                                    </IconButton>
                                 </Flex>
                             </Table.Cell>
                             )}

@@ -337,6 +337,9 @@ JSON
   ;;
 
   # 8 - INELEGIVEL: uso de anticoagulante nas ultimas 48h.
+  #     medicamentos fica vazio de proposito: o formulario nao deixa marcar
+  #     anticoagulante em uso junto com "usou nas ultimas 48h"
+  #     (HistoriaClinicaSection, bloquearAnticoagulantes).
   8) cat <<JSON
 {
   "LinhaDoTempoSection": {
@@ -355,7 +358,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 63, "uso_coagulante_em_48h": true,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": ["Enoxaparina (Lovenox®)"]
+    "medicamentos": []
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital MRJ (SUBPAV)",
@@ -367,7 +370,7 @@ JSON
   },
   "ParecerFinalSection": {
     "elegibilidade": "inelegivel",
-    "motivos": ["Uso de Anticoagulantes.", "Fez uso de anticoagulante a menos de 48 horas."]
+    "motivos": ["Fez uso de anticoagulante a menos de 48 horas."]
   }
 }
 JSON
@@ -466,7 +469,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 15, "uso_coagulante_em_48h": true,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": true },
-    "medicamentos": ["Heparina", "Varfarina (Varfine®)"]
+    "medicamentos": []
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Outros Hospitais não elegíveis trombólise",
@@ -484,7 +487,6 @@ JSON
       "Necessário pelo menos uma avaliação neurológica 'Alterado'.",
       "AVC Prévio (< 3 meses)",
       "Cirurgias de grande porte (< 3 semanas)",
-      "Uso de Anticoagulantes.",
       "Fez uso de anticoagulante a menos de 48 horas."
     ]
   }
@@ -612,7 +614,7 @@ resumo() {
   printf '    %-12s -> 2 registros no mesmo dia\n' "$(dia 12)"
   log ""
   log "  Filtro por N. ocorrencia (busca exata):"
-  log "    2026001/1  (elegivel)   2026011/2  (inelegivel, 7 motivos)"
+  log "    2026001/1  (elegivel)   2026011/2  (inelegivel, 6 motivos)"
   log ""
   local total paginas
   total="$(total_protocolos)"

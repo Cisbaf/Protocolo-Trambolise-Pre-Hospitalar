@@ -10,6 +10,24 @@ export function SuccessToaster(id: number) {
     });
 }
 
+export function UpdateSuccessToaster(id: string) {
+    toaster.create({
+        title: "Registro atualizado ✅",
+        description: `As alterações do protocolo ${id} foram salvas.`,
+        type: "success",
+        duration: 6000,
+    });
+}
+
+export function DeleteSuccessToaster(numeroOcorrencia: string) {
+    toaster.create({
+        title: "Registro excluído",
+        description: `A ocorrência ${numeroOcorrencia} foi removida definitivamente.`,
+        type: "success",
+        duration: 6000,
+    });
+}
+
 export function ErrorToaster(message: string) {
     toaster.create({
         title: "Erro ao enviar formulário",

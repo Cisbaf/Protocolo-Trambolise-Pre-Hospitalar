@@ -11,9 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/protocolo")
@@ -69,9 +71,30 @@ public class ProtocoloController {
         return ResponseEntity.ok(protocoloService.getProtocoloByIdWithParams(id, nomeUnidade, numeroOcorrencia, aberturaChamado, municipio, pageable));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProtocoloResponse> updateProtocolo(@PathVariable String id,
+                                                             @RequestBody @Valid ProtocoloRequest protocoloRequest,
+                                                             Authentication authentication) {
+        try {
+            return ResponseEntity.ok(protocoloService.updateProtocolo(id, protocoloRequest, usuarioDe(authentication)));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProtocoloById(@PathVariable String id) {
-        protocoloService.deleteProtocoloById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteProtocoloById(@PathVariable String id, Authentication authentication) {
+        try {
+            protocoloService.deleteProtocoloById(id, usuarioDe(authentication));
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private String usuarioDe(Authentication authentication) {
+        return authentication != null ? authentication.getName() : "desconhecido";
     }
 }

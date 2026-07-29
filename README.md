@@ -74,7 +74,7 @@ Os 12 casos cobrem um cenário clínico distinto cada, para exercitar o painel:
 | 8 | Queimados | inelegível | uso de anticoagulante < 48h |
 | 9 | Magé | inelegível | AVC prévio < 3 meses |
 | 10 | Itaguaí | inelegível | cirurgia de grande porte < 3 semanas |
-| 11 | Seropédica | inelegível | 7 motivos ao mesmo tempo |
+| 11 | Seropédica | inelegível | 6 motivos ao mesmo tempo |
 | 12 | Paracambi | elegível | janela de 4h20, logo abaixo do corte |
 
 Cada município aparece uma vez e as 6 unidades de referência estão distribuídas, então:
@@ -90,6 +90,43 @@ mostra bate com o que a tela calcularia para aqueles dados.
 
 Para editar ou acrescentar casos, os registros ficam em [seed.sh](scripts/seed.sh),
 um bloco JSON comentado por cenário.
+
+---
+
+## Painel: ver, editar e excluir
+
+Cada linha da tabela tem um botão de lupa que abre o registro completo num modal,
+com todas as seções do formulário já preenchidas.
+
+O modal abre em **somente leitura**. A chave *Modo edição* no cabeçalho libera os
+campos; desligá-la descarta o que não foi salvo e volta aos valores do banco.
+
+- **Salvar alterações** faz `PUT /protocolo/{id}`. O `id` e a `dataCriacao` originais
+  são preservados — só o conteúdo é regravado.
+- **Excluir registro** faz `DELETE /protocolo/{id}` e é **definitivo**: não há lixeira
+  nem recuperação. Por isso o botão fica no canto inferior esquerdo e a confirmação
+  aparece centralizada, com o "Sim, excluir" do lado oposto — um clique duplo
+  acidental não consegue confirmar sozinho.
+
+Ambas as operações exigem login e ficam registradas em
+`spring-protocolo/logs/protocolo-creation.txt`, com o usuário que fez a alteração:
+
+```
+INFO  ProtocoloService - Protocolo atualizado por 'daniel': ID:26072916423022, N. Ocorrencia: 2026003/1 -> 2026003/1
+WARN  ProtocoloService - Protocolo EXCLUIDO por 'daniel': ID:26072917235823, N. Ocorrencia: 9999999/9, Municipio: belford roxo, ...
+```
+
+O parecer é recalculado ao vivo enquanto se edita, pelas mesmas regras da tela de
+cadastro — mudar a idade ou uma avaliação neurológica já reflete no bloco final.
+
+### Uma ressalva
+
+O modal reaproveita as seções do formulário de cadastro, então as regras de negócio
+da tela também valem na edição. A mais visível: quando *"fez uso de anticoagulante a
+menos de 48h"* está marcado, a lista de anticoagulantes é bloqueada **e esvaziada**
+(`HistoriaClinicaSection`). Se um registro tiver essa combinação no banco — o que só
+acontece se ele foi gravado direto pela API, sem passar pela tela — abrir o modal
+mostra a lista vazia, e salvar grava vazio.
 
 ### Produção
 ```bash

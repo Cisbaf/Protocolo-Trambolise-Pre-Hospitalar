@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,33 @@ public class ProtocoloService {
             log.error(e.getMessage());
             throw new IllegalArgumentException(e);
         }
+    }
+
+    /**
+     * Regrava o protocolo inteiro preservando id e dataCriacao.
+     * O id e' a chave natural exibida na tela e em exportacoes, entao nunca muda.
+     */
+    public ProtocoloResponse updateProtocolo(String id, ProtocoloRequest protocolo, String usuario) {
+        if (protocolo == null) {
+            log.warn("Tentativa de atualizar o protocolo {} com corpo nulo", id);
+            throw new IllegalArgumentException("Corpo da requisição vazio");
+        }
+
+        var existente = protocoloRespository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Protocolo não encontrado: " + id));
+
+        var atualizado = protocoloMapper.toProtocolo(protocolo);
+        atualizado.setId(existente.getId());
+        atualizado.setDataCriacao(existente.getDataCriacao());
+
+        var salvo = protocoloRespository.save(atualizado);
+
+        log.info("Protocolo atualizado por '{}': ID:{}, N. Ocorrencia: {} -> {}",
+                usuario, salvo.getId(),
+                existente.getLinhaDoTempo().getNumeroOcorrencia(),
+                salvo.getLinhaDoTempo().getNumeroOcorrencia());
+
+        return protocoloMapper.toResponse(salvo);
     }
 
     public Page<ProtocoloResponse> getAllProtocolos(Pageable pageable) {
@@ -89,7 +117,20 @@ public class ProtocoloService {
         return protocoloRespository.findAll(spec, pageable).map(protocoloMapper::toResponse);
     }
 
-    public void deleteProtocoloById(String id) {
+    /**
+     * Exclusao definitiva. A confirmacao acontece no front; aqui so registramos
+     * o que foi apagado e por quem, ja que o registro nao e' recuperavel.
+     */
+    public void deleteProtocoloById(String id, String usuario) {
+        var existente = protocoloRespository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Protocolo não encontrado: " + id));
+
+        log.warn("Protocolo EXCLUIDO por '{}': ID:{}, N. Ocorrencia: {}, Municipio: {}, Data Criação: {}",
+                usuario, existente.getId(),
+                existente.getLinhaDoTempo().getNumeroOcorrencia(),
+                existente.getLinhaDoTempo().getMunicipio(),
+                existente.getDataCriacao());
+
         protocoloRespository.deleteById(id);
     }
 

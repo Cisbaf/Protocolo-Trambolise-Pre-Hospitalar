@@ -10,6 +10,8 @@ interface AvcManagerType {
     form: ReturnType<typeof useAvcDataPaginationForm>;
     filter: ReturnType<typeof useDynamicFilter>;
     loading: boolean;
+    /** Recarrega a página atual da listagem (depois de editar ou excluir). */
+    refetch: () => void;
 }
 
 interface AvcManagerProps {
@@ -40,7 +42,7 @@ export function AvcManagerProvider({children}: AvcManagerProps) {
         name: "size",
     });
 
-    const { data, loading  } = useGet({
+    const { data, loading, refetch  } = useGet({
         url: `${BaseURL}/protocolo/params`,
         params: {
             page: currentPage,
@@ -56,7 +58,7 @@ export function AvcManagerProvider({children}: AvcManagerProps) {
     }, [data])
 
     return(
-        <AvcManagerContext.Provider value={{form: formData, loading, filter}}>
+        <AvcManagerContext.Provider value={{form: formData, loading, filter, refetch}}>
             <LoadingOverlay isOpen={loading}/>
             {children}
         </AvcManagerContext.Provider>
