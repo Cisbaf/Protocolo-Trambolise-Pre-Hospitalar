@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# ==========================================================
+# Ponto de entrada unico do projeto Protocolo AVC.
+# Rode `./protocolo` sem argumentos para ver a ajuda.
+# ==========================================================
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS="$ROOT/scripts"
+
+usage() {
+  cat <<'EOF'
+
+  Protocolo AVC - gerenciador de ambientes
+
+  USO
+    ./protocolo <comando> [subcomando] [opcoes]
+
+  AMBIENTES
+    dev up [--build]        sobe desenvolvimento (front + back + mysql local)
+    dev down                para o ambiente de desenvolvimento
+    dev restart [svc]       reinicia tudo ou um servico
+    dev rebuild [svc]       reconstroi as imagens do zero
+    dev reset               apaga o banco local e sobe limpo
+    dev logs [svc]          logs do ambiente de desenvolvimento
+    dev shell <svc>         shell dentro de um container
+    dev ps | urls           status dos containers / enderecos
+
+    prod deploy             git pull + build + up + verificacao
+    prod up | build         sobe / reconstroi sem fazer pull
+    prod restart | down     reinicia / derruba (com confirmacao)
+    prod logs [svc] | ps    logs / status
+    prod check | config     valida a configuracao sem alterar nada
+
+  CONFIGURACAO
+    setup dev | setup prod  cria o .env a partir do template
+    setup show              mostra a configuracao (segredos mascarados)
+    setup check             valida o .env
+    setup secret            gera um JWT_SECRET novo
+    setup edit              abre o .env no editor
+
+  DIAGNOSTICO
+    status [--watch]        panorama completo do ambiente
+    doctor                  checagem de pre-requisitos e inconsistencias
+    logs [alvo]             logs unificados (todos|back|front|db|erros|arquivo)
+
+  BANCO
+    db info | ping          dados e teste de conexao
+    db shell                cliente mysql (dev)
+    db dump [arquivo]       gera dump .sql
+    db restore <arquivo>    restaura dump (somente dev)
+
+  VARIAVEIS DE AMBIENTE
+    ASSUME_YES=1            responde "sim" nas confirmacoes (uso em CI)
+    NO_COLOR=1              desliga as cores
+
+  PRIMEIROS PASSOS
+    ./protocolo setup dev && ./protocolo dev up
+
+EOF
+}
+
+main() {
+  local cmd="${1:-}"; shift || true
+  case "$cmd" in
+    dev)     exec bash "$SCRIPTS/dev.sh" "$@" ;;
+    prod)    exec bash "$SCRIPTS/prod.sh" "$@" ;;
+    setup)   exec bash "$SCRIPTS/setup.sh" "$@" ;;
+    status)  exec bash "$SCRIPTS/status.sh" "$@" ;;
+    doctor)  exec bash "$SCRIPTS/doctor.sh" "$@" ;;
+    logs)    exec bash "$SCRIPTS/logs.sh" "$@" ;;
+    db)      exec bash "$SCRIPTS/db.sh" "$@" ;;
+    ''|-h|--help|help) usage ;;
+    *)
+      printf 'Comando desconhecido: %s\n' "$cmd" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"

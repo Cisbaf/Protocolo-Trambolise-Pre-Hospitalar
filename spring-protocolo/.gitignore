@@ -31,6 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/application-dev.properties
 /logs/
-/src/test/
+/bin/
+/folder-alias.json
+/private-folder-alias.json
+
+# application-dev.properties agora e' versionado (sem credenciais reais).
+# Segredos ficam no .env da raiz do projeto.

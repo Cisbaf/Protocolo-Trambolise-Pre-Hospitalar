@@ -1,0 +1,76 @@
+# ==========================================================
+# Override de DESENVOLVIMENTO.
+# Sempre aplicado por cima do docker-compose.yml:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# Diferencas em relacao a producao:
+#   - estagio "dev" das imagens (hot reload)
+#   - codigo montado por bind mount
+#   - MySQL local em container (producao usa banco externo)
+#   - dependencias em volume nomeado (nao dependem do host)
+# ==========================================================
+
+services:
+  vite-protocolo:
+    build:
+      target: dev
+    image: protocolo/vite-protocolo:dev
+    volumes:
+      - ./vite-protocolo:/app
+      - vite-node-modules:/app/node_modules
+    environment:
+      # o vite dev server precisa disso para hot reload em bind mount
+      CHOKIDAR_USEPOLLING: "true"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:5173"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  spring-protocolo:
+    build:
+      target: dev
+    image: protocolo/spring-protocolo:dev
+    volumes:
+      - ./spring-protocolo:/app
+      - maven-repo:/root/.m2
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -o /dev/null http://127.0.0.1:8080/v3/api-docs || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 120s
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+
+  mysql-db:
+    image: mysql:8.1
+    container_name: protocolo-mysql-dev
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-protocolo}
+      MYSQL_USER: ${MYSQL_USER:-devuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-devpass}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - protocolo-network
+
+volumes:
+  mysql-data:
+  maven-repo:
+  vite-node-modules:

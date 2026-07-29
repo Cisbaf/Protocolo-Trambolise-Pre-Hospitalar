@@ -1,33 +1,62 @@
-# -------- Stage 1: build --------
-FROM node:20-alpine AS builder
+# ==========================================================
+# Dockerfile multi-estagio: serve dev e producao.
+#
+#   dev  -> vite dev server (--host) com codigo por volume
+#   prod -> build estatico servido por `serve` (estagio final)
+#
+# O estagio final e' o "prod", entao um `docker build` sem
+# --target continua produzindo a imagem de producao.
+# ==========================================================
 
+# ----------------------------------------------------------
+# deps: node_modules (compartilhado entre dev e build)
+# ----------------------------------------------------------
+FROM node:20-alpine AS deps
 WORKDIR /app
 
-# copia dependências
 COPY package*.json ./
-
-# instala dependências
 RUN npm install
 
-# copia código
+
+# ----------------------------------------------------------
+# dev: hot reload. O codigo vem de bind mount (compose).
+# node_modules fica em volume nomeado para nao ser encoberto.
+# ----------------------------------------------------------
+FROM deps AS dev
+WORKDIR /app
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "--port", "5173"]
+
+
+# ----------------------------------------------------------
+# build: compila os assets estaticos
+# ----------------------------------------------------------
+FROM deps AS build
+WORKDIR /app
+
 COPY . .
 
+# Vite congela as VITE_* no momento do build
 ARG VITE_API_URL
+ARG VITE_MODE
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_MODE=$VITE_MODE
 
-# build do vite
 RUN npm run build
 
 
-# -------- Stage 2: runtime --------
-FROM node:20-alpine
-
+# ----------------------------------------------------------
+# prod: servidor estatico (estagio final)
+# ----------------------------------------------------------
+FROM node:20-alpine AS prod
 WORKDIR /app
 
-# instala servidor estático
 RUN npm install -g serve
 
-# copia apenas os arquivos buildados
-COPY --from=builder /app/dist ./dist
+COPY --from=build /app/dist ./dist
+
+EXPOSE 5173
 
 CMD ["serve", "-s", "dist", "-l", "5173"]

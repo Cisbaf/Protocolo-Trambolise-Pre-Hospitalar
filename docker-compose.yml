@@ -1,14 +1,38 @@
+# ==========================================================
+# Arquivo BASE = ambiente de PRODUCAO.
+#
+# Producao (compativel com o que ja roda no servidor):
+#   docker compose up -d --build
+#
+# Desenvolvimento (aplica o override por cima):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# Na pratica, use os scripts:  ./protocolo prod up  |  ./protocolo dev up
+# ==========================================================
+
 services:
   vite-protocolo:
     build:
       context: ./vite-protocolo/
       dockerfile: Dockerfile
+      target: prod
       args:
         VITE_API_URL: ${VITE_API_URL}
+        VITE_MODE: ${VITE_MODE:-}
+    # Tag explicita: dev e prod NAO podem compartilhar o mesmo nome de imagem,
+    # senao um build de um modo sobrescreve a imagem do outro.
+    image: protocolo/vite-protocolo:prod
+    restart: unless-stopped
     ports:
-      - "${AVC_FRONT_PORT}:5173"
+      - "${AVC_FRONT_PORT:-5173}:5173"
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:5173"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     networks:
       - protocolo-network
 
@@ -16,10 +40,19 @@ services:
     build:
       context: ./spring-protocolo/
       dockerfile: Dockerfile
+      target: prod
+    image: protocolo/spring-protocolo:prod
+    restart: unless-stopped
     ports:
-      - "${AVC_BACK_PORT}:8080"
+      - "${AVC_BACK_PORT:-8080}:8080"
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/v3/api-docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
     networks:
       - protocolo-network
 
