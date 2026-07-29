@@ -12,6 +12,7 @@ arquivo de override do Compose — nunca o `docker-compose.yml` nem os `Dockerfi
 ```bash
 ./protocolo setup dev     # cria o .env a partir de .env.example
 ./protocolo dev up        # sobe front + back + MySQL local
+./protocolo dev seed      # cria o usuário e 12 atendimentos de teste
 ```
 
 Pronto. Endereços:
@@ -38,10 +39,57 @@ Tudo passa pelo `./protocolo`. Rode sem argumentos para ver a ajuda completa.
 ./protocolo dev down            # para (mantém o banco)
 ./protocolo dev restart [svc]   # reinicia tudo ou um serviço
 ./protocolo dev rebuild [svc]   # reconstrói as imagens do zero
-./protocolo dev reset           # APAGA o banco local e sobe limpo
+./protocolo dev reset           # APAGA o banco local, sobe limpo e repopula
+./protocolo dev seed            # popula o banco com dados de teste
 ./protocolo dev logs [svc]      # logs
 ./protocolo dev shell <svc>     # shell dentro do container
 ```
+
+### Dados de teste (seed)
+
+```bash
+./protocolo dev seed            # usuário + 12 atendimentos (pula se já houver dados)
+./protocolo dev seed --force    # insere mesmo com o banco populado
+./protocolo dev seed --reset    # apaga os atendimentos e recria
+./protocolo dev seed --list     # lista o que está no banco
+```
+
+Login: **daniel** / **admingeral**.
+
+Os registros entram pela própria API (`POST /protocolo`), então passam pelas mesmas
+validações de um cadastro feito na tela. As datas são relativas ao dia da execução,
+então o seed nunca fica com dados velhos.
+
+Os 12 casos cobrem um cenário clínico distinto cada, para exercitar o painel:
+
+| # | Município | Parecer | O que exercita |
+|---|---|---|---|
+| 1 | Nova Iguaçu | elegível | caso limpo, janela de 1h20 |
+| 2 | Duque de Caxias | elegível | usa AAS (não é anticoagulante impeditivo) |
+| 3 | Belford Roxo | inelegível | janela de 6h10, acima do corte de 4h30 |
+| 4 | Japeri | inelegível | LKW não informado (`ultimoHorarioVistoBem` nulo) |
+| 5 | Mesquita | inelegível | paciente de 16 anos |
+| 6 | Nilópolis | inelegível | nenhuma avaliação neurológica alterada |
+| 7 | São João de Meriti | inelegível | anticoagulante oral (Xarelto) |
+| 8 | Queimados | inelegível | uso de anticoagulante < 48h |
+| 9 | Magé | inelegível | AVC prévio < 3 meses |
+| 10 | Itaguaí | inelegível | cirurgia de grande porte < 3 semanas |
+| 11 | Seropédica | inelegível | 7 motivos ao mesmo tempo |
+| 12 | Paracambi | elegível | janela de 4h20, logo abaixo do corte |
+
+Cada município aparece uma vez e as 6 unidades de referência estão distribuídas, então:
+
+- **filtro por unidade** (busca parcial): `Hospital` → 9, `Nova Iguaçu` → 3, `Upa` → 2
+- **filtro por data de abertura** (busca exata): dois pares de registros caem no mesmo dia
+- **filtro por nº da ocorrência** (busca exata): `2026001/1`, `2026011/2`, …
+- **paginação**: 12 registros com página de 5 = 3 páginas
+
+Os `motivos` de cada parecer seguem exatamente as regras de
+[ParecerFinal.ts](vite-protocolo/src/helpers/ParecerFinal.ts), então o que o painel
+mostra bate com o que a tela calcularia para aqueles dados.
+
+Para editar ou acrescentar casos, os registros ficam em [seed.sh](scripts/seed.sh),
+um bloco JSON comentado por cenário.
 
 ### Produção
 ```bash
@@ -141,6 +189,12 @@ imagem do frontend (`./protocolo prod build`), não basta reiniciar o container.
 | `application-prod.properties` | perfil `prod` (imagem de produção) | env vars, sem default |
 
 Ambos os perfis são versionados e nenhum contém credencial real — os valores vêm do `.env`.
+
+**Não desligue `spring.jpa.open-in-view` no perfil de dev.** As coleções
+`@ElementCollection` (`historia.doencas`, `historia.medicamentos`,
+`parecerFinal.motivos`) são LAZY e só são serializadas porque a sessão continua
+aberta na renderização. Com `open-in-view=false`, `GET /protocolo` quebra em dev e
+continua passando em produção — a divergência que a normalização existe para evitar.
 
 ---
 

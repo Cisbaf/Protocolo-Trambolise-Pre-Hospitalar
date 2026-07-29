@@ -22,7 +22,10 @@ usage() {
     dev down                para o ambiente de desenvolvimento
     dev restart [svc]       reinicia tudo ou um servico
     dev rebuild [svc]       reconstroi as imagens do zero
-    dev reset               apaga o banco local e sobe limpo
+    dev reset               apaga o banco local, sobe limpo e repopula
+    dev seed                popula o banco: usuario daniel + 12 protocolos
+    dev seed --reset        apaga os protocolos e recria o conjunto
+    dev seed --list         lista o que esta no banco
     dev logs [svc]          logs do ambiente de desenvolvimento
     dev shell <svc>         shell dentro de um container
     dev ps | urls           status dos containers / enderecos

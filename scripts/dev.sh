@@ -10,6 +10,7 @@
 #   ./protocolo dev ps             lista os containers
 #   ./protocolo dev shell <svc>    abre um shell no container
 #   ./protocolo dev reset          APAGA o volume do MySQL e sobe do zero
+#   ./protocolo dev seed [opcoes]  popula o banco com usuario e dados de teste
 #   ./protocolo dev exec <svc> ... executa um comando no container
 # ==========================================================
 
@@ -116,6 +117,8 @@ cmd_reset() {
   dc "$MODE" down -v
   ok "Volumes removidos"
   cmd_up --build
+  # banco vazio recem-criado: repopular e' o que se quer em 99% dos casos
+  bash "$SCRIPTS_DIR/seed.sh"
 }
 
 cmd_shell() {
@@ -136,6 +139,7 @@ main() {
     restart) cmd_restart "${1:-}" ;;
     rebuild) cmd_rebuild "${1:-}" ;;
     reset)   cmd_reset ;;
+    seed)    exec bash "$SCRIPTS_DIR/seed.sh" "$@" ;;
     logs)    require_docker; dc "$MODE" logs -f --tail=200 ${1:+"$1"} ;;
     ps)      require_docker; dc "$MODE" ps ;;
     shell)   cmd_shell "${1:-}" ;;
