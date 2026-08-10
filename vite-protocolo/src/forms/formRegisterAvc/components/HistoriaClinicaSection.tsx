@@ -365,41 +365,45 @@ export function HistoriaClinicaSection() {
             Faz uso de outras medicações ?
           </Text>
 
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            gap={5}
-            align={{ base: "stretch", md: "flex-start" }}
-          >
-            <Field.Root flex="1" maxW={{ base: "100%", md: "400px" }}>
-              <Textarea
-                size="sm"
-                rows={2}
-                placeholder="Sim, especifique quais (ex: Losartana, Metformina...)"
-                disabled={usa_outras_medicacoes === false}
-                {...register("HistoriaClinicaSection.outras_medicacoes_descricao")}
-                onFocus={() =>
-                  setValue("HistoriaClinicaSection.usa_outras_medicacoes", true)
-                }
-              />
-            </Field.Root>
-
+          <Flex direction="column" gap={4} align="flex-start">
             <Controller
               control={control}
               name="HistoriaClinicaSection.usa_outras_medicacoes"
               render={({ field }) => (
-                <Checkbox.Root
-                  checked={field.value === false}
-                  onCheckedChange={(e) => {
-                    const naoFazUso = !!e.checked;
-                    field.onChange(naoFazUso ? false : undefined);
-                  }}
+                <RadioGroup.Root
+                  value={
+                    field.value === undefined ? undefined : String(field.value)
+                  }
+                  onValueChange={(e) => field.onChange(e.value === "true")}
                 >
-                  <Checkbox.HiddenInput />
-                  <Checkbox.Control />
-                  <Checkbox.Label>Não faz uso</Checkbox.Label>
-                </Checkbox.Root>
+                  <HStack gap="6">
+                    {options_coagulantes.map((option) => (
+                      <RadioGroup.Item
+                        key={option.label}
+                        value={String(option.value)}
+                      >
+                        <RadioGroup.ItemHiddenInput />
+                        <RadioGroup.ItemIndicator />
+                        <RadioGroup.ItemText>
+                          {option.label}
+                        </RadioGroup.ItemText>
+                      </RadioGroup.Item>
+                    ))}
+                  </HStack>
+                </RadioGroup.Root>
               )}
             />
+
+            {usa_outras_medicacoes === true && (
+              <Field.Root maxW={{ base: "100%", md: "400px" }}>
+                <Textarea
+                  size="sm"
+                  rows={2}
+                  placeholder="Especifique quais (ex: Losartana, Metformina...)"
+                  {...register("HistoriaClinicaSection.outras_medicacoes_descricao")}
+                />
+              </Field.Root>
+            )}
           </Flex>
 
           {(errors.HistoriaClinicaSection?.usa_outras_medicacoes ||
