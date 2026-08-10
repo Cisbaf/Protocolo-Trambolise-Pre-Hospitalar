@@ -1,5 +1,6 @@
 package com.viteprotocolo.protocolo.entity.emb;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import lombok.*;
@@ -25,5 +26,6 @@ public class Historia {
      * deste campo existir devem ficar em branco (null) em vez de "nao".
      */
     private Boolean usaOutrasMedicacoes;
+    @Column(columnDefinition = "TEXT")
     private String outrasMedicacoesDescricao;
 }

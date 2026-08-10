@@ -5,6 +5,7 @@ import {
   VStack,
   Field,
   Input,
+  Textarea,
   Checkbox,
   Text,
   Grid,
@@ -367,12 +368,13 @@ export function HistoriaClinicaSection() {
           <Flex
             direction={{ base: "column", md: "row" }}
             gap={5}
-            align={{ base: "stretch", md: "center" }}
+            align={{ base: "stretch", md: "flex-start" }}
           >
             <Field.Root flex="1" maxW={{ base: "100%", md: "400px" }}>
-              <Input
+              <Textarea
                 size="sm"
-                placeholder="Sim, especifique quais"
+                rows={2}
+                placeholder="Sim, especifique quais (ex: Losartana, Metformina...)"
                 disabled={usa_outras_medicacoes === false}
                 {...register("HistoriaClinicaSection.outras_medicacoes_descricao")}
                 onFocus={() =>
