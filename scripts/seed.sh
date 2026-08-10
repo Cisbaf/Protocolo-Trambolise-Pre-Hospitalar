@@ -101,7 +101,7 @@ emit_registro() {
   "HistoriaClinicaSection": {
     "idade": 67, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Geral de Nova Iguaçu",
@@ -135,7 +135,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 58, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": ["AAS"]
+    "medicamentos": ["AAS"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Municipalizado Adão Pereira Nunes",
@@ -169,7 +169,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 71, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Upa",
@@ -206,7 +206,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 79, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Outros Hospitais não elegíveis trombólise",
@@ -244,7 +244,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 16, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Municipal São João de Meriti",
@@ -281,7 +281,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 45, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Upa",
@@ -318,7 +318,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 74, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": ["Rivaroxabana (Xarelto®)"]
+    "medicamentos": ["Rivaroxabana (Xarelto®)"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Municipal São João de Meriti",
@@ -358,7 +358,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 63, "uso_coagulante_em_48h": true,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital MRJ (SUBPAV)",
@@ -395,7 +395,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 69, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": ["Clopidogrel"]
+    "medicamentos": ["Clopidogrel"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Municipalizado Adão Pereira Nunes",
@@ -432,7 +432,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 61, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": false, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": true },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Geral de Nova Iguaçu",
@@ -469,7 +469,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 15, "uso_coagulante_em_48h": true,
     "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": true },
-    "medicamentos": []
+    "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Outros Hospitais não elegíveis trombólise",
@@ -513,7 +513,7 @@ JSON
   "HistoriaClinicaSection": {
     "idade": 82, "uso_coagulante_em_48h": false,
     "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
-    "medicamentos": ["AAS", "Clopidogrel"]
+    "medicamentos": ["AAS", "Clopidogrel"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
     "unidadeReferenciaEleita": "Hospital Geral de Nova Iguaçu",

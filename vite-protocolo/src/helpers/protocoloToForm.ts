@@ -58,6 +58,10 @@ export function protocoloToFormValues(item: AvcDataValues): AvcFormValues {
       uso_coagulante_em_48h: !!historia?.uso_coagulante_em_48h,
       doencas,
       medicamentos: historia?.medicamentos ?? [],
+      // campo novo: registros antigos não têm esse dado, então fica em
+      // branco (undefined) até o usuário preencher, em vez de assumir "não".
+      usa_outras_medicacoes: historia?.usa_outras_medicacoes ?? undefined,
+      outras_medicacoes_descricao: historia?.outras_medicacoes_descricao ?? "",
     },
 
     UnidadeReferenciaSection: {

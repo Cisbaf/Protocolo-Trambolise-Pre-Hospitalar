@@ -34,6 +34,8 @@ export const fakeAvcFormInitialValues: Partial<AvcFormValues> = {
       "Cirurgias de grande porte (< 3 semanas)": false,
     },
     medicamentos: ["Clopidogrel"],
+    usa_outras_medicacoes: false,
+    outras_medicacoes_descricao: "",
   },
 
   UnidadeReferenciaSection: {

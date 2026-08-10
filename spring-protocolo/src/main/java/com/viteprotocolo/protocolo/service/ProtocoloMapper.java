@@ -81,6 +81,8 @@ public class ProtocoloMapper {
                 .usoCoagulanteEm48h(historia.uso_coagulante_em_48h())
                 .doencas(historia.doencas())
                 .medicamentos(historia.medicamentos())
+                .usaOutrasMedicacoes(historia.usa_outras_medicacoes())
+                .outrasMedicacoesDescricao(historia.outras_medicacoes_descricao())
                 .build();
     }
     private Unidade toUnidade(UnidadeDTO unidade) {
@@ -149,6 +151,8 @@ public class ProtocoloMapper {
                 .uso_coagulante_em_48h(historia.isUsoCoagulanteEm48h())
                 .medicamentos(historia.getMedicamentos())
                 .doencas(historia.getDoencas())
+                .usa_outras_medicacoes(historia.getUsaOutrasMedicacoes())
+                .outras_medicacoes_descricao(historia.getOutrasMedicacoesDescricao())
                 .build();
     }
     private UnidadeDTO toUnidadeDto(Unidade unidade) {

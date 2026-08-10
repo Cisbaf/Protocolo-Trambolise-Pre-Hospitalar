@@ -41,6 +41,9 @@ export function HistoriaClinicaSection() {
 
   const medicamentos = watch("HistoriaClinicaSection.medicamentos") || [];
   const fez_uso_48h = watch("HistoriaClinicaSection.uso_coagulante_em_48h");
+  const usa_outras_medicacoes = watch(
+    "HistoriaClinicaSection.usa_outras_medicacoes"
+  );
 
   /**
    * =========================
@@ -77,6 +80,13 @@ export function HistoriaClinicaSection() {
       setValue("HistoriaClinicaSection.medicamentos", filtrado);
     }
   }, [fez_uso_48h]);
+
+  // Se marcou "não faz uso" de outras medicações, limpar a descrição
+  React.useEffect(() => {
+    if (usa_outras_medicacoes === false) {
+      setValue("HistoriaClinicaSection.outras_medicacoes_descricao", "");
+    }
+  }, [usa_outras_medicacoes, setValue]);
 
   /**
    * =========================
@@ -247,6 +257,12 @@ export function HistoriaClinicaSection() {
                   </RadioGroup.Root>
                 )}
               />
+
+              {errors.HistoriaClinicaSection?.uso_coagulante_em_48h && (
+                <Text color="red.500" fontSize="sm">
+                  {errors.HistoriaClinicaSection.uso_coagulante_em_48h.message}
+                </Text>
+              )}
             </Flex>
           </Flex>
 
@@ -340,6 +356,58 @@ export function HistoriaClinicaSection() {
             {errors.HistoriaClinicaSection.medicamentos.message}
           </Text>
         )}
+
+        {/* ================= Outras Medicações ================= */}
+
+        <Box pt={2}>
+          <Text fontWeight="semibold" mb={3}>
+            Faz uso de outras medicações ?
+          </Text>
+
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            gap={5}
+            align={{ base: "stretch", md: "center" }}
+          >
+            <Field.Root flex="1" maxW={{ base: "100%", md: "400px" }}>
+              <Input
+                size="sm"
+                placeholder="Sim, especifique quais"
+                disabled={usa_outras_medicacoes === false}
+                {...register("HistoriaClinicaSection.outras_medicacoes_descricao")}
+                onFocus={() =>
+                  setValue("HistoriaClinicaSection.usa_outras_medicacoes", true)
+                }
+              />
+            </Field.Root>
+
+            <Controller
+              control={control}
+              name="HistoriaClinicaSection.usa_outras_medicacoes"
+              render={({ field }) => (
+                <Checkbox.Root
+                  checked={field.value === false}
+                  onCheckedChange={(e) => {
+                    const naoFazUso = !!e.checked;
+                    field.onChange(naoFazUso ? false : undefined);
+                  }}
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control />
+                  <Checkbox.Label>Não faz uso</Checkbox.Label>
+                </Checkbox.Root>
+              )}
+            />
+          </Flex>
+
+          {(errors.HistoriaClinicaSection?.usa_outras_medicacoes ||
+            errors.HistoriaClinicaSection?.outras_medicacoes_descricao) && (
+            <Text color="red.500" fontSize="sm" mt={2}>
+              {errors.HistoriaClinicaSection.usa_outras_medicacoes?.message ??
+                errors.HistoriaClinicaSection.outras_medicacoes_descricao?.message}
+            </Text>
+          )}
+        </Box>
       </VStack>
     </Box>
   );

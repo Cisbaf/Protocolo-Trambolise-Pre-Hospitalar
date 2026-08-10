@@ -33,6 +33,9 @@ export function mapAvcFullToPlanilha(data: AvcDataValues) {
         "idade": data.HistoriaClinicaSection.idade,
         "historico_doencas": montarHistoricoDoencas(data.HistoriaClinicaSection.doencas),
         "medicamentos": montarListaMedicamentos(data.HistoriaClinicaSection.medicamentos),
+        "outras_medicacoes": data.HistoriaClinicaSection.usa_outras_medicacoes
+            ? (data.HistoriaClinicaSection.outras_medicacoes_descricao ?? "")
+            : (data.HistoriaClinicaSection.usa_outras_medicacoes === false ? "Não faz uso" : ""),
         "unidade_referencia_eleita": data.UnidadeReferenciaSection.unidadeReferenciaEleita,
         "horario_notificacao_unidade": formatDateTimeBR(data.UnidadeReferenciaSection.horarioNotificacaoUnidade),
         "horario_saida_cena": formatDateTimeBR(data.DesfechoCenaSection.horarioSaidaCena),

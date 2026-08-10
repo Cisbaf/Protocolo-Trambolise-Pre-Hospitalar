@@ -20,4 +20,10 @@ public class Historia {
     private List<String> medicamentos;
     @ElementCollection
     private Map<String,Boolean> doencas;
+    /**
+     * Boolean (nao boolean primitivo) de proposito: registros criados antes
+     * deste campo existir devem ficar em branco (null) em vez de "nao".
+     */
+    private Boolean usaOutrasMedicacoes;
+    private String outrasMedicacoesDescricao;
 }
