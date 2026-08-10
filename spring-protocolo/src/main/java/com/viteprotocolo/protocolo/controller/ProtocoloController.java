@@ -38,8 +38,9 @@ public class ProtocoloController {
     @GetMapping
     public ResponseEntity<Page<ProtocoloResponse>> getProtocolo(@RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "10") int size,
-                                                                @RequestParam(defaultValue = "id") String sort) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+                                                                @RequestParam(defaultValue = "dataCriacao") String sort,
+                                                                @RequestParam(defaultValue = "DESC") String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
         try {
             return ResponseEntity.ok(protocoloService.getAllProtocolos(pageable));
         } catch (Exception e) {
@@ -64,9 +65,10 @@ public class ProtocoloController {
                                                                               @RequestParam @Nullable String municipio,
                                                                               @RequestParam(defaultValue = "0") int page,
                                                                               @RequestParam(defaultValue = "10") int size,
-                                                                              @RequestParam(defaultValue = "id") String sort
+                                                                              @RequestParam(defaultValue = "dataCriacao") String sort,
+                                                                              @RequestParam(defaultValue = "DESC") String direction
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
 
         return ResponseEntity.ok(protocoloService.getProtocoloByIdWithParams(id, nomeUnidade, numeroOcorrencia, aberturaChamado, municipio, pageable));
     }

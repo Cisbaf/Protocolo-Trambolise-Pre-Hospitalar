@@ -6,6 +6,7 @@ import AvcFilter from "../componentes/painel/AvcFilter";
 import { AvcSelectedProvider } from "../context/AvcSelected";
 import TagsSelecteds from "../componentes/painel/TagsSelecteds";
 import ControlTableView from "../componentes/painel/ControlTableView";
+import SortControl from "../componentes/painel/SortControl";
 
 export default function PainelPage() {
 
@@ -16,6 +17,7 @@ export default function PainelPage() {
                     direction="column"
                     gap={5}>
                     <AvcFilter/>
+                    <SortControl/>
                     <TagsSelecteds/>
                     <TableAvcForContext/>
                      <Flex justifyContent={"space-between"}>
