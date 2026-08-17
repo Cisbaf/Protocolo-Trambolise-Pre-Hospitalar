@@ -222,6 +222,7 @@ export function HistoriaClinicaSection() {
             {lista_comorbidades.map((item) => (
               <Checkbox.Root
                 key={item}
+                disabled={nega_comorbidades}
                 checked={!!doencas?.[item]}
                 onCheckedChange={(e) => toggleComorbidade(item, !!e.checked)}
               >
