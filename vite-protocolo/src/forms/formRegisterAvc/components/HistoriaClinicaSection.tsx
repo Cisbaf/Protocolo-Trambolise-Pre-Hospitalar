@@ -14,10 +14,13 @@ import {
   CheckboxCard,
   RadioGroup,
   HStack,
+  Separator,
 } from "@chakra-ui/react";
 
 import React from "react";
 import {
+  label_nega_comorbidades,
+  lista_comorbidades,
   lista_doencas,
   medicamentos_injetaveis,
   medicamentos_orais,
@@ -26,6 +29,7 @@ import {
 } from "../utils/labels";
 import { Controller } from "react-hook-form";
 import { useAvcFormContext } from "../../../context/AvcFormContext";
+import type { AvcFormValues } from "../schemas/AvcFormSchema";
 
 export function HistoriaClinicaSection() {
   const { form } = useAvcFormContext();
@@ -41,6 +45,8 @@ export function HistoriaClinicaSection() {
   const [negaUso, setNegaUso] = React.useState(false);
 
   const medicamentos = watch("HistoriaClinicaSection.medicamentos") || [];
+  const doencas = watch("HistoriaClinicaSection.doencas");
+  const nega_comorbidades = !!doencas?.[label_nega_comorbidades];
   const fez_uso_48h = watch("HistoriaClinicaSection.uso_coagulante_em_48h");
   const usa_outras_medicacoes = watch(
     "HistoriaClinicaSection.usa_outras_medicacoes"
@@ -94,6 +100,44 @@ export function HistoriaClinicaSection() {
    * Funções
    * =========================
    */
+
+  /**
+   * "NEGA COMORBIDADES" e as comorbidades são mutuamente excludentes: o bloco
+   * é reescrito a partir da lista de chaves marcadas, então marcar um lado
+   * necessariamente limpa o outro e o registro nunca fica ambíguo.
+   *
+   * Revalida apenas quando já existe erro na tela, para limpar a mensagem
+   * assim que o usuário corrige, sem acusar erro antes do primeiro envio.
+   */
+  const setDoencas = (marcadas: readonly string[]) => {
+    const novoValor = Object.fromEntries(
+      lista_doencas.map((doenca) => [doenca, marcadas.includes(doenca)])
+    ) as AvcFormValues["HistoriaClinicaSection"]["doencas"];
+
+    setValue("HistoriaClinicaSection.doencas", novoValor, {
+      shouldDirty: true,
+      shouldValidate: !!errors.HistoriaClinicaSection?.doencas,
+    });
+  };
+
+  const comorbidades_marcadas = lista_comorbidades.filter(
+    (doenca) => !!doencas?.[doenca]
+  );
+
+  const toggleComorbidade = (
+    doenca: (typeof lista_comorbidades)[number],
+    checked: boolean
+  ) => {
+    setDoencas(
+      checked
+        ? [...comorbidades_marcadas, doenca]
+        : comorbidades_marcadas.filter((marcada) => marcada !== doenca)
+    );
+  };
+
+  const toggleNegaComorbidades = (checked: boolean) => {
+    setDoencas(checked ? [label_nega_comorbidades] : []);
+  };
 
   const toggleMedicamento = (med: string, checked: boolean) => {
     const novoArray = checked
@@ -168,28 +212,47 @@ export function HistoriaClinicaSection() {
 
         <Box>
           <Text fontWeight="semibold" mb={3}>
-            Histórico de Doenças
+            Histórico de Doenças{" "}
+            <Text as="span" color="red.500">
+              *
+            </Text>
           </Text>
 
           <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={4}>
-            {lista_doencas.map((item) => (
-              <Controller
+            {lista_comorbidades.map((item) => (
+              <Checkbox.Root
                 key={item}
-                name={`HistoriaClinicaSection.doencas.${item}` as const}
-                control={control}
-                render={({ field }) => (
-                  <Checkbox.Root
-                    checked={field.value}
-                    onCheckedChange={(e) => field.onChange(!!e.checked)}
-                  >
-                    <Checkbox.HiddenInput />
-                    <Checkbox.Control />
-                    <Checkbox.Label>{item}</Checkbox.Label>
-                  </Checkbox.Root>
-                )}
-              />
+                checked={!!doencas?.[item]}
+                onCheckedChange={(e) => toggleComorbidade(item, !!e.checked)}
+              >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control />
+                <Checkbox.Label>{item}</Checkbox.Label>
+              </Checkbox.Root>
             ))}
           </Grid>
+
+          <Separator my={4} />
+
+          <CheckboxCard.Root
+            maxW={{ base: "100%", md: "260px" }}
+            size="sm"
+            checked={nega_comorbidades}
+            onCheckedChange={(e) => toggleNegaComorbidades(!!e.checked)}
+            colorPalette="teal"
+          >
+            <CheckboxCard.HiddenInput />
+            <CheckboxCard.Control>
+              <CheckboxCard.Label>{label_nega_comorbidades}</CheckboxCard.Label>
+              <CheckboxCard.Indicator />
+            </CheckboxCard.Control>
+          </CheckboxCard.Root>
+
+          {errors.HistoriaClinicaSection?.doencas && (
+            <Text color="red.500" fontSize="sm" mt={2}>
+              {errors.HistoriaClinicaSection.doencas.message}
+            </Text>
+          )}
         </Box>
 
         {/* ================= Medicamentos ================= */}

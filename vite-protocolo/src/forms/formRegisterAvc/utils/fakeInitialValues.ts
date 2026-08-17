@@ -32,6 +32,7 @@ export const fakeAvcFormInitialValues: Partial<AvcFormValues> = {
       "Diabetes": true,
       "AVC Prévio (< 3 meses)": false,
       "Cirurgias de grande porte (< 3 semanas)": false,
+      "NEGA COMORBIDADES": false,
     },
     medicamentos: ["Clopidogrel"],
     usa_outras_medicacoes: false,

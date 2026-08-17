@@ -100,7 +100,7 @@ emit_registro() {
   "ParametrosClinicosSection": { "glicemia": 112, "pressaoArterial": "160/90", "saturacao": 96 },
   "HistoriaClinicaSection": {
     "idade": 67, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -134,7 +134,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 98, "pressaoArterial": "145/85", "saturacao": 97 },
   "HistoriaClinicaSection": {
     "idade": 58, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": ["AAS"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -168,7 +168,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 134, "pressaoArterial": "175/95", "saturacao": 94 },
   "HistoriaClinicaSection": {
     "idade": 71, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -205,7 +205,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 156, "pressaoArterial": "190/110", "saturacao": 92 },
   "HistoriaClinicaSection": {
     "idade": 79, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -243,7 +243,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 88, "pressaoArterial": "120/70", "saturacao": 99 },
   "HistoriaClinicaSection": {
     "idade": 16, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": true },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -280,7 +280,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 104, "pressaoArterial": "130/80", "saturacao": 98 },
   "HistoriaClinicaSection": {
     "idade": 45, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": false, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": true },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -317,7 +317,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 143, "pressaoArterial": "168/94", "saturacao": 95 },
   "HistoriaClinicaSection": {
     "idade": 74, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": ["Rivaroxabana (Xarelto®)"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -357,7 +357,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 121, "pressaoArterial": "155/88", "saturacao": 96 },
   "HistoriaClinicaSection": {
     "idade": 63, "uso_coagulante_em_48h": true,
-    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -394,7 +394,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 167, "pressaoArterial": "182/102", "saturacao": 93 },
   "HistoriaClinicaSection": {
     "idade": 69, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": ["Clopidogrel"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -431,7 +431,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 95, "pressaoArterial": "148/86", "saturacao": 97 },
   "HistoriaClinicaSection": {
     "idade": 61, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": false, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": true },
+    "doencas": { "Hipertensão": false, "Diabetes": true, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": true, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -468,7 +468,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 59, "pressaoArterial": "205/115", "saturacao": 89 },
   "HistoriaClinicaSection": {
     "idade": 15, "uso_coagulante_em_48h": true,
-    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": true },
+    "doencas": { "Hipertensão": true, "Diabetes": true, "AVC Prévio (< 3 meses)": true, "Cirurgias de grande porte (< 3 semanas)": true, "NEGA COMORBIDADES": false },
     "medicamentos": [], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {
@@ -512,7 +512,7 @@ JSON
   "ParametrosClinicosSection": { "glicemia": 118, "pressaoArterial": "138/82", "saturacao": 98 },
   "HistoriaClinicaSection": {
     "idade": 82, "uso_coagulante_em_48h": false,
-    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false },
+    "doencas": { "Hipertensão": true, "Diabetes": false, "AVC Prévio (< 3 meses)": false, "Cirurgias de grande porte (< 3 semanas)": false, "NEGA COMORBIDADES": false },
     "medicamentos": ["AAS", "Clopidogrel"], "usa_outras_medicacoes": false
   },
   "UnidadeReferenciaSection": {

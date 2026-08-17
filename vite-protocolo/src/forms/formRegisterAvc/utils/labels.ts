@@ -4,6 +4,8 @@ const label_cirurgia = "Cirurgias de grande porte (< 3 semanas)";
 
 const label_avc = "AVC Prévio (< 3 meses)";
 
+const label_nega_comorbidades = "NEGA COMORBIDADES";
+
 const medicamentos_injetaveis = [
     "Dalteparina (Fragmin®)",
     "Enoxaparina (Lovenox®)",
@@ -25,11 +27,22 @@ const medicamentos_orais = [
 
 const medicamentos_outros = ["AAS", "Clopidogrel"];
 
-const lista_doencas = [
+/** As comorbidades propriamente ditas: o que aparece na grade de checkboxes. */
+const lista_comorbidades = [
   "Hipertensão",
   "Diabetes",
   "AVC Prévio (< 3 meses)",
   "Cirurgias de grande porte (< 3 semanas)",
+] as const;
+
+/**
+ * Todas as chaves persistidas em HistoriaClinicaSection.doencas, incluindo a
+ * negação explícita. "NEGA COMORBIDADES" é excludente em relação às demais:
+ * ou o paciente tem comorbidades, ou nega ter. Ver HistoriaClinicaSchema.
+ */
+const lista_doencas = [
+  ...lista_comorbidades,
+  label_nega_comorbidades,
 ] as const;
 
 
@@ -56,9 +69,11 @@ const municipios = [
 export {
     label_cirurgia,
     label_avc,
+    label_nega_comorbidades,
     medicamentos_injetaveis,
     medicamentos_orais,
     medicamentos_outros,
+    lista_comorbidades,
     lista_doencas,
     options_coagulantes,
     municipios
